@@ -1,0 +1,2 @@
+export const AUTH_SET_USER_INFO = 'auth/AUTH_SET_USER_INFO';
+export const AUTH_SET_AUTHENTICATED = 'auth/AUTH_SET_AUTHENTICATED';

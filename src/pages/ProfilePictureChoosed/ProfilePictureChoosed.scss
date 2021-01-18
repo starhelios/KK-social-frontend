@@ -1,0 +1,129 @@
+.profilepicturechoosed-left-side {
+    font-family: Avenir Next;
+    border-radius: 19px 0px 0px 19px;
+    background-color: #2A2A29;
+    padding: 33px 44px 33px 46px;
+    .profilepicturechoosed-left-side-header {
+        button{
+            text-decoration: underline;
+            color:#979797;
+            background: none;
+            border: none;
+        }
+        button:focus {        
+            outline: none;
+        }
+    }
+    
+    .content {
+        font-size: 20.06px;
+        font-weight: 500;
+        margin-top: 62px;
+        .ant-typography {
+            text-align: center;
+        }
+    }
+    .ant-btn {
+        border-radius: 50px;
+        width: 349px;
+        height: 55px;
+        margin-bottom: 15px;
+        
+        font-weight: 600;
+        font-size: 17.5px;
+        font-style: normal;
+    }
+    .confirmbtn {
+        margin-top: 146px;
+    }
+    
+}
+.profilepicturechoosed-right-side {
+    font-family: Avenir Next;
+    border-radius: 0px 19px 19px 0px !important;
+    
+    background-size: cover;
+
+  
+    color: white;
+    h3 {
+        color: white;
+        margin: 0px;
+        font-size: 18px;
+        font-weight: 500;
+    }
+    .ant-carousel .slick-dots-bottom {
+        bottom: 41px;
+        left: 100px;
+    }
+    .ant-carousel .slick-dots li button {
+        width: 6px;
+        height: 6px;
+        border-radius: 50px;
+    }
+    .slick-dots li button:before {
+        content: none;
+    }
+    .right-side-wrapper1 {     
+        height: 640px;
+        padding: 0px 23px 31px 23px;
+        background: url(../../assets/img/experience/Picture1.png) no-repeat;
+        background-size: cover;
+        border-radius: 0px 19px 19px 0px !important;
+    }
+    .right-side-wrapper2 {
+        height: 640px;
+        padding: 0px 23px 31px 23px;
+        background: url(../../assets/img/experience/Picture2.png) no-repeat;
+        background-size: cover;
+        border-radius: 0px 19px 19px 0px !important;
+    }
+    .right-side-wrapper3 {
+        height: 640px;
+        padding: 0px 23px 31px 23px;
+        background: url(../../assets/img/experience/Picture3.png) no-repeat;
+        background-size: cover;
+        border-radius: 0px 19px 19px 0px !important;
+    }
+    .right-side-wrapper4 {
+        height: 640px;
+        padding: 0px 23px 31px 23px;
+        background: url(../../assets/img/experience/Picture4.png) no-repeat;
+        background-size: cover;
+        border-radius: 0px 19px 19px 0px !important;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .profilepicturechoosed-left-side {
+        border-radius: 19px;
+    }
+}
+
+@media screen and (max-width: 910px) {
+    .profilepicturechoosed-right-side  {
+        .ant-carousel .slick-dots-bottom {
+            bottom: 41px;
+            left: 50px;
+        }
+    }
+    
+}
+
+@media screen and (max-width: 690px) {
+    .profilepicturechoosed-right-side  {
+        .right-side-wrapper1 {
+            height: 658px;
+        }
+        .right-side-wrapper2 {
+            height: 658px;
+        }
+        .right-side-wrapper3 {
+            height: 658px;
+        }
+        .right-side-wrapper4 {
+            height: 658px;
+        }
+    }
+    
+}

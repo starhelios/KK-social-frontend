@@ -1,0 +1,86 @@
+.edit-profile-wrapper {
+  border-radius: 10px;
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    margin: 22px 0px 33px 0px;
+  }
+  .edit-profile-content {
+    h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      opacity: 0.75;
+    }
+    h3 {
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+    }
+    .ant-input {
+      color: white;
+      font-size: 16px;
+      font-weight: 500;
+      background: none;
+      border: none;
+    }
+    .edit-profile-line {
+      background: white;
+      opacity: 0.2;
+      height: 1px;
+      margin-top: 22px;
+      margin-bottom: 22px;
+    }
+    .edit-profile-photo {
+      .ant-btn {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 33px;
+        border-radius: 80px;
+        background: url(../../assets/img/avatar.jpg) center center no-repeat;
+        background-size: contain !important;
+        border: none;
+        padding: 120px 65px 15px 65px;
+        svg {
+          width: 20px;
+          height: 15px;
+          color: white;
+        }
+      }
+    }
+
+    .security-wrapper {
+      margin: 44px 0px 7px 0px;
+    }
+    .save-btn {
+      margin-top: 39px;
+      .ant-btn {
+        width: 100%;
+        height: 44px;
+        font-size: 14px;
+        font-weight: 600;
+        border-radius: 50px;
+        background: white;
+      }
+    }
+
+    .ant-picker {
+      width: 100%;
+      background: transparent;
+      border: none;
+
+      .ant-picker-input {
+        input {
+          color: white;
+          font-size: 16px;
+          font-weight: 500;
+        }
+
+        .ant-picker-suffix {
+          color: white;
+        }
+      }
+    }
+  }
+}

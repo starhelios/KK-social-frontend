@@ -1,0 +1,160 @@
+// .left-side {
+//     background: #2A2A29;
+//     padding: 40px;
+//     .ant-modal-close-icon {
+//         border: 1px solid;
+//         border-radius: 50px;
+//         background: white;
+//         width: 40px;
+//         height: 40px;
+//         /* margin-top: 50px; */
+//         padding-top: 11px;
+//     }
+// }
+.left-side {
+  font-family: Avenir Next;
+  background: #2a2a29;
+  padding: 33px 44px 33px 46px;
+  border-radius: 19px 0px 0px 19px;
+  .left-side-header,
+  .forgot-password-btn {
+    button {
+      text-decoration: underline;
+      color: #979797;
+      background: none;
+      border: none;
+      padding: 0px;
+    }
+    button:focus {
+      outline: none;
+    }
+  }
+
+  .input-unit {
+    margin-top: 27.11px;
+    .ant-input {
+      padding-left: 0px;
+      border: none;
+      background: transparent;
+      color: white;
+      width: 100%;
+      height: 67.28px;
+      border-bottom: 1px solid #979797;
+      font-size: 21px;
+      box-shadow: none;
+    }
+    .ant-input-password {
+      border: none;
+      background: transparent;
+      color: white;
+      width: 100%;
+      height: 67.28px;
+      box-shadow: none;
+      .ant-input-suffix {
+        display: none;
+      }
+    }
+    .errorText {
+      margin-top: 5px;
+      color: red;
+    }
+  }
+  .ant-btn {
+    border-radius: 50px;
+    width: 100%;
+    height: 55px;
+    margin-bottom: 15px;
+
+    font-weight: 600;
+    font-size: 17.5px;
+    font-style: normal;
+  }
+  .loginbtn {
+    margin-top: 134.89px;
+  }
+}
+.right-side {
+  font-family: Avenir Next;
+  border-radius: 0px 19px 19px 0px !important;
+  background-size: cover;
+
+  color: white;
+  h3 {
+    color: white;
+    margin: 0px;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .ant-carousel .slick-dots-bottom {
+    bottom: 41px;
+    left: 100px;
+  }
+  .ant-carousel .slick-dots li button {
+    width: 6px;
+    height: 6px;
+    border-radius: 50px;
+  }
+  .slick-dots li button:before {
+    content: none;
+  }
+  .right-side-wrapper1 {
+    height: 625px;
+    padding: 0px 23px 31px 23px;
+    background: url(../../assets/img/experience/Picture1.png) no-repeat;
+    background-size: cover;
+    border-radius: 0px 19px 19px 0px !important;
+  }
+  .right-side-wrapper2 {
+    height: 625px;
+    padding: 0px 23px 31px 23px;
+    background: url(../../assets/img/experience/Picture2.png) no-repeat;
+    background-size: cover;
+    border-radius: 0px 19px 19px 0px !important;
+  }
+  .right-side-wrapper3 {
+    height: 625px;
+    padding: 0px 23px 31px 23px;
+    background: url(../../assets/img/experience/Picture3.png) no-repeat;
+    background-size: cover;
+    border-radius: 0px 19px 19px 0px !important;
+  }
+  .right-side-wrapper4 {
+    height: 625px;
+    padding: 0px 23px 31px 23px;
+    background: url(../../assets/img/experience/Picture4.png) no-repeat;
+    background-size: cover;
+    border-radius: 0px 19px 19px 0px !important;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .left-side {
+    border-radius: 19px;
+  }
+}
+
+@media screen and (max-width: 910px) {
+  .right-side {
+    .ant-carousel .slick-dots-bottom {
+      bottom: 41px;
+      left: 50px;
+    }
+  }
+}
+
+@media screen and (max-width: 690px) {
+  .right-side {
+    .right-side-wrapper1 {
+      height: 658px;
+    }
+    .right-side-wrapper2 {
+      height: 658px;
+    }
+    .right-side-wrapper3 {
+      height: 658px;
+    }
+    .right-side-wrapper4 {
+      height: 658px;
+    }
+  }
+}

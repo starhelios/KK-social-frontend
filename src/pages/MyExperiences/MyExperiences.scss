@@ -1,0 +1,340 @@
+.myexperience {
+  background: white;
+  font-family: Avenir Next;
+  .exp-back-btn {
+    display: flex !important;
+    margin: 68px 0px 33px 0px;
+    .exp-back-btn-context {
+      margin-left: 6px;
+      color: black;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    svg {
+      color: black;
+      width: 24px;
+      height: 20px;
+    }
+    .NavLinkWithActivation {
+      width: 100px;
+    }
+  }
+  .exp-content {
+    padding-top: 84px;
+    .exp-content-left {
+      .exp-content-left-item {
+        display: block;
+        padding-bottom: 39.33px;
+        h1 {
+          font-size: 43.88px !important;
+          font-weight: 600;
+          margin: 0px 0px 22.3px 0px;
+        }
+        h2 {
+          font-size: 36.56px;
+          font-weight: 600;
+          margin: 0px 0px 39.92px 0px;
+        }
+        h3 {
+          font-size: 25.59px;
+          font-weight: 500;
+          margin: 0px;
+        }
+        h4 {
+          font-size: 25.59px;
+          font-weight: 500;
+          margin-top: 17px;
+        }
+        svg {
+          width: 28.88px;
+          height: 28.88px;
+          margin-right: 15px;
+          opacity: 0.75;
+        }
+        img {
+          margin-right: 15px;
+        }
+      }
+      .exp-content-left-item-line {
+        border: 1px solid rgb(221, 221, 221);
+        margin-bottom: 39.97px;
+      }
+    }
+    .exp-content-right {
+      height: 100%;
+      padding: 22px 24px;
+      //margin: 0px 84px;
+      border-radius: 18px;
+      box-shadow: 2px 2px 2px 2px #888888;
+      h4 {
+        font-size: 21.96px;
+        margin: 0px;
+      }
+      h5 {
+        font-size: 15.38px;
+        margin: 0px;
+        font-weight: 500;
+      }
+      .exp-content-right-header {
+        .exp-content-right-header-date {
+          border-radius: 50px;
+          border: 1px solid black;
+          height: 44px;
+          h5 {
+            margin-top: 9px;
+            font-weight: 600;
+          }
+
+          .search-dates-experience {
+            cursor: pointer;
+
+            .ant-picker-input {
+              display: none;
+            }
+
+            .ant-picker-range-separator {
+              font-size: 15.38px;
+              font-weight: 600;
+            }
+          }
+        }
+        .exp-content-right-header-guest {
+          padding: 2px;
+          border-radius: 50px;
+          border: 1px solid black;
+          height: 44px;
+          span {
+            font-size: 15.38px;
+            font-weight: 600;
+          }
+          .decrease-btn,
+          .increase-btn {
+            border-radius: 50px;
+            background: #2a2a29;
+            color: white;
+            width: 37.34px;
+            height: 37.34px;
+            align-items: center;
+            display: flex;
+            opacity: 0.25;
+          }
+
+          .decrease-btn:focus,
+          .increase-btn:focus {
+            opacity: 1;
+            border: none;
+          }
+          .ant-btn {
+            padding: 0px;
+          }
+        }
+        // h5 {
+        //     margin-top: 9px
+        // }
+      }
+      .exp-content-right-body {
+        .exp-content-right-body-row {
+          padding-top: 36px;
+          .exp-content-right-body-row-choose-item {
+            padding-top: 24.16px;
+            padding-bottom: 23.9px;
+            //border-bottom: 1px solid rgb(221, 221, 221);
+          }
+          .exp-content-right-body-row-choose-item-line {
+            border: 1px solid rgb(221, 221, 221);
+          }
+          .ant-btn {
+            border-radius: 50px;
+            background: #e41e35;
+            color: white;
+            font-size: 15.38px;
+            border: none;
+            width: 100%;
+            height: 48.32px;
+          }
+        }
+      }
+    }
+  }
+}
+FormGroup {
+  margin: 0 15px 20px;
+  padding: 0;
+  border-style: none;
+  background-color: #7795f8;
+  will-change: opacity, transform;
+  box-shadow: 0 6px 9px rgba(50, 50, 93, 0.06), 0 2px 5px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 #829fff;
+  border-radius: 4px;
+}
+/**
+Stripe styling start
+*/
+.FormRow {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-left: 15px;
+  border-top: 1px solid #819efc;
+}
+.stripe-format-row {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.stripe-form-line {
+  margin-top: 14px;
+  border: 1px solid rgb(221, 221, 221);
+}
+.stripe-regular-input {
+  padding: 8px 8px 8px 11px;
+  margin-top: 15px;
+}
+.stripe-regular-input::placeholder {
+  color: #e0e0e0;
+}
+
+.StripeElement--webkit-autofill {
+  background: transparent !important;
+}
+
+.StripeElement {
+  width: 100%;
+  padding: 11px 15px 11px 11px;
+  margin-top: 15px;
+  border: 1px solid #e0e0e0;
+  
+}
+.StripeElement--focus {
+  border: 1px solid #40A9FF;
+}
+.StripeElement:hover {
+  border: 1px solid #40A9FF;
+}
+
+/**
+Stripe styling end
+*/
+.confirm-pay-modal {
+  h1 {
+    font-size: 27.42px;
+    font-weight: 500;
+  }
+  h2 {
+    font-size: 15.0459px;
+    font-weight: 600;
+    color: #2a2a29;
+    opacity: 0.75;
+    margin-bottom: 19.63px;
+  }
+  h3 {
+    font-size: 20.06px;
+    font-weight: 500;
+    color: #2a2a29;
+    margin-bottom: 26.65px;
+  }
+  h4 {
+    font-size: 15.0459px;
+    font-weight: 500;
+    color: #2a2a29;
+    opacity: 0.75;
+    margin-bottom: 19.63px;
+  }
+  h5 {
+    font-size: 16.45px;
+    font-weight: 600;
+    color: black;
+    opacity: 0.75;
+    margin: 0px;
+  }
+  .ant-modal-content {
+    border-radius: 50px;
+  }
+  .ant-modal-body {
+    padding: 0px;
+  }
+  .ant-modal-footer {
+    display: none !important;
+  }
+  .confirm-pay-modal-left-side {
+    font-family: Avenir Next;
+    background: white;
+    padding: 24px 45px 33px 45px;
+    border-radius: 19px 0px 0px 19px;
+    .confirm-pay-modal-left-side-item {
+      padding-top: 27.5px;
+      border-bottom: 1px solid rgb(221, 221, 221);
+    }
+    .confirm-pay-modal-left-side-item-content {
+      span {
+        font-size: 20.06px;
+        font-weight: 500;
+        color: #2a2a29;
+        margin-bottom: 26.65px;
+      }
+    }
+    .confirm-pay-modal-title {
+      font-family: Avenir Next;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 30px;
+    }
+    img {
+      border-radius: 20px;
+      width: 100%;
+      height: 137.09px;
+    }
+    .red-review-icon {
+      img {
+        height: 100%;
+      }
+    }
+    a {
+      text-decoration: underline;
+      color: #979797;
+    }
+  }
+  .confirm-pay-modal-right-side {
+    font-family: Avenir Next;
+    border-radius: 0px 19px 19px 0px !important;
+    background: white;
+    padding: 52px 45px 33px 45px;
+    .ant-select-selector {
+      border: none;
+    }
+    .ant-select,
+    .ant-select-open,
+    .ant-select-show-arrow,
+    .ant-select-single {
+      width: 100%;
+      margin-bottom: 26px;
+    }
+    .confirm-pay-modal-right-side-item {
+      padding-top: 56px;
+      border-bottom: 1px solid rgb(221, 221, 221);
+    }
+    .confirm-pay-modal-right-side-text {
+      padding-top: 56px;
+      padding-bottom: 22px;
+      text-align: center;
+    }
+    .ant-btn {
+      border-radius: 50px;
+      background: #e41e35;
+      width: 349px;
+      height: 55px;
+      margin-bottom: 15px;
+      color: white;
+      font-weight: 600;
+      font-size: 17.5px;
+      font-style: normal;
+      margin-bottom: 0px;
+    }
+  }
+  .anticon.anticon-close.ant-modal-close-icon {
+    background: #979797;
+    border: none;
+  }
+}

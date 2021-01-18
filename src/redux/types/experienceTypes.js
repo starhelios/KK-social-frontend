@@ -1,0 +1,2 @@
+export const EXPERIENCE_SET_DATE_FILTER =
+  'experience/EXPERIENCE_SET_DATE_FILTER';

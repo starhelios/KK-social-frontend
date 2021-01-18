@@ -1,0 +1,69 @@
+{
+  "name": "kloutkast",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@stripe/react-stripe-js": "^1.1.2",
+    "@stripe/stripe-js": "^1.11.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "antd": "^4.7.0",
+    "antd-img-crop": "^3.13.2",
+    "axios": "^0.21.0",
+    "connected-react-router": "^6.8.0",
+    "express": "^4.17.1",
+    "firebase": "^8.0.0",
+    "history": "^5.0.0",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "node-sass": "^4.14.1",
+    "ramda": "^0.27.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-google-login": "^5.1.22",
+    "react-hook-form": "^6.10.0",
+    "react-icons": "^4.1.0",
+    "react-id-swiper": "^4.0.0",
+    "react-lazy-load-image-component": "^1.5.0",
+    "react-redux": "^7.2.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "react-spinkit": "^3.0.0",
+    "react-toastify": "^6.0.9",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
+    "swiper": "^6.3.5",
+    "validator": "^13.1.17"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.5",
+    "prettier": "^2.1.2",
+    "react-slick": "^0.27.11",
+    "slick-carousel": "^1.8.1"
+  }
+}

@@ -1,0 +1,182 @@
+.slick-wrapper {
+  font-family: Avenir Next;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: white;
+  }
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 22px;
+  }
+  h3 {
+    font-size: 18px;
+  }
+  .slick-arrow {
+    position: absolute;
+    top: -30px;
+    margin-right: 50px;
+  }
+  .slick-prev {
+    align-items: center;
+    left: auto;
+    right: 60px;
+    font-size: 13px;
+    color: #eaeaea;
+    background: #2a2a29;
+    opacity: 0.5;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    svg {
+      margin-top: 13px;
+    }
+  }
+  .slick-prev:focus,
+  .slick-prev:hover,
+  .slick-next:focus,
+  .slick-next:hover {
+    opacity: 1;
+  }
+  .slick-next {
+    right: 0;
+    font-size: 13px;
+    color: #eaeaea;
+    background: #2a2a29;
+    width: 40px;
+    height: 40px;
+    opacity: 0.5;
+    border-radius: 50px;
+    svg {
+      margin-top: 13px;
+    }
+  }
+
+  .slick-track {
+    margin: 0;
+  }
+
+  .ant-card {
+    background: none;
+  }
+  .ant-card-bordered {
+    border: none;
+  }
+  .ant-card-body {
+    padding: 18px 0px;
+    .ant-card-meta-title,
+    .ant-card-meta-description {
+      color: white;
+    }
+    .ant-card-meta-title {
+      font-family: Avenir Next;
+      font-weight: 500;
+      font-size: 18px;
+    }
+    .ant-card-meta-description {
+      font-family: Avenir Next;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 18px;
+      p {
+        margin-bottom: 8px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .booking-card {
+    .booking-card-content {
+      padding: 24px;
+    }
+    .card-wrapper {
+      height: 100%;
+    }
+    .booking-card-footer {
+      background: white;
+      border-radius: 0px 0px 18px 18px;
+      font-size: 14px;
+      height: 0px;
+      transition: height 0.5s;
+      .ant-btn {
+        display: none;
+        margin: 24px auto;
+        background: #e41e35;
+        border-radius: 50px;
+        border: none;
+        color: white;
+        width: 279px;
+        height: 44px;
+      }
+    }
+    &:hover {
+      .ant-btn {
+        display: inline;
+      }
+      .booking-card-footer-rate {
+        .booking-card-footer-rate-col {
+          display: inline;
+        }
+      }
+      .booking-card-footer {
+        height: 91px;
+      }
+      .booking-card-footer-rate {
+        height: 130px;
+      }
+    }
+    .booking-card-footer-rate {
+      padding: 0px 24px;
+      font-size: 18px;
+      height: 0px;
+      transition: height 0.5s;
+      .booking-card-footer-rate-col {
+        border-top: 1px solid white;
+        padding: 24px 0px;
+        display: none;
+      }
+      .ant-rate-star.ant-rate-star-full,
+      .ant-rate-star.ant-rate-star-zero,
+      .ant-rate-star.ant-rate-star-half.ant-rate-star-active {
+        transition: transform 0s;
+        transform: scale(1.45);
+        padding-right: 6px;
+      }
+
+      .ant-rate-star.ant-rate-star-half.ant-rate-star-active:hover {
+        transform: scale(1.45);
+        padding-right: 6px;
+      }
+
+      .ant-rate-star.ant-rate-star-full:hover {
+        transform: scale(1.45);
+        padding-right: 6px;
+      }
+
+      .ant-rate-star.ant-rate-star-zero:hover {
+        transform: scale(1.45);
+        padding-right: 6px;
+      }
+      .ant-rate-star.ant-rate-star-zero {
+        padding-right: 6px;
+      }
+    }
+  }
+}
+
+.slick-list {
+  padding: 0 !important;
+}
+
+@media screen and (max-width: 576px) {
+  .card-item {
+    margin: 0 auto;
+  }
+  .booking-card {
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,114 @@
+.profile-wrapper {
+  background: #383838;
+  padding: 68px 84px 112px 84px;
+  .profile-line {
+    background: #eaeaea;
+    opacity: 0.1;
+    height: 1.95px;
+    width: 100%;
+  }
+  .profile-back-btn {
+    display: flex !important;
+
+    .profile-back-btn-context {
+      margin-left: 6px;
+      color: #eaeaea;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    svg {
+      color: #e5e5e5;
+      width: 24px;
+      height: 20px;
+    }
+    // .NavLinkWithActivation {
+    //     width: 100px;
+    // }
+  }
+  .profile-content {
+    margin-top: 84px;
+    .profile-left-side {
+      font-family: Avenir Next;
+      color: #eaeaea;
+
+      .input-unit {
+        button {
+          display: flex;
+          width: 100%;
+          text-decoration: none !important;
+          background: none;
+          border: none;
+          padding: 0px;
+        }
+        button:focus {
+          outline: none;
+        }
+      }
+      h1 {
+        font-size: 43.88px;
+        font-weight: 600;
+        color: #eaeaea;
+        margin: 0px;
+      }
+      h2 {
+        font-size: 25.59;
+        font-weight: 500;
+        color: #eaeaea;
+        opacity: 0.75;
+        margin-top: 22px;
+        margin-bottom: 40.3px;
+      }
+      h3 {
+        font-size: 20.06px;
+        font-weight: 500;
+        color: #eaeaea;
+        margin: 26px 0px 26px 0px;
+      }
+      h4 {
+        font-size: 15.0459px;
+        font-weight: 600;
+        color: #eaeaea;
+        opacity: 0.75;
+        margin: 40px 0px 0px 0px;
+      }
+      h5 {
+        font-size: 12.0459px;
+        font-weight: 300;
+        color: #eaeaea;
+        margin: 10px 0px 0px 0px;
+      }
+
+      a {
+        text-decoration: underline;
+        color: #979797;
+      }
+
+      .logout-btn {
+        color: #e41e35;
+        font-size: 20.06px;
+        font-weight: 500;
+        margin-top: 66px;
+        cursor: pointer;
+      }
+      .profile-available-cards {
+        border-color: white;
+
+      }
+      .profile-available-cards:hover {
+        background-color: #e41e35;
+        
+      }
+    }
+    .profile-right-side {
+      font-family: Avenir Next;
+      //border-radius: 19px 0px 0px 19px;
+    }
+  }
+}
+
+@media screen and (max-width: '720px') {
+  .profile-wrapper {
+    padding: 19px 30px;
+  }
+}

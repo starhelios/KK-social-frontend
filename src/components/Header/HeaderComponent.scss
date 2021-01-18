@@ -1,0 +1,58 @@
+.header-component {
+    font-family: Avenir Next;
+    width: 100%;
+    height: auto;
+    padding: 19px 80px;
+    background: none;
+    color: none;
+    .logo {
+        width: 80px;
+        height: 80px;
+    }
+    .signup-link button {
+        color: rgb(160, 160, 160);
+        text-decoration: underline;
+        font-size: 14px;
+        font-weight: 500;
+        background: none;
+        border: none;
+    }
+    button:focus {
+        outline: none;
+    }
+    
+}
+.signup-modal{
+    .ant-modal-header {
+        border-radius: 20px;
+    }
+    
+    .ant-modal-title {
+        text-align: center;
+    }
+    
+    .ant-modal-content {
+        border-radius: 20px;
+    }
+
+    .ant-modal-body {
+        padding: 0px;
+    }
+    .ant-modal-footer {
+        display: none;
+    }
+    
+    .ant-btn-primary {
+        background-color: black;
+        border-color: black;
+        border-radius: 50px;
+        width: 279px;
+        height: 44px;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .header-component{
+        padding: 19px 30px;
+    }
+}

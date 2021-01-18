@@ -1,0 +1,61 @@
+.my-bookings {
+    font-family: Avenir Next;
+    height: calc(100vh - 182px);
+    h2 {
+        color: white;
+        font-size: 24px;
+        font-weight: 600;
+    }
+    h3 {
+        font-size: 17.5px;
+        font-weight: 600;
+        //color: white;
+    }
+    .my-booking-switch-button {
+        border-radius: 50px;
+        background: white;
+        width: 295px;
+        height: 60px;
+        margin-top: 33px;
+        .ant-btn {
+            border-radius: 50px;
+            border: none;
+            width: 137.5px;
+            height: 50px;
+        }
+        .ant-btn:focus, .ant-btn:active {
+            background-color: black;
+            color: white;
+            border: none;
+        }
+        .ant-btn-primary {
+            background-color: black;
+            color: white;
+            border: none;
+        }
+    }
+    .ant-radio-group {
+        display: flex;
+        .ant-radio-button-wrapper {
+            display: flex;
+            align-items: center;
+            border: none;
+            border-radius: 50px;
+            width: 137.5px;
+            height: 50px;
+            font-size: 17.5px;
+            font-weight: 600;
+            span {
+                margin: 0 auto;
+            }
+        }
+    }
+    .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+        color: #fff;
+        background: #2A2A29;
+        border-color: #2A2A29;
+    }
+    .ant-radio-button-wrapper:not(:first-child)::before {
+        background-color: transparent;
+    }
+}

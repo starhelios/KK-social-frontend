@@ -1,0 +1,232 @@
+.host-experience {
+  background: white;
+  font-family: Avenir Next;
+  .host-experience-back-btn {
+    display: flex !important;
+    margin: 68px 0px 33px 0px;
+    .host-experience-back-btn-context {
+      margin-left: 6px;
+      color: black;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    svg {
+      color: black;
+      width: 24px;
+      height: 20px;
+    }
+    .NavLinkWithActivation {
+      width: 100px;
+    }
+  }
+  .host-experience-content {
+    padding-top: 84px;
+    .host-experience-content-left {
+      .host-experience-content-left-item {
+        display: block;
+        padding-bottom: 39.33px;
+        h1 {
+          font-size: 43.88px !important;
+          font-weight: 600;
+          margin: 0px 0px 22.3px 0px;
+        }
+        h2 {
+          font-size: 36.56px;
+          font-weight: 600;
+          margin: 0px 0px 39.92px 0px;
+        }
+        h3 {
+          font-size: 25.59px;
+          font-weight: 500;
+          margin: 0px;
+        }
+        h4 {
+          font-size: 25.59px;
+          font-weight: 500;
+          margin-top: 17px;
+        }
+        h5 {
+          font-size: 15.05px;
+          font-weight: 600;
+          margin-bottom: 19.63px;
+          opacity: 0.75;
+        }
+        svg {
+          width: 28.88px;
+          height: 28.88px;
+          margin-right: 15px;
+          opacity: 0.75;
+        }
+
+        .host-experience-upload {
+          img {
+            margin-right: -6px;
+          }
+        }
+        .ant-upload.ant-upload-select-picture-card {
+          border-radius: 20px;
+          background: none;
+        }
+        .ant-upload-list-picture .ant-upload-list-item,
+        .ant-upload-list-picture-card .ant-upload-list-item {
+          padding: 0px;
+          border-radius: 20px;
+        }
+        .ant-upload-list-picture .ant-upload-list-item-info,
+        .ant-upload-list-picture-card .ant-upload-list-item-info {
+          border-radius: 20px;
+        }
+      }
+      .host-experience-content-left-item-line {
+        border: 1px solid rgb(221, 221, 221);
+        margin-bottom: 39.97px;
+      }
+      .ant-input,
+      .ant-input-number,
+      .ant-input-number-input-wrap,
+      .ant-input-number-input-wrap > input {
+        padding-left: 0px;
+        border: none;
+        background: transparent;
+        color: black;
+        width: 100%;
+        height: 21px;
+        //border-bottom: 1px solid #979797;
+        font-size: 21px;
+        font-weight: 500;
+        box-shadow: none;
+        img {
+          margin-right: -15px;
+        }
+      }
+      .ant-input-prefix {
+        margin-right: 14px;
+      }
+      .ant-input-affix-wrapper,
+      .ant-input-affix-wrapper:focus {
+        border: none !important;
+      }
+      // .ant-input::placeholder {
+      //   color: #2a2a29;
+      //   font-size: 20.06px;
+      //   font-weight: 600;
+      //   margin-left: 15px;
+      // }
+
+      .ant-input-number-handler-wrap {
+        display: none !important;
+      }
+
+      .create-btn {
+        .ant-btn {
+          background: #e41e35;
+          color: white;
+          width: 100%;
+          height: 55px;
+          font-size: 17.5px;
+          font-weight: 600;
+          border-radius: 50px;
+          margin: 84px 0px 84px 0px;
+          border: none;
+        }
+      }
+    }
+    .host-experience-content-right {
+      height: 100%;
+      padding: 22px 24px;
+      //margin: 0px 84px;
+      border-radius: 18px;
+      box-shadow: 2px 2px 2px 2px #888888;
+      h4 {
+        font-size: 21.96px;
+        font-weight: 600;
+        margin: 0px;
+      }
+      h5 {
+        font-size: 15.38px;
+        margin: 0px;
+        font-weight: 600;
+      }
+      h6 {
+        font-size: 15.38px;
+        margin: 0px;
+        font-weight: 500;
+      }
+      .host-experience-content-right-header {
+        button {
+          background: none;
+          border: none;
+          padding: 0px;
+        }
+        button:focus {
+          outline: none;
+        }
+        .host-experience-content-right-header-date {
+          border-radius: 50px;
+          border: 1px solid black;
+          height: 44px;
+          h5 {
+            margin-top: 9px;
+            font-weight: 600;
+          }
+        }
+        border-radius: 50px;
+        border: 1px solid black;
+        // h5 {
+        //     margin-top: 9px
+        // }
+      }
+      .host-experience-content-right-body {
+        .host-experience-content-right-body-row {
+          padding-top: 36px;
+          .host-experience-content-right-body-row-choose-item {
+            padding-top: 24.16px;
+            padding-bottom: 23.9px;
+            //border-bottom: 1px solid rgb(221, 221, 221);
+          }
+          .host-experience-content-right-body-row-choose-item-line {
+            border: 1px solid rgb(221, 221, 221);
+          }
+          .ant-btn {
+            border-radius: 50px;
+            background: #e41e35;
+            color: white;
+            font-size: 15.38px;
+            border: none;
+            width: 100%;
+            height: 48.32px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.host-search-dates {
+  background: none;
+  //padding-left: 0px;
+  border: none;
+  height: 44px;
+  width: 100%;
+  font-family: Avenir Next;
+  font-size: 15.38px;
+  font-weight: 600;
+  .ant-picker-input {
+    display: none;
+  }
+  .ant-picker-clear {
+    display: none;
+  }
+  .ant-picker-active-bar {
+    display: none;
+  }
+  .ant-picker-range-separator {
+    padding: 0px;
+    border: none;
+  }
+}
+
+textarea.ant-input {
+  height: auto !important;
+}

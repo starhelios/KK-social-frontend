@@ -1,0 +1,330 @@
+import React, { useCallback } from 'react';
+import {
+  Row,
+  Col,
+  Upload,
+  message,
+  Button,
+  Input,
+  DatePicker,
+  Skeleton,
+  AutoComplete,
+  Dropdown,
+  Menu,
+} from 'antd';
+import { CameraOutlined, SearchOutlined } from '@ant-design/icons';
+import { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import ImgCrop from 'antd-img-crop';
+import isEmail from 'validator/lib/isEmail';
+import moment from 'moment';
+import _get from 'lodash/get';
+import { toast } from 'react-toastify';
+import _debounce from 'lodash/debounce';
+
+import './styles.scss';
+import { storage } from '../../utils/firebase';
+import { authServices } from '../../services/authServices';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserInfo } from '../../redux/selectors/authSelector';
+import { AUTH_SET_USER_INFO } from '../../redux/types/authTypes';
+import SearchIcon from '../../assets/img/search-icon.png';
+import { categoryServices } from '../../services/categoryService';
+
+export const BecomeHost = () => {
+  const [loading, setLoading] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
+  const [styleAvatar, setStyleAvatar] = useState({});
+  const userInfoSelector = useSelector((state) => getUserInfo(state));
+  const [showChangePass, setShowChangePass] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const dispatch = useDispatch();
+
+  let setFirstPass = localStorage.getItem('setFirstPass');
+  if (setFirstPass === 'true') {
+    setFirstPass = true;
+  } else {
+    setFirstPass = false;
+  }
+
+  const callApiSearch = (value) => {
+    categoryServices.searchCategory(value).then((res) => {
+      const { data } = res;
+      const errorStatus = _get(data, 'error.status', true);
+      const payload = _get(data, 'payload', null);
+
+      if (!errorStatus) {
+        setCategories(payload);
+      }
+    });
+  };
+
+  const handleSeachCategories = useCallback(_debounce(callApiSearch, 1000), []);
+
+  const { handleSubmit, errors, reset, control, setValue, watch } = useForm({
+    mode: 'onBlur',
+  });
+
+  const beforeUpload = (file) => {
+    const isImage = file.type.indexOf('image/') === 0;
+    if (!isImage) {
+      message.error('You can only upload image file!');
+    }
+
+    // You can remove this validation if you want
+    const isLt5M = file.size / 1024 / 1024 < 5;
+    if (!isLt5M) {
+      message.error('Image must smaller than 5MB!');
+    }
+    return isImage && isLt5M;
+  };
+
+  const customUpload = ({ onError, onSuccess, file }) => {
+    const uploadTask = storage.ref(`images/${file.name}`).put(file);
+    setLoading(true);
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {},
+      (error) => {
+        onError(error);
+      },
+      () => {
+        storage
+          .ref('images')
+          .child(`${file.name}`)
+          .getDownloadURL()
+          .then((url) => {
+            onSuccess(null, url);
+            setImageUrl(url);
+            setLoading(false);
+          });
+      }
+    );
+  };
+
+  const onSubmit = async (values) => {
+    const params = {
+      dateOfBirth: values.dateOfBirth.toDate(),
+      fullname: values.fullname,
+      email: values.email,
+      aboutMe: values.aboutMe,
+      isHost: true,
+    };
+
+    if (imageUrl) {
+      params.avatarUrl = imageUrl;
+    }
+
+    setLoadingSubmit(true);
+
+    authServices.updateUserInfo(userInfoSelector.id, params).then((res) => {
+      const { data } = res;
+      const errorStatus = _get(data, 'error.status', true);
+      const errorMessage = _get(data, 'error.message', '');
+      const payload = _get(data, 'payload', null);
+
+      if (!showChangePass) {
+        setLoadingSubmit(false);
+      }
+
+      if (!errorStatus) {
+        toast.success(errorMessage);
+        dispatch({ type: AUTH_SET_USER_INFO, payload });
+      } else {
+        toast.error(errorMessage);
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (imageUrl) {
+      setStyleAvatar({
+        background: `url(${imageUrl}) center center no-repeat`,
+      });
+    }
+  }, [imageUrl]);
+
+  useEffect(() => {
+    callApiSearch('');
+  }, []);
+  useEffect(() => {
+    if (userInfoSelector) {
+      setLoading(false);
+      setValue('fullname', userInfoSelector.fullname, { shouldDirty: true });
+      setValue('email', userInfoSelector.email, { shouldDirty: true });
+      setValue('dateOfBirth', moment(userInfoSelector.dateOfBirth), {
+        shouldDirty: true,
+      });
+
+      // warning
+      if (userInfoSelector.avatarUrl) {
+        setImageUrl(userInfoSelector.avatarUrl);
+      }
+    } else {
+      setLoading(true);
+    }
+  }, [userInfoSelector]);
+
+  const showDropDownMenu = () => {
+    return (
+      <Menu>
+        {categories.map((elem, index) => {
+          return (
+            <Menu.Item
+              onClick={() => {
+                setSelectedCategory(elem);
+              }}
+            >
+              <p>{elem.name}</p>
+            </Menu.Item>
+          );
+        })}
+      </Menu>
+    );
+  };
+  return (
+    <Col className="edit-profile-wrapper" sm={24} xs={24}>
+      <Row className="edit-profile-header" justify="center">
+        <h2>Become A Host</h2>
+      </Row>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Row className="edit-profile-content">
+          <Col sm={24} xs={24}>
+            <Row className="edit-profile-photo" justify="center">
+              {loading && (
+                <Skeleton.Avatar
+                  active={loading}
+                  size={150}
+                  shape="circle"
+                  style={{ marginBottom: 33 }}
+                />
+              )}
+              {!loading && (
+                <ImgCrop>
+                  <Upload
+                    fileList={[]}
+                    beforeUpload={beforeUpload}
+                    customRequest={customUpload}
+                  >
+                    <Button style={styleAvatar}>
+                      <CameraOutlined />
+                    </Button>
+                  </Upload>
+                </ImgCrop>
+              )}
+            </Row>
+
+            <Row>
+              <h4>Full Name</h4>
+            </Row>
+            <Row>
+              <Controller
+                as={<Input />}
+                name="fullname"
+                control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: 'You must enter your full name',
+                  },
+                }}
+              />
+              {errors.fullname && (
+                <div className="errorText">{errors.fullname.message}</div>
+              )}
+            </Row>
+            <Row className="edit-profile-line" />
+            <Row>
+              <h4>Email Address</h4>
+            </Row>
+            <Row>
+              <Controller
+                as={<Input />}
+                name="email"
+                control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: 'You must enter your email',
+                  },
+                  validate: (input) => isEmail(input),
+                }}
+              />
+              {errors.email && (
+                <div className="errorText">{errors.email.message}</div>
+              )}
+              {errors.email && errors.email.type === 'validate' && (
+                <div className="errorText">Wrong format email</div>
+              )}
+            </Row>
+            <Row className="edit-profile-line" />
+            <Row>
+              <h4>Date of Birth</h4>
+            </Row>
+            <Row>
+              <Controller
+                as={<DatePicker size="middle" format="DD-MM-YYYY" />}
+                name="dateOfBirth"
+                control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: 'You must choose birthday',
+                  },
+                }}
+              />
+            </Row>
+            <Row className="edit-profile-line" />
+
+            <Row>
+              <h4>About Me</h4>
+            </Row>
+            <Row>
+              <Controller
+                as={<Input placeholder="Enter about me" />}
+                name="aboutMe"
+                control={control}
+                rules={{
+                  required: {
+                    value: true,
+                    message: 'You must enter your about',
+                  },
+                }}
+              />
+              {errors.aboutMe && (
+                <div className="errorText">{errors.aboutMe.message}</div>
+              )}
+            </Row>
+            <Row className="edit-profile-line" />
+            {/* Need confirm and remove below code. */}
+            {/* <Row style={{ cursor: 'hover' }}>
+              <h4>Category</h4>
+            </Row>
+            <Row align="middle" justify="start" style={{ cursor: 'hover' }}>
+              <Col md={24} sm={24} xs={24}>
+                <Dropdown overlay={showDropDownMenu}>
+                  <p style={{ fontSize: '20px', color: 'white' }}>{`${
+                    selectedCategory ? selectedCategory.name : `Select Category`
+                  }`}</p>
+                </Dropdown>
+              </Col>
+            </Row> 
+            <Row className="edit-profile-line" /> */}
+            <Row className="save-btn" justify="center">
+              <Col sm={20} xs={20}>
+                <Button htmlType="submit" loading={loadingSubmit}>
+                  Become A Host
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </form>
+    </Col>
+  );
+};
+
+export default BecomeHost;
