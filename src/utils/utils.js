@@ -1,14 +1,14 @@
-import moment from 'moment';
+import moment from "moment";
 
-export const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
+export const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT_CLOUD; //! Change back to REACT_APP_API_ENDPOINT when finished
 
 export const reducerHooks = (state, newState) => ({
   ...state,
   ...newState,
 });
 
-export const formatDateFE = 'MMMM DD, YYYY';
-export const formatDateBE = 'YYYY-MM-DD';
+export const formatDateFE = "MMMM DD, YYYY";
+export const formatDateBE = "YYYY-MM-DD";
 
 function timeConvert(n) {
   var num = n;
@@ -17,9 +17,9 @@ function timeConvert(n) {
   var minutes = (hours - rhours) * 60;
   var rminutes = Math.round(minutes);
   if (rhours === 0) {
-    return num + ' minutes';
+    return num + " minutes";
   }
-  return rhours + ' hour(s) and ' + rminutes + ' minute(s).';
+  return rhours + " hour(s) and " + rminutes + " minute(s).";
 }
 
 export const convertExperience = (input) => {
@@ -29,7 +29,7 @@ export const convertExperience = (input) => {
       title: item.title,
       imgLink: item.images[0],
       category: item.categoryName,
-      catoryIcon: '',
+      catoryIcon: "",
       time: formatMinutesToHours(item.duration),
       price: `$ ${item.price}`,
     };
@@ -42,16 +42,16 @@ export const convertExperience = (input) => {
 
 export const getQueryParams = () =>
   window.location.search
-    .replace('?', '')
-    .split('&')
+    .replace("?", "")
+    .split("&")
     .reduce(
-      (r, e) => ((r[e.split('=')[0]] = decodeURIComponent(e.split('=')[1])), r),
+      (r, e) => ((r[e.split("=")[0]] = decodeURIComponent(e.split("=")[1])), r),
       {}
     );
 
 export function formatMinutesToHours(numberOfMinutes) {
   //create duration object from moment.duration
-  var duration = moment.duration(numberOfMinutes, 'minutes');
+  var duration = moment.duration(numberOfMinutes, "minutes");
 
   //calculate hours
   var hh =
@@ -65,19 +65,19 @@ export function formatMinutesToHours(numberOfMinutes) {
 
   if (hh === 0) {
     if (mm === 1) {
-      return mm + ' minute';
+      return mm + " minute";
     }
-    return mm + ' minutes';
+    return mm + " minutes";
   } else {
     if (mm === 0) {
       if (hh === 1) {
-        return hh + ' hour';
+        return hh + " hour";
       }
-      return hh + ' hours';
+      return hh + " hours";
     }
     if (hh === 1) {
-      return hh + ' hour ' + mm + ' minutes';
+      return hh + " hour " + mm + " minutes";
     }
-    return hh + ' hours ' + mm + ' minutes';
+    return hh + " hours " + mm + " minutes";
   }
 }

@@ -4,8 +4,9 @@ import './SliderComponent.scss';
 import React from 'react';
 import Slider from 'react-slick';
 import { NavLink } from 'react-router-dom';
-import { Button, Card, Col, Image, Rate, Row } from 'antd';
-import { StarOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Image, Row } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import RatingComponent from './RatingComponent';
 
 const { Meta } = Card;
 
@@ -31,6 +32,10 @@ function SliderComponent(props) {
       ? 4
       : 5;
   };
+
+  const sendRatingData = (id, rating) => {
+    console.log('send rating data', id, rating);
+  }
 
   const settings = {
     className: 'center',
@@ -365,7 +370,7 @@ function SliderComponent(props) {
                                       <p> Rate this experience:</p>
                                     </Row>
                                     <Row>
-                                      <Rate character={<StarOutlined />} />
+                                      <RatingComponent id={item.id} callback={sendRatingData} />
                                     </Row>
                                   </Col>
                                 </Row>

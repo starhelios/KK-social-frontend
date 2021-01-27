@@ -27,7 +27,7 @@ function MyBookings() {
             title: "Guitar Lessons",
             category: "Music",
             
-            time: "Aug 8, 2020 • 12:30pmmin",
+            time: "Aug 8, 2020 • 12:30pm",
             price: "$85"
         },
         {
@@ -75,7 +75,7 @@ function MyBookings() {
             title: "Guitar Lessons",
             category: "Music",
             
-            time: "Aug 8, 2020 • 12:30pmmin",
+            time: "Aug 8, 2020 • 12:30pm",
             price: "$85"
         },
         {
