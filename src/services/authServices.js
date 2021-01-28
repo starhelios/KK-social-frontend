@@ -1,4 +1,4 @@
-import requestAPI from '../utils/request';
+import requestAPI from "../utils/request";
 
 export const authServices = {
   login,
@@ -15,25 +15,25 @@ export const authServices = {
 };
 
 function login(data) {
-  return requestAPI.post('/v1/auth/login', data).then((res) => {
+  return requestAPI.post("/v1/auth/login", data).then((res) => {
     return res;
   });
 }
 
 function googleLogin(data) {
-  return requestAPI.post('/v1/auth/google-login', data).then((res) => {
+  return requestAPI.post("/v1/auth/google-login", data).then((res) => {
     return res;
   });
 }
 
 function register(data) {
-  return requestAPI.post('/v1/auth/register', data).then((res) => {
+  return requestAPI.post("/v1/auth/register", data).then((res) => {
     return res;
   });
 }
 
 function forgotPassword(data) {
-  return requestAPI.post('/v1/auth/forgot-password', data).then((res) => {
+  return requestAPI.post("/v1/auth/forgot-password", data).then((res) => {
     return res;
   });
 }
@@ -53,7 +53,7 @@ function changePassword(data) {
 }
 
 function logout(data) {
-  return requestAPI.post('/v1/auth/logout', data).then((res) => {
+  return requestAPI.post("/v1/auth/logout", data).then((res) => {
     return res;
   });
 }
@@ -62,7 +62,7 @@ function updateUserInfo(userId, data) {
   return requestAPI
     .patch(`/v1/users/${userId}`, data, {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     })
     .then((res) => {
@@ -74,7 +74,7 @@ function getUserInfo(userId) {
   return requestAPI
     .get(`/v1/users/${userId}`, {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     })
     .then((res) => {

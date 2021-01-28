@@ -1,4 +1,4 @@
-import requestAPI from '../utils/request';
+import requestAPI from "../utils/request";
 
 export const experienceServices = {
   createExperience,
@@ -13,10 +13,10 @@ function createExperience(data) {
   return requestAPI
     .post(
       `/v1/experiences`,
-      { ...data, userId: localStorage.getItem('userId') },
+      { ...data, userId: localStorage.getItem("userId") },
       {
         headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('access_token'),
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
       }
     )
@@ -33,6 +33,12 @@ function getAll() {
 
 function getAllByUserId(userId) {
   return requestAPI.get(`/v1/experiences?userId=${userId}`).then((res) => {
+    return res;
+  });
+}
+
+function getExperiencesByUser(userId) {
+  return requestAPI.get(`/v1/experiences/reserved/${userId}`).then((res) => {
     return res;
   });
 }

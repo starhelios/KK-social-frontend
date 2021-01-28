@@ -141,6 +141,8 @@ function SliderComponent(props) {
         },
       },
     ],
+     draggable: true,
+    swipeToSlide: true
   };
   const settings_booking = {
     className: 'center',
@@ -303,6 +305,8 @@ function SliderComponent(props) {
         },
       },
     ],
+    draggable: true,
+    swipeToSlide: true
   };
 
   return (

@@ -1,16 +1,23 @@
 import './MyBookings.scss';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Row, Col, Radio} from 'antd'
+import _get from 'lodash/get';
+import { useDispatch, useSelector } from 'react-redux';
 
-import SliderComponent from '../../components/SliderComponent/SliderComponent';
+// import SliderComponent from '../../components/SliderComponent/SliderComponent';
 
 import image1 from "../../assets/img/booking/booking1.png";
 import image2 from "../../assets/img/booking/booking2.png";
 import image3 from "../../assets/img/booking/booking3.png";
 import image4 from "../../assets/img/booking/booking4.png";
 import image5 from "../../assets/img/booking/booking5.png";
+import SliderComponent from '../../components/SliderComponent/SliderComponent'
+import { experienceServices } from '../../services/experienceService';
+import { EXPERIENCE_SET_BOOKINGS } from '../../redux/types/experienceTypes';
+
 
 function MyBookings() {
+    const dispatch = useDispatch();
     const upcoming_data = [
         {
             id: 1,
@@ -114,6 +121,31 @@ function MyBookings() {
         setShowBooking(e.target.value);
         
     };
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userId');
+
+        if (userId) {
+            experienceServices.getUserInfo(userId).then((res) => {
+            const { data } = res;
+            const errorStatus = _get(data, 'error.status', true);
+            const payload = _get(data, 'payload', null);
+
+            if (!errorStatus) {
+                console.log('heyyyy')
+                  dispatch({ type: EXPERIENCE_SET_BOOKINGS, payload });
+            } else {
+                console.log('heyyy something went wrong')
+            }
+            });
+        } else {
+            console.log('heyy')
+        //   dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
+        //   history.push('/');
+        }
+
+
+    });
     
     return (
         <div className="my-bookings">
