@@ -9,6 +9,7 @@ import { Select, Input } from 'antd';
 import { paymentsServices } from '../../services/paymentServices';
 
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { experienceServices } from '../../services/experienceService';
 const ELEMENT_OPTIONS = {
   style: {
     base: {
@@ -101,7 +102,10 @@ const CheckoutForm = (props) => {
             userID: `${props.modalDataToShow[`userId`]}`,
             experienceID: `${props.modalDataToShow[`id`]}`,
           });
+          const userId = localStorage.getItem('userId');
+          const sendData = await experienceServices.reserveExperience({...props.itemInfo, paymentIntent: payload.paymentIntent, guests: props.guest_number, userId: userId, experienceId: props.experienceId, imageUrl: props.imageUrl})
           setPaymentMethod(payload.paymentMethod);
+          console.log('experience id...',props.experienceId)
           setErrorMessage(null);
 
           setIsSubmitting(false);

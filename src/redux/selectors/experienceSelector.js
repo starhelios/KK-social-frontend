@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
 
 const experienceReducer = (state) => state.experienceReducer;
 
@@ -9,4 +9,8 @@ export const getStartDate = createSelector(
 export const getEndDate = createSelector(
   experienceReducer,
   (state) => state.endDate
+);
+export const getBookings = createSelector(
+  experienceReducer,
+  (state) => state.bookings
 );

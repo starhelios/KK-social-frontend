@@ -3,10 +3,12 @@ import requestAPI from "../utils/request";
 export const experienceServices = {
   createExperience,
   getAll,
+  getUserBookings,
   filterExperience,
   getById,
   getByUserId,
   getAllByUserId,
+  reserveExperience,
 };
 
 function createExperience(data) {
@@ -14,6 +16,25 @@ function createExperience(data) {
     .post(
       `/v1/experiences`,
       { ...data, userId: localStorage.getItem("userId") },
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      }
+    )
+    .then((res) => {
+      return res;
+    });
+}
+
+function reserveExperience(data) {
+  return requestAPI
+    .post(
+      "/v1/experiences/reserve",
+      {
+        ...data,
+        userId: localStorage.getItem("userId"),
+      },
       {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -37,7 +58,7 @@ function getAllByUserId(userId) {
   });
 }
 
-function getExperiencesByUser(userId) {
+function getUserBookings(userId) {
   return requestAPI.get(`/v1/experiences/reserved/${userId}`).then((res) => {
     return res;
   });

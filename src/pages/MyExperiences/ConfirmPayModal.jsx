@@ -20,7 +20,7 @@ const ConfirmPayModal = ({
   handleConfirmAndPay,
   modalDataToShow,
   itemInfo,
-  userData,
+  userData, imageUrl
 }) => {
   const currencyFormat = (num) => {
     return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
@@ -34,6 +34,7 @@ const ConfirmPayModal = ({
       setLoadingModal(false);
     }
   }, [modalDataToShow]);
+  console.log(itemInfo)
 
   useEffect(() => {
     if (userData && userData.availableMethods.length > 0) {
@@ -53,6 +54,7 @@ const ConfirmPayModal = ({
   if (loadingModal) {
     return <>Loading</>;
   }
+  console.log(itemInfo);
   return (
     <Modal
       width={1000}
@@ -213,9 +215,11 @@ const ConfirmPayModal = ({
                   <CheckoutForm
                     handleConfirmAndPay={handleConfirmAndPay}
                     modalDataToShow={modalDataToShow}
+                    itemInfo={itemInfo}
                     paymentType={isNewCard}
                     paymentMethodID={selectedCardVal}
                     guest_number={guest_number}
+                    imageUrl={imageUrl}
                   />
                 </Elements>
               </Row>

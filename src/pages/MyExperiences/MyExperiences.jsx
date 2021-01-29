@@ -53,7 +53,7 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-function MyExperiences() {
+function MyExperiences(props) {
   const { id } = useParams();
 
   const [showConfirmAndPayModal, setShowConfirmAndPayModal] = useState(false);
@@ -65,6 +65,7 @@ function MyExperiences() {
   const [aboutMe, setAboutme] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
   const [experienceData, setExperienceData] = useState([]);
+  const [imageUrl, setImageUrl] = useState("")
   const [dateTextFilter, setDateTextFilter] = useState('Dates');
   const [startDateCalendar, setStartDateCalendar] = useState('');
   const [endDateCalendar, setEndDateCalendar] = useState('');
@@ -77,6 +78,9 @@ function MyExperiences() {
   const [showDatepicker, setShowDatepicker] = useState(false);
   const [values, setValues] = useState([]);
 
+  console.log(experienceData)
+
+
   useEffect(() => {
     if (query.get('start_date') && query.get('end_date')) {
       let start_momentObject = moment(query.get('start_date'), formatDateBE);
@@ -87,8 +91,10 @@ function MyExperiences() {
   }, [detailData]);
 
   useEffect(() => {
-    if (detailData.dateAvaibility) {
-      const formatArr = detailData.dateAvaibility.map((item, idx) => {
+    if (detailData.specificExperience) {
+      console.log(detailData)
+      const formatArr = detailData.specificExperience.map((item, idx) => {
+        console.log(item.day)
         if (startDateCalendar && endDateCalendar) {
           if (startDateCalendar === endDateCalendar) {
             const date = moment(new Date(item.day)).format(formatDateBE);
@@ -163,7 +169,7 @@ function MyExperiences() {
                     className="exp-content-right-body-row-choose-item-btn"
                     onClick={() => {
                       if (localStorage.getItem('userId')) {
-                        handleConfirmAndPayModal(true, item);
+                        handleConfirmAndPayModal(true, item, item.id);
                       } else {
                         window.scrollTo(0, 0);
                         toast.error('please login to continue');
@@ -191,6 +197,7 @@ function MyExperiences() {
     endDateCalendar,
     startDate,
   ]);
+  console.log(detailData.id)
   useEffect(() => {
     if (id) {
       experienceServices.getById(id).then((res) => {
@@ -219,11 +226,11 @@ function MyExperiences() {
               );
             }
           }
-          console.log(payload);
           setDetailData(payload.experience);
           setFullName(payload.experience.hostData.fullname);
           setAboutme(payload.aboutMe);
           setAvatarUrl(payload.avatarUrl);
+          setImageUrl(payload.experience.images[0])
 
           experienceServices
             .getAllByUserId(payload.experience.userId)
@@ -235,6 +242,7 @@ function MyExperiences() {
               if (!errorStatus) {
                 const result = convertExperience(payload);
                 const finalResult = result.filter((item) => item.id !== id);
+                console.log(finalResult)
                 setExperienceData(finalResult);
               }
             });
@@ -253,7 +261,7 @@ function MyExperiences() {
     setGuestNumber(guest_number + 1);
   };
 
-  const handleConfirmAndPayModal = (value, item_info) => {
+  const handleConfirmAndPayModal = (value, item_info, id) => {
     setSelectedItemInfo(item_info);
     setShowConfirmAndPayModal(value);
   };
@@ -315,6 +323,7 @@ function MyExperiences() {
           modalDataToShow={detailData}
           guest_number={guest_number}
           itemInfo={selectedItemInfo}
+          imageUrl={imageUrl}
         />
         <Col md={23} xs={23} sm={23}>
           <Row className="exp-back-btn">

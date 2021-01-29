@@ -1,6 +1,6 @@
 import moment from "moment";
 
-export const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT_CLOUD; //! Change back to REACT_APP_API_ENDPOINT when finished
+export const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT; //! Change back to REACT_APP_API_ENDPOINT when finished
 
 export const reducerHooks = (state, newState) => ({
   ...state,

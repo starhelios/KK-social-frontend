@@ -24,7 +24,7 @@ import { formatDateBE } from '../../utils/utils';
 
 const { TextArea } = Input;
 
-const HostExperienceForm = ({ daysAvailable, setPrice, days }) => {
+const HostExperienceForm = ({ specificExperience, setPrice, days }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { register, handleSubmit, errors, control, watch } = useForm();
@@ -61,7 +61,7 @@ const HostExperienceForm = ({ daysAvailable, setPrice, days }) => {
       toast.error('Please upload photos');
       return;
     }
-    if (daysAvailable.length === 0) {
+    if (specificExperience.length === 0) {
       toast.error('Please select dates of avaibility');
       return;
     }
@@ -71,7 +71,7 @@ const HostExperienceForm = ({ daysAvailable, setPrice, days }) => {
       images,
       duration: values.duration,
       price: values.price,
-      dateAvaibility: daysAvailable,
+      specificExperience: specificExperience,
       startDay: moment(days[0]).format(formatDateBE),
       endDay: moment(days[1]).format(formatDateBE),
       categoryName: selectedCategory.name,

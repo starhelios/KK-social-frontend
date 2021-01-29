@@ -1,10 +1,10 @@
-import React from 'react';
-import Swiper from 'react-id-swiper';
-import { NavLink, useHistory } from 'react-router-dom';
-import { Card, Col, Image, Row } from 'antd';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
-import './PopularExperience.scss';
+import React from "react";
+import Swiper from "react-id-swiper";
+import { NavLink, useHistory } from "react-router-dom";
+import { Card, Col, Image, Row } from "antd";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import "./PopularExperience.scss";
 
 const { Meta } = Card;
 
@@ -19,14 +19,14 @@ const PopularExperience = ({
   let history = useHistory();
 
   const params = {
-    slidesPerView: 'auto',
+    slidesPerView: "auto",
     spaceBetween: 30,
     observer: true,
     observeParents: true,
   };
 
-  const colorDark = theme === 'dark' ? { color: 'black' } : {};
-  const titleStyle = isDetail ? { fontSize: '36.56px' } : {};
+  const colorDark = theme === "dark" ? { color: "black" } : {};
+  const titleStyle = isDetail ? { fontSize: "36.56px" } : {};
 
   return (
     <div className="popularExperience">
@@ -37,12 +37,12 @@ const PopularExperience = ({
         {filterApplied && (
           <h6
             style={{
-              cursor: 'pointer',
-              fontSize: '12px',
-              color: 'red',
-              textDecoration: 'underline',
-              marginTop: '12px',
-              marginLeft: '20px',
+              cursor: "pointer",
+              fontSize: "12px",
+              color: "red",
+              textDecoration: "underline",
+              marginTop: "12px",
+              marginLeft: "20px",
             }}
             onClick={clearFilters}
           >
@@ -58,7 +58,7 @@ const PopularExperience = ({
               <Card
                 className="card-item"
                 hoverable
-                style={{ width: 232, borderRadius: '18px' }}
+                style={{ width: 232, borderRadius: "18px" }}
                 cover={
                   <LazyLoadImage
                     src={item.imgLink}
@@ -69,7 +69,12 @@ const PopularExperience = ({
                     style={{ borderRadius: 12 }}
                   />
                 }
-                onClick={() => history.push(`/experience/${item.id}`)}
+                onClick={() =>
+                  history.push({
+                    pathname: `/experience/${item.id}`,
+                    state: { itemData: item },
+                  })
+                }
               >
                 <Meta
                   // title={item.title}
@@ -87,7 +92,7 @@ const PopularExperience = ({
                           >
                             <span
                               style={{
-                                textTransform: 'capitalize',
+                                textTransform: "capitalize",
                                 ...colorDark,
                               }}
                             >

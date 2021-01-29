@@ -1,5 +1,5 @@
 import './MyBookings.scss';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Row, Col, Radio} from 'antd'
 import _get from 'lodash/get';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,58 +14,15 @@ import image5 from "../../assets/img/booking/booking5.png";
 import SliderComponent from '../../components/SliderComponent/SliderComponent'
 import { experienceServices } from '../../services/experienceService';
 import { EXPERIENCE_SET_BOOKINGS } from '../../redux/types/experienceTypes';
+import {
+  getBookings
+} from '../../redux/selectors/experienceSelector';
 
 
 function MyBookings() {
     const dispatch = useDispatch();
-    const upcoming_data = [
-        {
-            id: 1,
-            imgLink: image1,
-            title: "Chef Ramasay Cooking",
-            category: "Cooking",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$150"
-        },
-        {
-            id: 2,
-            imgLink: image2,
-            title: "Guitar Lessons",
-            category: "Music",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$85"
-        },
-        {
-            id: 3,
-            imgLink: image3,
-            title: "Sushi Making",
-            category: "Sports",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$250"
-        },
-        {
-            id: 4,
-            imgLink: image4,
-            title: "Understanding Ingredients",
-            category: "Sports",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$30"
-        },
-        {
-            id: 5,
-            imgLink: image5,
-            title: "Charcutterie",
-            category: "Sports",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$84"
-        },
-    ];
-
+    const bookings = useSelector((state) => getBookings(state));
+    console.log(bookings);
     const completed_data = [
         {
             id: 1,
@@ -126,16 +83,16 @@ function MyBookings() {
         const userId = localStorage.getItem('userId');
 
         if (userId) {
-            experienceServices.getUserInfo(userId).then((res) => {
+            experienceServices.getUserBookings(userId).then((res) => {
+                
             const { data } = res;
             const errorStatus = _get(data, 'error.status', true);
             const payload = _get(data, 'payload', null);
-
+                console.log(payload)
             if (!errorStatus) {
-                console.log('heyyyy')
                   dispatch({ type: EXPERIENCE_SET_BOOKINGS, payload });
             } else {
-                console.log('heyyy something went wrong')
+                console.log('heyyy something went wrong');
             }
             });
         } else {
@@ -145,7 +102,7 @@ function MyBookings() {
         }
 
 
-    });
+    }, []);
     
     return (
         <div className="my-bookings">
@@ -173,7 +130,7 @@ function MyBookings() {
             <Row className="experiences-wrapper" justify="end">
                 <Col md={23} xs={23} sm={23}>
                     {
-                        showBooking === "3" ? <SliderComponent data={{data: upcoming_data, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438, color: 1}}/> : <SliderComponent data={{data: completed_data, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438}}/>
+                        showBooking === "3" ? <SliderComponent data={{data: bookings, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438, color: 1}}/> : <SliderComponent data={{data: completed_data, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438}}/>
                     }
                     
                 </Col>

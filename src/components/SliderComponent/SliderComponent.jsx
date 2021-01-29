@@ -326,8 +326,8 @@ function SliderComponent(props) {
 
       {popular_flag > 2 ? (
         <Slider {...settings_booking}>
-          {data
-            ? data.map((item) => {
+          {data && data.userBookings
+            ? data.userBookings.map((item) => {
                 return (
                   <div key={item.id}>
                     <h3>
@@ -336,19 +336,21 @@ function SliderComponent(props) {
                         style={{
                           width: card_width,
                           height: card_height,
-                          background: `url(${item.imgLink}) center center no-repeat`,
+                          background: `url(${item.experience ? item.experience.images[0]: null}) center center no-repeat`,
+                          backgroundSize: 'cover',
+                          borderRadius: '18px 18px 18px 18px'
                         }}
-                      >
+                      >{console.log(item.imageUrl)}
                         {popular_flag < 5 ? (
                           <Row className='card-wrapper' align='bottom'>
                             <Col sm={24} xs={24}>
                               <Row className='booking-card-content'>
                                 <Col>
                                   <Row>
-                                    <p> {item.title}</p>
+                                    <p> {item.experience ? item.experience.title: null}</p>
                                   </Row>
                                   <Row>
-                                    <p> {item.time}</p>
+                                    <p> {item.day} • {item.startTime}</p>
                                   </Row>
                                 </Col>
                               </Row>
