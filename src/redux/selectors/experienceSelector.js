@@ -14,3 +14,7 @@ export const getBookings = createSelector(
   experienceReducer,
   (state) => state.bookings
 );
+export const getCompletedBookings = createSelector(
+  experienceReducer,
+  (state) => state.completedBookings
+);

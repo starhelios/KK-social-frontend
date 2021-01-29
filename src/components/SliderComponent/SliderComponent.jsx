@@ -6,11 +6,16 @@ import Slider from 'react-slick';
 import { NavLink } from 'react-router-dom';
 import { Button, Card, Col, Image, Row } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import _get from 'lodash/get';
+import { useDispatch, useSelector } from 'react-redux';
 import RatingComponent from './RatingComponent';
+import { experienceServices } from '../../services/experienceService';
+
 
 const { Meta } = Card;
 
 function SliderComponent(props) {
+  const dispatch = useDispatch();
   const { data, rows } = props.data;
   const popular_flag = props.data.flag;
   const header_title = props.data.header_title;
@@ -33,8 +38,27 @@ function SliderComponent(props) {
       : 5;
   };
 
-  const sendRatingData = (id, rating) => {
-    console.log('send rating data', id, rating);
+  const sendRatingData = (experienceId, rating) => {
+    const userId = localStorage.getItem('userId');
+    console.log('send rating data', experienceId, rating, userId);
+    if (experienceId && rating && userId) {
+            experienceServices.rateSpecificExperience(experienceId, rating, userId).then((res) => {
+                
+            const { data } = res;
+            const errorStatus = _get(data, 'error.status', true);
+            const payload = _get(data, 'payload', null);
+            if (!errorStatus) {
+                //TODO event handler once finished sending experience
+
+            } else {
+                console.log("couldn't go through bookings");
+            }
+            });
+        } else {
+            console.log('user not logged in')
+        //   dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
+        //   history.push('/');
+        }
   }
 
   const settings = {
@@ -161,7 +185,7 @@ function SliderComponent(props) {
         breakpoint: 2000,
         settings: {
           slidesToShow: popular_flag === 5 ? 3 : 4,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '100px' : '100px',
         },
       },
@@ -169,7 +193,7 @@ function SliderComponent(props) {
         breakpoint: 1600,
         settings: {
           slidesToShow: 3,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '70px' : '100px',
         },
       },
@@ -177,7 +201,7 @@ function SliderComponent(props) {
         breakpoint: 1500,
         settings: {
           slidesToShow: 3,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '10px' : '100px',
         },
       },
@@ -185,7 +209,7 @@ function SliderComponent(props) {
         breakpoint: 1342,
         settings: {
           slidesToShow: 2,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '100px' : '200px',
         },
       },
@@ -194,7 +218,7 @@ function SliderComponent(props) {
         settings: {
           slidesToShow: 2,
           centerPadding: popular_flag === 5 ? '90px' : '180px',
-          infinite: true,
+          infinite: data.length > 3,
         },
       },
       {
@@ -202,14 +226,14 @@ function SliderComponent(props) {
         settings: {
           slidesToShow: 2,
           centerPadding: popular_flag === 5 ? '30px' : '150px',
-          infinite: true,
+          infinite: data.length > 3,
         },
       },
       {
         breakpoint: 1054,
         settings: {
           slidesToShow: 2,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '10px' : '100px',
         },
       },
@@ -217,7 +241,7 @@ function SliderComponent(props) {
         breakpoint: 940,
         settings: {
           slidesToShow: 2,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '10px' : '80px',
         },
       },
@@ -225,7 +249,7 @@ function SliderComponent(props) {
         breakpoint: 900,
         settings: {
           slidesToShow: 2,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '-100px' : '50px',
         },
       },
@@ -233,7 +257,7 @@ function SliderComponent(props) {
         breakpoint: 840,
         settings: {
           slidesToShow: 2,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '-50px' : '40px',
         },
       },
@@ -241,7 +265,7 @@ function SliderComponent(props) {
         breakpoint: 820,
         settings: {
           slidesToShow: 2,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '-60px' : '30px',
         },
       },
@@ -249,7 +273,7 @@ function SliderComponent(props) {
         breakpoint: 783,
         settings: {
           slidesToShow: 2,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '-60px' : '25px',
         },
       },
@@ -257,7 +281,7 @@ function SliderComponent(props) {
         breakpoint: 760,
         settings: {
           slidesToShow: 1,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '100px' : '150px',
           initialSlide: 0,
         },
@@ -266,7 +290,7 @@ function SliderComponent(props) {
         breakpoint: 700,
         settings: {
           slidesToShow: 1,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '80px' : '120px',
         },
       },
@@ -274,7 +298,7 @@ function SliderComponent(props) {
         breakpoint: 620,
         settings: {
           slidesToShow: 1,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '50px' : '100px',
         },
       },
@@ -282,7 +306,7 @@ function SliderComponent(props) {
         breakpoint: 570,
         settings: {
           slidesToShow: 1,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '30px' : '70px',
         },
       },
@@ -290,7 +314,7 @@ function SliderComponent(props) {
         breakpoint: 510,
         settings: {
           slidesToShow: 1,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: popular_flag === 5 ? '10px' : '50px',
         },
       },
@@ -299,7 +323,7 @@ function SliderComponent(props) {
         settings: {
           slidesToShow: 1,
           initialSlide: 1,
-          infinite: true,
+          infinite: data.length > 3,
           centerPadding: '100px',
           centerMode: false,
         },
@@ -308,6 +332,22 @@ function SliderComponent(props) {
     draggable: true,
     swipeToSlide: true
   };
+
+  console.log(data)
+  const findRating = (item) => {
+    const userId = localStorage.getItem('userId');
+    console.log(item);
+    let obj;
+    item.ratings.map((item, idx) => {
+      const array = Object.values(item);
+      if(array.indexOf(item.id) > -1 && array.indexOf(userId) > -1){
+        return obj = item;
+      }else {
+        return false
+      }
+    })
+    return obj.rating;
+  }
 
   return (
     <div className='slick-wrapper'>
@@ -326,8 +366,8 @@ function SliderComponent(props) {
 
       {popular_flag > 2 ? (
         <Slider {...settings_booking}>
-          {data && data.userBookings
-            ? data.userBookings.map((item) => {
+          {data
+            ? data.map((item) => {
                 return (
                   <div key={item.id}>
                     <h3>
@@ -337,7 +377,6 @@ function SliderComponent(props) {
                           width: card_width,
                           height: card_height,
                           background: `url(${item.experience ? item.experience.images[0]: null}) center center no-repeat`,
-                          backgroundSize: 'cover',
                           borderRadius: '18px 18px 18px 18px'
                         }}
                       >{console.log(item.imageUrl)}
@@ -376,7 +415,7 @@ function SliderComponent(props) {
                                       <p> Rate this experience:</p>
                                     </Row>
                                     <Row>
-                                      <RatingComponent id={item.id} callback={sendRatingData} />
+                                      <RatingComponent id={item.id} callback={sendRatingData} rated={findRating(item)} />
                                     </Row>
                                   </Col>
                                 </Row>

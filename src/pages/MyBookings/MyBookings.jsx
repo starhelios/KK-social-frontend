@@ -13,63 +13,16 @@ import image4 from "../../assets/img/booking/booking4.png";
 import image5 from "../../assets/img/booking/booking5.png";
 import SliderComponent from '../../components/SliderComponent/SliderComponent'
 import { experienceServices } from '../../services/experienceService';
-import { EXPERIENCE_SET_BOOKINGS } from '../../redux/types/experienceTypes';
+import { EXPERIENCE_SET_BOOKINGS, EXPERIENCE_SET_COMPLETED_BOOKINGS } from '../../redux/types/experienceTypes';
 import {
-  getBookings
+  getBookings, getCompletedBookings
 } from '../../redux/selectors/experienceSelector';
 
 
 function MyBookings() {
     const dispatch = useDispatch();
-    const bookings = useSelector((state) => getBookings(state));
-    console.log(bookings);
-    const completed_data = [
-        {
-            id: 1,
-            imgLink: image5,
-            title: "Chef Ramasay Cooking",
-            category: "Cooking",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$150"
-        },
-        {
-            id: 2,
-            imgLink: image4,
-            title: "Guitar Lessons",
-            category: "Music",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$85"
-        },
-        {
-            id: 3,
-            imgLink: image3,
-            title: "Sushi Making",
-            category: "Sports",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$250"
-        },
-        {
-            id: 4,
-            imgLink: image2,
-            title: "Understanding Ingredients",
-            category: "Sports",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$30"
-        },
-        {
-            id: 5,
-            imgLink: image1,
-            title: "Charcutterie",
-            category: "Sports",
-            
-            time: "Aug 8, 2020 • 12:30pm",
-            price: "$84"
-        },
-    ];
+    const inCompleteBookings = useSelector((state) => getBookings(state));
+    const completeBookings = useSelector((state) => getCompletedBookings(state))
     
     const [showBooking, setShowBooking] = React.useState("3");
 
@@ -81,29 +34,36 @@ function MyBookings() {
 
     useEffect(() => {
         const userId = localStorage.getItem('userId');
-
+        console.log(userId)
         if (userId) {
             experienceServices.getUserBookings(userId).then((res) => {
                 
             const { data } = res;
             const errorStatus = _get(data, 'error.status', true);
             const payload = _get(data, 'payload', null);
-                console.log(payload)
+            console.log(payload)
+                let inCompleteBookings = [];
+                let completeBookings = [];
             if (!errorStatus) {
-                  dispatch({ type: EXPERIENCE_SET_BOOKINGS, payload });
+                payload.userBookings.map((item, idx) => {
+                    return item.completed !== true ? inCompleteBookings.push(item): completeBookings.push(item);
+                });
+                  dispatch({ type: EXPERIENCE_SET_BOOKINGS, payload: inCompleteBookings });
+                  dispatch({ type: EXPERIENCE_SET_COMPLETED_BOOKINGS, payload: completeBookings });
+
             } else {
-                console.log('heyyy something went wrong');
+                console.log("couldn't go through bookings");
             }
             });
         } else {
-            console.log('heyy')
+            console.log('user not logged in')
         //   dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
         //   history.push('/');
         }
 
 
     }, []);
-    
+
     return (
         <div className="my-bookings">
             <Row>
@@ -130,7 +90,7 @@ function MyBookings() {
             <Row className="experiences-wrapper" justify="end">
                 <Col md={23} xs={23} sm={23}>
                     {
-                        showBooking === "3" ? <SliderComponent data={{data: bookings, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438, color: 1}}/> : <SliderComponent data={{data: completed_data, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438}}/>
+                        showBooking === "3" ? <SliderComponent data={{data: inCompleteBookings, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438, color: 1}}/> : <SliderComponent data={{data: completeBookings, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438}}/>
                     }
                     
                 </Col>

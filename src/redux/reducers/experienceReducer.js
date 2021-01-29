@@ -1,12 +1,14 @@
 import {
   EXPERIENCE_SET_DATE_FILTER,
   EXPERIENCE_SET_BOOKINGS,
+  EXPERIENCE_SET_COMPLETED_BOOKINGS,
 } from "../types/experienceTypes";
 
 const getInitialState = () => ({
   startDate: "",
   endDate: "",
   bookings: [],
+  completedBookings: [],
 });
 
 function experienceReducer(state = getInitialState(), { type, payload }) {
@@ -21,6 +23,11 @@ function experienceReducer(state = getInitialState(), { type, payload }) {
       return {
         ...state,
         bookings: payload,
+      };
+    case EXPERIENCE_SET_COMPLETED_BOOKINGS:
+      return {
+        ...state,
+        completedBookings: payload,
       };
     default:
       return state;

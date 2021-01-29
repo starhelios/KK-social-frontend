@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Rate} from 'antd';
 import { StarOutlined } from '@ant-design/icons';
 
-function RatingComponent({id, callback}) {
+function RatingComponent({id, callback, rated}) {
     const [rating, setRating] = useState();
 
     const handleRatingChange = (value) => {
@@ -16,7 +16,7 @@ function RatingComponent({id, callback}) {
     console.log(rating)
 
     return (
-        <Rate onChange={handleRatingChange} value={rating}  character={<StarOutlined />} />
+        <Rate onChange={handleRatingChange} value={rated && rated > 0 ? rated: rating}  character={<StarOutlined />} />
     )
 }
 export default RatingComponent;

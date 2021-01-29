@@ -9,6 +9,7 @@ export const experienceServices = {
   getByUserId,
   getAllByUserId,
   reserveExperience,
+  rateSpecificExperience,
 };
 
 function createExperience(data) {
@@ -78,6 +79,17 @@ function getById(id) {
 
 function filterExperience(data) {
   return requestAPI.post(`/v1/experiences/filter`, data).then((res) => {
+    return res;
+  });
+}
+
+function rateSpecificExperience(experienceId, rating, userId) {
+  const data = {
+    experienceId,
+    rating,
+    userId,
+  };
+  return requestAPI.post("/v1/experiences/rate", data).then((res) => {
     return res;
   });
 }
