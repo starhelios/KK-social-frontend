@@ -15,6 +15,7 @@ function HostExperience() {
   const [daysAvailable, setDayAvailable] = useState([]);
   const [price, setPrice] = useState('');
   const [values, setValues] = useState([]);
+  console.log(daysAvailable)
 
   return (
     <>

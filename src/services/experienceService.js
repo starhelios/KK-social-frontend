@@ -16,7 +16,10 @@ function createExperience(data) {
   return requestAPI
     .post(
       `/v1/experiences`,
-      { ...data, userId: localStorage.getItem("userId") },
+      {
+        ...data,
+        userId: localStorage.getItem("userId"),
+      },
       {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("access_token"),

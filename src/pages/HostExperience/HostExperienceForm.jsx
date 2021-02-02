@@ -24,7 +24,7 @@ import { formatDateBE } from '../../utils/utils';
 
 const { TextArea } = Input;
 
-const HostExperienceForm = ({ specificExperience, setPrice, days }) => {
+const HostExperienceForm = ({ setPrice, days, values, daysAvailable }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { register, handleSubmit, errors, control, watch } = useForm();
@@ -61,17 +61,51 @@ const HostExperienceForm = ({ specificExperience, setPrice, days }) => {
       toast.error('Please upload photos');
       return;
     }
-    if (specificExperience.length === 0) {
-      toast.error('Please select dates of avaibility');
-      return;
-    }
+    // if (specificExperience.length === 0) {
+    //   toast.error('Please select dates of availability');
+    //   return;
+    // }
+
+    //TODO breakdown time/dates
+    console.log(daysAvailable)
+    const addMinutes =  function (dt, minutes) {
+      return new Date(dt.getTime() + minutes * 60000);
+    };
+    
+    let specificExperiences = [];
+    daysAvailable.forEach((element) => {
+      let start = new Date(moment(element.startDayTime).format());
+      let end = new Date(moment(element.endDayTime).format());
+      let firstEnd = addMinutes(start, values.duration);
+      let startingObject = {
+        day: moment(start).format('LL'),
+        startTime: moment(start).format('LT'),
+        endTime: moment(firstEnd).format('LT')
+      }
+      specificExperiences.push(startingObject);
+      while (start < end){
+        let newStartDate = addMinutes(start, values.duration)
+        let newEndDate = addMinutes(newStartDate, values.duration)
+        let object = {
+          day: moment(newStartDate).format('LL'),
+          startTime: moment(newStartDate).format('LT'),
+          endTime: moment(newEndDate).format('LT')
+        };
+        console.log(newEndDate < end)
+        if(object.startTime !== object.endTime && newEndDate < end && newStartDate < end){
+          specificExperiences.push(object);
+        }
+        start = addMinutes(start, values.duration);
+
+      }
+    })
 
     let params = {
       ...values,
+      specificExperiences,
       images,
       duration: values.duration,
       price: values.price,
-      specificExperience: specificExperience,
       startDay: moment(days[0]).format(formatDateBE),
       endDay: moment(days[1]).format(formatDateBE),
       categoryName: selectedCategory.name,

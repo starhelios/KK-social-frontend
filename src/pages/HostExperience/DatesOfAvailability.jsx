@@ -16,34 +16,36 @@ const DatesOfAvailability = ({
   setValues,
 }) => {
   const [showDatepicker, setShowDatepicker] = React.useState(false);
-  const [isEditAll, setEditAll] = useState(false);
+  const [isEditAll, setEditAll] = useState(true);
 
   const handleShowDatepicker = (value) => {
     setShowDatepicker(value);
   };
 
   const handleApplyDatepicker = () => {
-    if (values.length > 0) {
-      handleShowDatepicker(false);
-      let dates = [
-        {
-          day: values[0].format('MMMM DD, YYYY'),
-        },
-      ];
+    handleShowDatepicker(false);
+    setValues(values)
+    // if (values.length > 0) {
+    //   handleShowDatepicker(false);
+    //   let dates = [
+    //     {
+    //       day: values[0].format('MMMM DD, YYYY'),
+    //     },
+    //   ];
 
-      const currDate = moment(values[0]).startOf('day');
-      const lastDate = moment(values[1]).startOf('day');
+    //   const currDate = moment(values[0]).startOf('day');
+    //   const lastDate = moment(values[1]).startOf('day');
 
-      while (currDate.add(1, 'days').diff(lastDate) < 0) {
-        dates.push({
-          day: currDate.clone().format('MMMM DD, YYYY'),
-        });
-      }
+    //   while (currDate.add(1, 'days').diff(lastDate) < 0) {
+    //     dates.push({
+    //       day: currDate.clone().format('MMMM DD, YYYY'),
+    //     });
+    //   }
 
-      dates.push({ day: values[1].format('MMMM DD, YYYY') });
+    //   dates.push({ day: values[1].format('MMMM DD, YYYY') });
 
-      setDayAvailable(dates);
-    }
+    //   setDayAvailable(dates);
+    // }
   };
 
   const handleOpenChange = () => {
@@ -51,7 +53,12 @@ const DatesOfAvailability = ({
   };
 
   const handleChange = (values) => {
-    setValues(values);
+    const newDates = values.map((item, idx) => {
+      const newDate = moment(item).format('LL')
+      return newDate
+    })
+    console.log(new Date().getFullYear())
+    setValues(newDates);
   };
 
   const disabledDate = (current) => {
@@ -59,7 +66,7 @@ const DatesOfAvailability = ({
     return current && current < moment().startOf('day');
   };
 
-  console.log(daysAvailable);
+  console.log(values);
 
   return (
     <Col
@@ -121,7 +128,7 @@ const DatesOfAvailability = ({
         <Col sm={24} xs={24}>
           <Row className='host-experience-content-right-body-row'>
             <Col sm={24} xs={24}>
-              {daysAvailable.length > 0 && (
+              {values.length > 0 && (
                 <Row className='host-experience-content-right-body-row-date'>
                   <Col sm={18} xs={18}>
                     <h4>Active Dates</h4>
@@ -140,13 +147,14 @@ const DatesOfAvailability = ({
               )}
               <Row className='host-experience-content-right-body-row-choose'>
                 <Col sm={24} xs={24}>
-                  {daysAvailable.map((item, index) => (
+                  {values.map((item, index) => (
                     <DateItem
                       key={index}
                       item={item}
                       idx={index}
                       isEditAll={isEditAll}
                       setDayAvailable={setDayAvailable}
+                      values={values}
                       daysAvailable={daysAvailable}
                       price={price}
                     />

@@ -377,6 +377,7 @@ function SliderComponent(props) {
                           width: card_width,
                           height: card_height,
                           background: `url(${item.experience ? item.experience.images[0]: null}) center center no-repeat`,
+                          backgroundSize: 'cover',
                           borderRadius: '18px 18px 18px 18px'
                         }}
                       >{console.log(item.imageUrl)}
