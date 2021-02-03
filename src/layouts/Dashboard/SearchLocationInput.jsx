@@ -7,50 +7,59 @@ import SearchIcon from '../../assets/img/search-icon.png';
 
 import Script from 'react-load-script';
 
-const SearchBar = () => {
-  const [query, setQuery] = useState('')
-  const googleKey = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`
+const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityChosen, showIcon}) => {
+  
+  const [cities, setCities] = useState([])
+  const googleKey = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAcHUaRR1URQlQR54ebNGeByyDR7Y6pJn4&libraries=places`
   let autocomplete;
 
+  const renderRows = (item) => {
+    return (<Row>{item}</Row>)
+  }
+  const handleQueryChange = (e) => {
+    setQuery(e.target.value)
+  }
+
   useEffect(() => {
-    
+    if(cityChosen && !query.length) return setCityChosen(false)
+    if(!query.length) { setCities([])}
+    else {
+      var nodes = document.getElementsByClassName("pac-item") ? document.getElementsByClassName("pac-item"): null;
+      if(nodes && nodes.length){
+        let array = [];
+        for(var i=0; i<nodes.length; i++) {
+          const string = nodes[i].outerText;
+          const whiteSpaceIndex = string.indexOf(',') - 2
+          const newString = string.slice(0, whiteSpaceIndex) + " " + string.slice(whiteSpaceIndex)
+          array.push(newString)
+        }
+        setCities(array)
+      }
+    }
   }, [query])
 
   const handleScriptLoad = () => {
-    // Declare Options For Autocomplete
     const options = {
       types: ['(cities)'],
     };
 
-    // Initialize Google Autocomplete
     /*global google*/ // To disable any eslint 'google not defined' errors
     autocomplete = new google.maps.places.Autocomplete(
       document.getElementById('autocomplete'),
       options,
     );
 
-    // Avoid paying for data that you don't need by restricting the set of
-    // place fields that are returned to just the address components and formatted
-    // address.
     autocomplete.setFields(['address_components', 'formatted_address']);
 
-    // Fire Event when a suggested name is selected
-    autocomplete.addListener('place_changed', handlePlaceSelect);
+   autocomplete.addListener('place_changed', handlePlaceSelect);
   }
   
   
-  const handlePlaceSelect = () => {
-
-    // Extract City From Address Object
-    const addressObject = autocomplete.getPlace();
-    const address = addressObject.address_components;
-
-    // Check if address is valid
-    if (address) {
-      // Set State
-      setQuery(addressObject.formatted_address)
-    }
+  const handlePlaceSelect = (item) => {
+      setCityChosen(true)
+      setQuery(item)
   }
+  console.log(query.length)
 
 
     return (
@@ -61,20 +70,22 @@ const SearchBar = () => {
         />
         <Row md={6} className='location-search-box-item'>
           <Col>
-            <Input id="autocomplete" className="searchlocationbox" placeholder="Search City" onChange={(e) => setQuery(e.target.value)} value={query}
+            <Input autoComplete={false} id="autocomplete" className="searchlocationbox" placeholder="Search City" onChange={handleQueryChange} value={query}
               style={{
                 margin: '0 auto',
                 maxWidth: 800
               }}
-              prefix={<img src={SearchIcon} alt='' />}
+              prefix={showIcon ? <img src={SearchIcon} alt='' />: null}
               suffix={<img src={DirectionIcon} alt='' />}
             />
-            
           </Col>
         </Row>
+            {cities.length && query.length > 1 && !cityChosen ? cities.map((item, idx) => {
+              return (<Row key={idx} onClick={() => handlePlaceSelect(item)} md={6} className={pageClass}>{item}</Row>)
+            }): <div></div>}
       </div>
     );
 
 }
 
-export default SearchBar;
+export default SearchLocationInput;

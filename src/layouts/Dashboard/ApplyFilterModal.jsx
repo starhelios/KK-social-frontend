@@ -12,6 +12,10 @@ const ApplyFilterModal = ({
   selectedCategory,
   setSelectedCategory,
   categories,
+  query,
+  setQuery,
+  cityChosen, 
+  setCityChosen
 }) => {
   const showDropDownMenu = () => {
     return (
@@ -93,7 +97,7 @@ const ApplyFilterModal = ({
           </Col>
         </Row>
 
-        <SearchLocationInput />
+        <SearchLocationInput query={query} setQuery={setQuery} pageClass="searched-item" cityChosen={cityChosen} setCityChosen={setCityChosen} showIcon={true} />
       </Row>
     </Modal>
   );

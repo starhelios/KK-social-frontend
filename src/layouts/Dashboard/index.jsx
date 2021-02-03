@@ -22,6 +22,8 @@ const { RangePicker } = DatePicker;
 
 function Dashboard() {
   const dispatch = useDispatch();
+  const [query, setQuery] = useState('')
+  const [cityChosen, setCityChosen] = useState(false)
   const [experienceData, setExperienceData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [hostData, setHostData] = useState([]);
@@ -54,7 +56,7 @@ function Dashboard() {
       const minPrice = rangeData[0];
       const maxPrice = rangeData[1];
 
-      let params = { categoryName: valueSearch, minPrice, maxPrice };
+      let params = { categoryName: valueSearch, minPrice, maxPrice, location: query };
 
       if (values.length > 0) {
         params.startDay = moment(values[0]).format(formatDateBE);
@@ -258,6 +260,10 @@ function Dashboard() {
                 }
               />
               <ApplyFilterModal
+                query={query}
+                setQuery={setQuery}
+                cityChosen={cityChosen}
+                setCityChosen={setCityChosen}
                 showFilterModal={showFilterModal}
                 handleShowModal={handleShowModal}
                 handleApplyFilters={handleApplyFilters}

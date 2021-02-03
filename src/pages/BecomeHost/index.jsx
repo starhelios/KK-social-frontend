@@ -30,8 +30,12 @@ import { getUserInfo } from '../../redux/selectors/authSelector';
 import { AUTH_SET_USER_INFO } from '../../redux/types/authTypes';
 import SearchIcon from '../../assets/img/search-icon.png';
 import { categoryServices } from '../../services/categoryService';
+import SearchLocationInput from '../../layouts/Dashboard/SearchLocationInput';
+
 
 export const BecomeHost = () => {
+  const[query, setQuery] = useState('')
+  const [cityChosen, setCityChosen] = useState(false)
   const [loading, setLoading] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
@@ -111,6 +115,7 @@ export const BecomeHost = () => {
       email: values.email,
       aboutMe: values.aboutMe,
       isHost: true,
+      location: query,
     };
 
     if (imageUrl) {
@@ -298,6 +303,27 @@ export const BecomeHost = () => {
                 <div className="errorText">{errors.aboutMe.message}</div>
               )}
             </Row>
+            <Row className="edit-profile-line" />
+            <Row>
+              <h4>Location</h4>
+            </Row>
+            <Row>
+              <Controller
+                as={<SearchLocationInput query={query} setQuery={setQuery} pageClass="search-profile" cityChosen={cityChosen} setCityChosen={setCityChosen} showIcon={false} />}
+                name="location"
+                control={control}
+                rules={{
+                  required: {
+                    value: !query.length,
+                    message: 'You must enter your location',
+                  },
+                }}
+              />
+              
+            </Row>
+            {errors.location && (
+                <div className="errorText">{errors.location.message}</div>
+              )}
             <Row className="edit-profile-line" />
             {/* Need confirm and remove below code. */}
             {/* <Row style={{ cursor: 'hover' }}>

@@ -111,10 +111,28 @@
   content: " ";
   background: none !important;
 }
+.pac-container {
+  background: none !important;
+  border: none !important;
+}
+.pac-logo::after {
+  background: none !important;
+  border: none !important;
+  height: 0px !important;
+  padding: 0 !important;
+}
 .pac-item {
+  display: none;
 }
 .pac-icon {
   display: none;
+}
+//this is for google styling
+
+//Dynamic styling for location
+.search-profile {
+  color: white;
+  cursor: pointer;
 }
 
 html {
@@ -488,6 +506,10 @@ h4.ant-typography {
   .searched-item {
     padding: 22px 0px;
     border-bottom: 1px solid rgb(221, 221, 221);
+  }
+  .searched-item:focus,
+  .searched-item:hover {
+    background-color: #b4b4b4;
   }
 
   .searched-item-last {
