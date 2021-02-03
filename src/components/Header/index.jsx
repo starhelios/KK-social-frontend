@@ -37,7 +37,7 @@ function HeaderComponent(props) {
     (location.pathname.includes('experience') ||
       location.pathname.includes('host')) &&
     !hostedMe
-      ? 'white'
+      ? '#eaeaea'
       : '#383838';
   const logo_img =
     (location.pathname.includes('experience') ||

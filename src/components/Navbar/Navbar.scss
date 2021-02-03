@@ -1,50 +1,57 @@
 .loged-in-nav-bar {
-    font-family: Avenir Next;
+  font-family: Avenir Next;
+  font-size: 16px;
+  font-weight: 500;
+  span {
+    margin-left: 20px;
+  }
+  a {
+    color: white;
+  }
+
+  .ant-menu {
+    background: none;
+    color: white !important;
     font-size: 16px;
     font-weight: 500;
-    span {
-        margin-left: 20px;
-    }
-    a {
-        color: white;
-    }
-    
-    .ant-menu {
-        background: none;
-        color: white !important;
-        font-size: 16px;
-        font-weight: 500;
-        border: none;
-        
-    }
-    .ant-menu-horizontal > .ant-menu-item a {
-        color: white;
-    }
-    .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-active, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-active, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-open, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-open, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected{
-        border: none !important;
-    }
-    .ant-menu-item .ant-menu-item-only-child{
-        border: none !important;
-    }
-    .ant-menu-horizontal > .ant-menu-item, .ant-menu-horizontal > .ant-menu-submenu {
-        border: none !important;
-    }
+    border: none;
+  }
+  .ant-menu-horizontal > .ant-menu-item a {
+    color: white;
+  }
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover,
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover,
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-active,
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-active,
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-open,
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-open,
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected,
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected {
+    border: none !important;
+  }
+  .ant-menu-item .ant-menu-item-only-child {
+    border: none !important;
+  }
+  .ant-menu-horizontal > .ant-menu-item,
+  .ant-menu-horizontal > .ant-menu-submenu {
+    border: none !important;
+  }
 }
 .barsMenu {
-    // visibility: hidden;
-    display: none;
-    background: none;
-    border: 1px solid white;
-    margin-top: 15px;
+  // visibility: hidden;
+  display: none;
+  background: none;
+  border: 1px solid white;
+  margin-top: 15px;
 }
-@media screen and (max-width:"575px") {
-    .loged-in-nav-bar {
-        display: none;;
-    }
-    .barsMenu {
-        // visibility: visible;
-        display: block;
-    }
+@media screen and (max-width: "575px") {
+  .loged-in-nav-bar {
+    display: none;
+  }
+  .barsMenu {
+    // visibility: visible;
+    display: block;
+  }
 }
 
 // .ant-dropdown, .ant-dropdown-placement-bottomLeft  {
@@ -53,5 +60,5 @@
 // }
 
 .nav-profile-dropdown {
-    top: 81px !important;
+  top: 81px !important;
 }

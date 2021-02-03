@@ -1,96 +1,80 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col, Input } from 'antd';
+import './Dashboard.scss';
 
 import DirectionIcon from '../../assets/img/direction-icon.png';
 import SearchIcon from '../../assets/img/search-icon.png';
 
-let autoComplete;
+import Script from 'react-load-script';
 
-const loadScript = (url, callback) => {
-  let script = document.createElement('script');
-  script.type = 'text/javascript';
-
-  if (script.readyState) {
-    script.onreadystatechange = function () {
-      if (script.readyState === 'loaded' || script.readyState === 'complete') {
-        script.onreadystatechange = null;
-        callback();
-      }
-    };
-  } else {
-    script.onload = () => callback();
-  }
-
-  script.src = url;
-  document.getElementsByTagName('head')[0].appendChild(script);
-};
-
-function handleScriptLoad(updateQuery, autoCompleteRef) {
-  autoComplete = new window.google.maps.places.Autocomplete(
-    autoCompleteRef.current,
-    { types: ['(cities)'], componentRestrictions: { country: 'us' } }
-  );
-  autoComplete.setFields(['address_components', 'formatted_address']);
-  autoComplete.addListener('place_changed', () =>
-    handlePlaceSelect(updateQuery)
-  );
-}
-
-async function handlePlaceSelect(updateQuery) {
-  const addressObject = autoComplete.getPlace();
-  const query = addressObject.formatted_address;
-  updateQuery(query);
-  console.log(addressObject);
-}
-
-const SearchLocationInput = () => {
-  const [query, setQuery] = useState('');
-  const autoCompleteRef = useRef(null);
+const SearchBar = () => {
+  const [query, setQuery] = useState('')
+  const googleKey = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`
+  let autocomplete;
 
   useEffect(() => {
-    loadScript(
-      `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`,
-      () => handleScriptLoad(setQuery, autoCompleteRef)
-    );
-  }, []);
+    
+  }, [query])
 
-  return (
-    <Row>
-      <Col md={24}>
+  const handleScriptLoad = () => {
+    // Declare Options For Autocomplete
+    const options = {
+      types: ['(cities)'],
+    };
+
+    // Initialize Google Autocomplete
+    /*global google*/ // To disable any eslint 'google not defined' errors
+    autocomplete = new google.maps.places.Autocomplete(
+      document.getElementById('autocomplete'),
+      options,
+    );
+
+    // Avoid paying for data that you don't need by restricting the set of
+    // place fields that are returned to just the address components and formatted
+    // address.
+    autocomplete.setFields(['address_components', 'formatted_address']);
+
+    // Fire Event when a suggested name is selected
+    autocomplete.addListener('place_changed', handlePlaceSelect);
+  }
+  
+  
+  const handlePlaceSelect = () => {
+
+    // Extract City From Address Object
+    const addressObject = autocomplete.getPlace();
+    const address = addressObject.address_components;
+
+    // Check if address is valid
+    if (address) {
+      // Set State
+      setQuery(addressObject.formatted_address)
+    }
+  }
+
+
+    return (
+      <div>
+        <Script
+          url={googleKey}
+          onLoad={handleScriptLoad}
+        />
         <Row md={6} className='location-search-box-item'>
           <Col>
-            {/* <input
-              ref={autoCompleteRef}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder='Enter a City'
-              value={query}
-            /> */}
-            <Input
-              ref={autoCompleteRef}
-              onChange={(event) => setQuery(event.target.value)}
-              value={query}
-              className='searchlocationbox'
+            <Input id="autocomplete" className="searchlocationbox" placeholder="Search City" onChange={(e) => setQuery(e.target.value)} value={query}
+              style={{
+                margin: '0 auto',
+                maxWidth: 800
+              }}
               prefix={<img src={SearchIcon} alt='' />}
-              placeholder='Search Location'
               suffix={<img src={DirectionIcon} alt='' />}
             />
+            
           </Col>
         </Row>
+      </div>
+    );
 
-        <Row className='searched-item' md={6}>
-          <h2>New Orleans, LA</h2>
-        </Row>
+}
 
-        <Row className='searched-item' md={6}>
-          <h2>Nashville, TN</h2>
-        </Row>
-
-        <Row className='searched-item-last' md={6}>
-          <h2>New York, NY</h2>
-        </Row>
-      </Col>
-    </Row>
-  );
-};
-
-export default SearchLocationInput;
+export default SearchBar;

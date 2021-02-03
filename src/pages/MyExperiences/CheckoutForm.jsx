@@ -31,11 +31,17 @@ const CheckoutForm = (props) => {
   console.log(props);
   const elements = useElements();
   const stripe = useStripe();
+  const [newState, setNewState] = useState(false);
   const [name, setName] = useState('');
   const [postal, setPostal] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(null);
+
+
+  useEffect(() => {
+    return props.paymentType === 'new' ? setNewState(true): setNewState(false)
+  },[])
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -47,6 +53,8 @@ const CheckoutForm = (props) => {
 
     setIsSubmitting(true);
 
+    const cardElement = elements.getElement(CardNumberElement);
+
     const result = await paymentsServices.GenerateIntentForChargeCustomerExperience(
       {
         experienceID: `${props.modalDataToShow[`id`]}`,
@@ -56,9 +64,10 @@ const CheckoutForm = (props) => {
           100,
         payment_type: props.paymentType,
         payment_method_id:
-          props.paymentType === 'saved' ? `${props.paymentMethodID.id}` : null,
+          !newState ? `${props.paymentMethodID.id}` : null,
       }
     );
+      console.log(result)
 
     if (result.data.error.status) {
       console.log('[error]', result.data.error);
@@ -67,11 +76,9 @@ const CheckoutForm = (props) => {
 
       setIsSubmitting(false);
     } else {
-      const cardElement = elements.getElement(CardNumberElement);
-
       const payload = await stripe.confirmCardPayment(result.data.payload, {
         payment_method:
-          props.paymentType === 'saved'
+          !newState
             ? `${props.paymentMethodID.id}`
             : {
                 card: cardElement,
@@ -80,6 +87,7 @@ const CheckoutForm = (props) => {
                 },
               },
       });
+      console.log('running');
       console.log(payload);
       if (payload.error) {
         console.log('[error]', payload.error);
@@ -123,7 +131,7 @@ const CheckoutForm = (props) => {
     <form onSubmit={handleSubmit}>
       <Row className="stripe-form-line" />
       <Row style={{ marginTop: '15px' }}></Row>
-      {props.paymentType === 'new' ? (
+      {newState ? (
         <>
           <label htmlFor="name">Full Name</label>
           <Input

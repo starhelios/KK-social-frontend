@@ -42,12 +42,14 @@ const ConfirmPayModal = ({
       setSelectedCard(
         `${elem.cardBrand.toUpperCase()} ending with ${elem.last4digits}`
       );
+      console.log('running')
       setSelectedCardVal(elem);
     }
   }, [userData]);
 
   useEffect(() => {
     if (userData && userData.availableMethods.length === 0) {
+      console.log('is new')
       setIsNewCard('new');
     }
   }, [userData]);

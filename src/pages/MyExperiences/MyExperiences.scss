@@ -1,5 +1,5 @@
 .myexperience {
-  background: white;
+  background: #eaeaea;
   font-family: Avenir Next;
   .exp-back-btn {
     display: flex !important;
@@ -205,13 +205,12 @@ Stripe styling start
   padding: 11px 15px 11px 11px;
   margin-top: 15px;
   border: 1px solid #e0e0e0;
-  
 }
 .StripeElement--focus {
-  border: 1px solid #40A9FF;
+  border: 1px solid #40a9ff;
 }
 .StripeElement:hover {
-  border: 1px solid #40A9FF;
+  border: 1px solid #40a9ff;
 }
 
 /**

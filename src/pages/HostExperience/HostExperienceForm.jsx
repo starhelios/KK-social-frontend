@@ -66,8 +66,6 @@ const HostExperienceForm = ({ setPrice, days, values, daysAvailable }) => {
     //   return;
     // }
 
-    //TODO breakdown time/dates
-    console.log(daysAvailable)
     const addMinutes =  function (dt, minutes) {
       return new Date(dt.getTime() + minutes * 60000);
     };

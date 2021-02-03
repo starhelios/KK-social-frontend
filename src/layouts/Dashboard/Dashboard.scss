@@ -76,7 +76,7 @@
 }
 
 .searchbox {
-  margin: '0 0 10px 0';
+  margin: "0 0 10px 0";
   border: 0px !important;
   box-shadow: none;
   font-family: Avenir Next;
@@ -105,6 +105,16 @@
     margin-left: 32.73px;
     margin-right: 17.14px;
   }
+}
+//this is for google styling
+.pac-container::after {
+  content: " ";
+  background: none !important;
+}
+.pac-item {
+}
+.pac-icon {
+  display: none;
 }
 
 html {
