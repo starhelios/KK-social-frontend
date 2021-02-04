@@ -64,6 +64,7 @@ const ConfirmPayModal = ({
       visible={showConfirmAndPayModal}
       className="confirm-pay-modal"
       width={1000}
+      footer={null}
       onCancel={() => handleConfirmAndPayModal(false)}
     >
       <div style={{padding: '50px', fontFamily: 'Avenir Next', minHeight: '50vh'}}>

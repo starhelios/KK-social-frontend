@@ -99,9 +99,6 @@ const ApplyFilterModal = ({
 
         <SearchLocationInput query={query} setQuery={setQuery} pageClass="searched-item" cityChosen={cityChosen} setCityChosen={setCityChosen} showIcon={true} />
       </Row>
-      <Row>
-        <Button onClick={() => handleApplyFilters()} style={{backgroundColor: "#000000", width: '100%', borderRadius: '24.5px', color: 'white', fontFamily: 'Avenir Next', fontWeight: '600', fontSize: '14px', lineHeight: '14px', marginTop: '10px'}}>Apply</Button>
-      </Row>
     </Modal>
   );
 };
