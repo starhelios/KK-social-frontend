@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Modal, Slider, Menu, Dropdown } from 'antd';
+import { Row, Col, Modal, Slider, Menu, Dropdown, Button } from 'antd';
 
 import SearchLocationInput from './SearchLocationInput';
 
@@ -98,6 +98,9 @@ const ApplyFilterModal = ({
         </Row>
 
         <SearchLocationInput query={query} setQuery={setQuery} pageClass="searched-item" cityChosen={cityChosen} setCityChosen={setCityChosen} showIcon={true} />
+      </Row>
+      <Row>
+        <Button onClick={() => handleApplyFilters()} style={{backgroundColor: "#000000", width: '100%', borderRadius: '24.5px', color: 'white', fontFamily: 'Avenir Next', fontWeight: '600', fontSize: '14px', lineHeight: '14px', marginTop: '10px'}}>Apply</Button>
       </Row>
     </Modal>
   );

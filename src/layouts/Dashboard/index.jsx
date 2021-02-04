@@ -139,18 +139,12 @@ function Dashboard() {
 
   const handleSelectCategory = (value) => {
     if (!valueSearch.includes(value)) {
-      // setInputSearch({...valueSearch, value});
-      // setValueSearch([...valueSearch, value]);
       const newArrayInput = [...inputSearch];
       const newArrayValue = [...valueSearch];
       newArrayInput.push(value);
       newArrayValue.push(value);
       setInputSearch(newArrayInput);
       setValueSearch(newArrayValue);
-
-
-      console.log(inputSearch);
-      console.log(valueSearch);
 
       experienceServices
         .filterExperience({ categoryName: [...valueSearch, value] })
