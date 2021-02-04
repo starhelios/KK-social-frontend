@@ -168,6 +168,15 @@ FormGroup {
     inset 0 1px 0 #829fff;
   border-radius: 4px;
 }
+.profile-line {
+  background: #eaeaea;
+  opacity: 0.1;
+  height: 1.95px;
+  width: 100%;
+}
+.ant-modal-footer {
+  display: none;
+}
 /**
 Stripe styling start
 */
@@ -212,7 +221,17 @@ Stripe styling start
 .StripeElement:hover {
   border: 1px solid #40a9ff;
 }
-
+@media (max-width: 836px) {
+  #modal-wrapper-details {
+    flex-direction: column;
+  }
+  #left-side-content-wrapper {
+    margin-right: 0 !important;
+  }
+  #right-side-content-wrapper {
+    margin-left: 0 !important;
+  }
+}
 /**
 Stripe styling end
 */
@@ -251,6 +270,7 @@ Stripe styling end
   .ant-modal-content {
     border-radius: 50px;
   }
+
   .ant-modal-body {
     padding: 0px;
   }

@@ -15,6 +15,7 @@ const PopularExperience = ({
   isDetail,
   clearFilters,
   filterApplied,
+  valueSearch,
 }) => {
   let history = useHistory();
 
@@ -34,7 +35,7 @@ const PopularExperience = ({
         <h2 className="title" style={{ ...colorDark, ...titleStyle }}>
           {title}
         </h2>
-        {filterApplied && (
+        {valueSearch && valueSearch.length ? (
           <h6
             style={{
               cursor: "pointer",
@@ -48,7 +49,7 @@ const PopularExperience = ({
           >
             clear filters
           </h6>
-        )}
+        ) : null}
       </Row>
 
       <Swiper {...params}>

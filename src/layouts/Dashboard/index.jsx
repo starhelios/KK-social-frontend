@@ -23,6 +23,7 @@ const { RangePicker } = DatePicker;
 function Dashboard() {
   const dispatch = useDispatch();
   const [query, setQuery] = useState('')
+  const [modalState, setModalState] = useState(false)
   const [cityChosen, setCityChosen] = useState(false)
   const [experienceData, setExperienceData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -40,6 +41,7 @@ function Dashboard() {
   const handleShowModal = (value) => {
     setShowFilterModal(value);
   };
+  console.log(categories)
 
   const handleClearFilters = () => {
     // setExperienceData([]);
@@ -137,8 +139,18 @@ function Dashboard() {
 
   const handleSelectCategory = (value) => {
     if (!valueSearch.includes(value)) {
-      setInputSearch([...valueSearch, value].join(', '));
-      setValueSearch([...valueSearch, value]);
+      // setInputSearch({...valueSearch, value});
+      // setValueSearch([...valueSearch, value]);
+      const newArrayInput = [...inputSearch];
+      const newArrayValue = [...valueSearch];
+      newArrayInput.push(value);
+      newArrayValue.push(value);
+      setInputSearch(newArrayInput);
+      setValueSearch(newArrayValue);
+
+
+      console.log(inputSearch);
+      console.log(valueSearch);
 
       experienceServices
         .filterExperience({ categoryName: [...valueSearch, value] })
@@ -153,10 +165,18 @@ function Dashboard() {
             setExperienceData(result);
           }
         });
+    } else {
+      const array = [...inputSearch]
+      console.log(array);
+      const index = array.indexOf(value);
+      array.splice(index, 1)
+      setInputSearch(array);
+      setValueSearch(array)
     }
   };
 
   const handleInputChange = ({ target: { value } }) => {
+    console.log(value)
     return;
     // setValueSearch(value);
   };
@@ -245,34 +265,41 @@ function Dashboard() {
       <Row>
         <Col md={24} sm={24} xs={24}>
           <Row justify="center">
-            <Col md={24} sm={24} xs={24}>
-              <Input.Search
+            <Col md={12} sm={16} xs={20}>
+              <Input
                 className="searchbox"
-                prefix={<img src={SearchIcon} alt="" />}
+                prefix={<img style={{backgroundColor: 'white'}} src={SearchIcon} alt="" />}
                 placeholder="Search KloutKast"
                 onSearch={() => handleShowModal(true)}
+                style={{borderRadius: '50px'}}
                 onChange={handleInputChange}
-                value={inputSearch}
-                enterButton={
-                  <Button>
-                    <img src={SearchSettingIcon} alt="" />
+                value={inputSearch.map((item, idx) => {
+                  if(idx > 0)return " " + item;
+                  else return item
+                })}
+                suffix={
+                  <Button onClick={()=>setShowFilterModal(!showFilterModal)} style={{marginRight: '10px', backgroundColor: "#2B2B29", height: '80%', width: '100%', borderRadius: '20px'}}>
+                    <img style={{padding: '10px'}} src={SearchSettingIcon} alt="" />
                   </Button>
                 }
               />
-              <ApplyFilterModal
-                query={query}
-                setQuery={setQuery}
-                cityChosen={cityChosen}
-                setCityChosen={setCityChosen}
-                showFilterModal={showFilterModal}
-                handleShowModal={handleShowModal}
-                handleApplyFilters={handleApplyFilters}
-                handleSliderChange={handleSliderChange}
-                handleSliderAfterChange={handleSliderAfterChange}
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-                categories={categories}
-              />
+              <Col md={12} sm={16}>
+                  <ApplyFilterModal
+                    query={query}
+                    setQuery={setQuery}
+                    cityChosen={cityChosen}
+                    setCityChosen={setCityChosen}
+                    showFilterModal={showFilterModal}
+                    handleShowModal={handleShowModal}
+                    handleApplyFilters={handleApplyFilters}
+                    handleSliderChange={handleSliderChange}
+                    handleSliderAfterChange={handleSliderAfterChange}
+                    selectedCategory={selectedCategory}
+                    setSelectedCategory={setSelectedCategory}
+                    categories={categories}
+                  />
+              </Col>
+              
             </Col>
           </Row>
           <Row className="search-values-wrapper" align="top" justify="center">
@@ -321,6 +348,7 @@ function Dashboard() {
               <Col key={item.id}>
                 <button
                   className="search-values btn-border-white"
+                  style={inputSearch.indexOf(item.name) > -1 ? {backgroundColor: 'white', color: 'black'}: null}
                   onClick={() => handleSelectCategory(item.name)}
                 >
                   {item.name}
@@ -336,6 +364,7 @@ function Dashboard() {
             <Col>
               <PopularExperience
                 data={experienceData}
+                valueSearch={valueSearch}
                 filterApplied={isFilterActive}
                 clearFilters={handleClearFilters}
                 title={`${

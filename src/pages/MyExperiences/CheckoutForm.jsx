@@ -6,6 +6,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { Row, Col, Button, Modal, Checkbox } from 'antd';
 import { Select, Input } from 'antd';
+import { LeftOutlined } from '@ant-design/icons';
 import { paymentsServices } from '../../services/paymentServices';
 
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -122,74 +123,77 @@ const CheckoutForm = (props) => {
         }
 
         setIsSubmitting(false);
+        props.setShowNewCardForm(false)
         props.handleConfirmAndPay('other');
       }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Row className="stripe-form-line" />
-      <Row style={{ marginTop: '15px' }}></Row>
-      {newState ? (
-        <>
-          <label htmlFor="name">Full Name</label>
-          <Input
-            id="name"
-            required
-            placeholder="Jenny Rosen"
-            className="stripe-regular-input"
-            value={name}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-          <Row className="stripe-format-row" />
-          <label htmlFor="cardNumber">Card Number</label>
-          <CardNumberElement id="cardNumber" options={ELEMENT_OPTIONS} />
-          <Row className="stripe-format-row" />
-          <label htmlFor="expiry">Card Expiration</label>
-          <CardExpiryElement id="expiry" options={ELEMENT_OPTIONS} />
-          <Row className="stripe-format-row" />
-          <label htmlFor="cvc">CVC</label>
-          <CardCvcElement id="cvc" options={ELEMENT_OPTIONS} />
-          <Row className="stripe-format-row" />
-          <label htmlFor="postal">Postal Code</label>
-          <Input
-            id="postal"
-            required
-            placeholder="12345"
-            value={postal}
-            className="stripe-regular-input"
-            onChange={(e) => {
-              setPostal(e.target.value);
-            }}
-          />
+    <div>
+      <Row style={{display: 'flex', alignItems: 'center'}}>
+        <LeftOutlined onClick={() => props.setShowNewCardForm(false)} style={{fontSize: '20px'}} />
+        <h1 style={{marginBottom: '0', marginLeft: '15px'}}>Add New Payment</h1>
+      </Row>
+      <form onSubmit={handleSubmit}>
+        {newState ? (
+          <>
+            <label htmlFor="name">Full Name</label>
+            <Input
+              id="name"
+              required
+              placeholder="Jenny Rosen"
+              className="stripe-regular-input"
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
+            <Row className="stripe-format-row" />
+            <label htmlFor="cardNumber">Card Number</label>
+            <CardNumberElement id="cardNumber" options={ELEMENT_OPTIONS} />
+            <Row className="stripe-format-row" />
+            <label htmlFor="expiry">Card Expiration</label>
+            <CardExpiryElement id="expiry" options={ELEMENT_OPTIONS} />
+            <Row className="stripe-format-row" />
+            <label htmlFor="cvc">CVC</label>
+            <CardCvcElement id="cvc" options={ELEMENT_OPTIONS} />
+            <Row className="stripe-format-row" />
+            <label htmlFor="postal">Postal Code</label>
+            <Input
+              id="postal"
+              required
+              placeholder="12345"
+              value={postal}
+              className="stripe-regular-input"
+              onChange={(e) => {
+                setPostal(e.target.value);
+              }}
+            />
+            
 
-          <Row className="stripe-form-line" />
-        </>
-      ) : (
-        <></>
-      )}
-      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-      {paymentMethod && <div>Got PaymentMethod: {paymentMethod.id}</div>}
-      <Row className="confirm-pay-modal-right-side-text" justify="center">
-        <Col>
-          <h4>
-            By selecting the button below, you agree to ther Guest Release and
-            Waiver, and the Guest Refund Policy
-          </h4>
-        </Col>
-      </Row>
-      <Row justify="center" className="loginbtn">
-        <Button htmlType="submit" disabled={!stripe} loading={isSubmitting}>
-          Confirm & Pay
-        </Button>
-      </Row>
-      {/* <button type="submit" disabled={!stripe}>
-        Pay
-      </button> */}
-    </form>
+          </>
+        ) : (
+          <></>
+        )}
+        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        {paymentMethod && <div>Got PaymentMethod: {paymentMethod.id}</div>}
+        <Row className="confirm-pay-modal-right-side-text" justify="center">
+          <Col>
+            <h4>
+              By selecting the button below, you agree to the Guest Release and
+              Waiver, and the Guest Refund Policy
+            </h4>
+          </Col>
+        </Row>
+        <Row justify="center" className="loginbtn">
+          <Button htmlType="submit" disabled={!stripe} loading={isSubmitting}  style={{backgroundColor: "#E42435", borderRadius: '30.625px', color: 'white', fontWeight: '600', fontSize: '17.5px', lineHeight: '17.5px', textAlign: 'center', height: '50px', width: `${6.3409090909 * 50}px`}}>Confirm & Pay</Button>
+        </Row>
+        {/* <button type="submit" disabled={!stripe}>
+          Pay
+        </button> */}
+      </form>
+    </div>
   );
 };
 

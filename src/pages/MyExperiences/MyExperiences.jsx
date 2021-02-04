@@ -227,7 +227,7 @@ function MyExperiences(props) {
             }
           }
           setDetailData(payload.experience);
-          setFullName(payload.experience.hostData.fullname);
+          setFullName(titleCase(payload.experience.hostData.fullname));
           setAboutme(payload.aboutMe);
           setAvatarUrl(payload.avatarUrl);
           setImageUrl(payload.experience.images[0])
@@ -311,10 +311,17 @@ function MyExperiences(props) {
       }
     }
   };
+  const titleCase = (string) => {
+    
+    return string.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  }
   return (
     <>
       <Row justify="end" className="myexperience">
         <ConfirmPayModal
+        titleCase={titleCase}
           showConfirmAndPayModal={showConfirmAndPayModal}
           setShowConfirmAndPayModal={setShowConfirmAndPayModal}
           handleConfirmAndPay={handleConfirmAndPay}
@@ -354,8 +361,8 @@ function MyExperiences(props) {
           <Row className="exp-content">
             <Col md={13} sm={13} xs={23} className="exp-content-left">
               <Row className="exp-content-left-item">
-                <h1>{detailData.title}</h1>
-                <h3>Location: upcomming ....</h3>
+                <h1>{detailData.title ? titleCase(detailData.title): null}</h1>
+                <h3>Location: {detailData.location ? detailData.location: "TBA"}</h3>
               </Row>
               <Row className="exp-content-left-item-line" />
               <Row className="exp-content-left-item">
@@ -384,7 +391,7 @@ function MyExperiences(props) {
                     </Col>
                     <Col>
                       <h3 style={{ textTransform: 'capitalize' }}>
-                        {detailData.categoryName}
+                        {detailData.categoryName ? titleCase(detailData.categoryName): null}
                       </h3>
                     </Col>
                   </Row>
@@ -392,7 +399,7 @@ function MyExperiences(props) {
               </Row>
               <Row className="exp-content-left-item-line" />
               <Row className="exp-content-left-item">
-                <h2>About the experience</h2>
+                <h2>About The Experience</h2>
                 <h4>{detailData.description}</h4>
               </Row>
               <Row className="exp-content-left-item-line" />
