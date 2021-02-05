@@ -9,7 +9,7 @@ import { Select, Input } from 'antd';
 import { LeftOutlined } from '@ant-design/icons';
 import { paymentsServices } from '../../services/paymentServices';
 
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import {  useStripe, useElements } from '@stripe/react-stripe-js';
 import { experienceServices } from '../../services/experienceService';
 const ELEMENT_OPTIONS = {
   style: {
@@ -35,9 +35,7 @@ const CheckoutForm = (props) => {
   const [newState, setNewState] = useState(false);
   const [name, setName] = useState('');
   const [postal, setPostal] = useState('');
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState(null);
+
 
 
   useEffect(() => {
@@ -52,7 +50,7 @@ const CheckoutForm = (props) => {
       return;
     }
 
-    setIsSubmitting(true);
+    props.setIsSubmitting(true);
 
     const cardElement = elements.getElement(CardNumberElement);
 
@@ -72,10 +70,10 @@ const CheckoutForm = (props) => {
 
     if (result.data.error.status) {
       console.log('[error]', result.data.error);
-      setErrorMessage(`Oops. Something went wrong. Please try again later.`);
-      setPaymentMethod(null);
+      props.setErrorMessage(`Oops. Something went wrong. Please try again later.`);
+      props.setPaymentMethod(null);
 
-      setIsSubmitting(false);
+      props.setIsSubmitting(false);
     } else {
       const payload = await stripe.confirmCardPayment(result.data.payload, {
         payment_method:
@@ -92,10 +90,10 @@ const CheckoutForm = (props) => {
       console.log(payload);
       if (payload.error) {
         console.log('[error]', payload.error);
-        setErrorMessage(payload.error.message);
-        setPaymentMethod(null);
+        props.setErrorMessage(payload.error.message);
+        props.setPaymentMethod(null);
 
-        setIsSubmitting(false);
+        props.setIsSubmitting(false);
         // props.handleConfirmAndPay('error');
       } else {
         if (payload.paymentIntent.status === 'succeeded') {
@@ -113,16 +111,16 @@ const CheckoutForm = (props) => {
           });
           const userId = localStorage.getItem('userId');
           const sendData = await experienceServices.reserveExperience({...props.itemInfo, paymentIntent: payload.paymentIntent, guests: props.guest_number, userId: userId, experienceId: props.experienceId, imageUrl: props.imageUrl})
-          setPaymentMethod(payload.paymentMethod);
+          props.setPaymentMethod(payload.paymentMethod);
           console.log('experience id...',props.experienceId)
-          setErrorMessage(null);
+          props.setErrorMessage(null);
 
-          setIsSubmitting(false);
+          props.setIsSubmitting(false);
 
           props.handleConfirmAndPay('success');
         }
 
-        setIsSubmitting(false);
+        props.setIsSubmitting(false);
         props.setShowNewCardForm(false)
         props.handleConfirmAndPay('other');
       }
@@ -176,8 +174,8 @@ const CheckoutForm = (props) => {
         ) : (
           <></>
         )}
-        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-        {paymentMethod && <div>Got PaymentMethod: {paymentMethod.id}</div>}
+        {props.errorMessage && <div style={{ color: 'red' }}>{props.errorMessage}</div>}
+        {props.paymentMethod && <div>Got PaymentMethod: {props.paymentMethod.id}</div>}
         <Row className="confirm-pay-modal-right-side-text" justify="center">
           <Col>
             <h4>
@@ -187,7 +185,7 @@ const CheckoutForm = (props) => {
           </Col>
         </Row>
         <Row justify="center" className="loginbtn">
-          <Button htmlType="submit" disabled={!stripe} loading={isSubmitting}  style={{backgroundColor: "#E42435", borderRadius: '30.625px', color: 'white', fontWeight: '600', fontSize: '17.5px', lineHeight: '17.5px', textAlign: 'center', height: '50px', width: `${6.3409090909 * 50}px`}}>Confirm & Pay</Button>
+          <Button htmlType="submit" disabled={!stripe} loading={props.isSubmitting}  style={{backgroundColor: "#E42435", borderRadius: '30.625px', color: 'white', fontWeight: '600', fontSize: '17.5px', lineHeight: '17.5px', textAlign: 'center', height: '50px', width: `${6.3409090909 * 50}px`}}>Confirm & Pay</Button>
         </Row>
         {/* <button type="submit" disabled={!stripe}>
           Pay

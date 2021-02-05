@@ -36,9 +36,13 @@ import {
   getStartDate,
 } from '../../redux/selectors/experienceSelector';
 import { getUserInfo } from '../../redux/selectors/authSelector';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+const STRIPE_PK_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
+const stripePromise = loadStripe(STRIPE_PK_KEY);
 const NavLinkWithActivation = (props) => (
   <NavLink activeStyle={{ color: 'color' }} {...props} />
-);
+  );
 
 const params = {
   slidesPerView: 'auto',
@@ -320,18 +324,20 @@ function MyExperiences(props) {
   return (
     <>
       <Row justify="end" className="myexperience">
-        <ConfirmPayModal
-        titleCase={titleCase}
-          showConfirmAndPayModal={showConfirmAndPayModal}
-          setShowConfirmAndPayModal={setShowConfirmAndPayModal}
-          handleConfirmAndPay={handleConfirmAndPay}
-          handleConfirmAndPayModal={handleConfirmAndPayModal}
-          userData={userInfoSelector}
-          modalDataToShow={detailData}
-          guest_number={guest_number}
-          itemInfo={selectedItemInfo}
-          imageUrl={imageUrl}
-        />
+        <Elements stripe={stripePromise}>
+          <ConfirmPayModal
+          titleCase={titleCase}
+            showConfirmAndPayModal={showConfirmAndPayModal}
+            setShowConfirmAndPayModal={setShowConfirmAndPayModal}
+            handleConfirmAndPay={handleConfirmAndPay}
+            handleConfirmAndPayModal={handleConfirmAndPayModal}
+            userData={userInfoSelector}
+            modalDataToShow={detailData}
+            guest_number={guest_number}
+            itemInfo={selectedItemInfo}
+            imageUrl={imageUrl}
+          />
+        </Elements>
         <Col md={23} xs={23} sm={23}>
           <Row className="exp-back-btn">
             <NavLinkWithActivation to="/">

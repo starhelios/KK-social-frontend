@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Modal, Checkbox } from 'antd';
 import { Select, Input, Radio } from 'antd';
 
+
+import { Elements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import RedStarIcon from '../../assets/img/experience/red-star.png';
-import exp_image1 from '../../assets/img/experience/Picture1.png';
+import { paymentsServices } from '../../services/paymentServices';
+import { experienceServices } from '../../services/experienceService';
 import CheckoutForm from './CheckoutForm';
 import './MyExperiences.scss';
 const STRIPE_PK_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
@@ -26,11 +27,86 @@ const ConfirmPayModal = ({
   const currencyFormat = (num) => {
     return '$' + num.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
   };
+  const stripe = useStripe();
   const [loadingModal, setLoadingModal] = useState(true);
   const [selectedCard, setSelectedCard] = useState(null);
   const [showNewCardForm, setShowNewCardForm] = useState(false)
   const [selectedCardVal, setSelectedCardVal] = useState(null);
   const [isNewCard, setIsNewCard] = useState('saved');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState(null);
+
+
+  const submitSavedCard = async() => {
+    console.log('running payment')
+    setIsSubmitting(true)
+    const result = await paymentsServices.GenerateIntentForChargeCustomerExperience(
+      {
+        experienceID: `${modalDataToShow[`id`]}`,
+        amount:
+          parseInt(modalDataToShow[`price`]) *
+          parseInt(guest_number) *
+          100,
+        payment_type: 'saved',
+        payment_method_id:
+          `${selectedCardVal.id}`
+      }
+    );
+      console.log(result)
+
+    if (result.data.error.status) {
+      console.log('[error]', result.data.error);
+      setErrorMessage(`Oops. Something went wrong. Please try again later.`);
+      setPaymentMethod(null);
+
+      setIsSubmitting(false);
+    } else {
+      console.log('running')
+      console.log(selectedCardVal)
+      const payload = await stripe.confirmCardPayment(result.data.payload, {
+        payment_method:
+          selectedCardVal.id
+      });
+      console.log('running');
+      console.log(payload);
+      if (payload.error) {
+        console.log('[error]', payload.error);
+        setErrorMessage(payload.error.message);
+        setPaymentMethod(null);
+
+        setIsSubmitting(false);
+        // props.handleConfirmAndPay('error');
+      } else {
+        if (payload.paymentIntent.status === 'succeeded') {
+          // Show a success message to your customer
+          // There's a risk of the customer closing the window before callback
+          // execution. Set up a webhook or plugin to listen for the
+          // payment_intent.succeeded event that handles any business critical
+          // post-payment actions.
+
+          const saveTransaction = await paymentsServices.SaveTransactionInDB({
+            client_secret: `${payload.paymentIntent.client_secret}`,
+            id: `${payload.paymentIntent.id}`,
+            userID: `${modalDataToShow[`userId`]}`,
+            experienceID: `${modalDataToShow[`id`]}`,
+          });
+          const userId = localStorage.getItem('userId');
+          const sendData = await experienceServices.reserveExperience({...itemInfo, paymentIntent: payload.paymentIntent, guests: guest_number, userId: userId, experienceId: `${modalDataToShow[`id`]}`, imageUrl: imageUrl})
+          setPaymentMethod(payload.paymentMethod);
+          console.log('experience id...',`${modalDataToShow[`id`]}`)
+          setErrorMessage(null);
+
+          setIsSubmitting(false);
+
+          handleConfirmAndPay('success');
+        }
+
+        setIsSubmitting(false);
+        handleConfirmAndPay('other');
+      }
+    }
+  }
   useEffect(() => {
     if (Object.entries(modalDataToShow).length !== 0) {
       setLoadingModal(false);
@@ -125,6 +201,7 @@ const ConfirmPayModal = ({
                   >
                     <Radio
                       value={'saved'}
+                      onClick={() => setIsNewCard('saved')}
                       disabled={
                         !(userData && userData.availableMethods.length > 0)
                       }
@@ -133,7 +210,7 @@ const ConfirmPayModal = ({
                         ? `Saved payment methods`
                         : `No saved payment methods`}
                     </Radio>
-                    <Radio value={'new'}>Use new card</Radio>
+                    <Radio value={'new'} onClick={() => setIsNewCard('new')}>Use new card</Radio>
                   </Radio.Group>
                 </Row>
                 <Row className="confirm-pay-modal-right-side-item-content">
@@ -171,7 +248,7 @@ const ConfirmPayModal = ({
                 <Row style={{marginTop: "40px"}}>
                   <p>By selecting the button below, you agree to the Guest Release and Waiver, and the Guest Refund Policy.</p>
                 </Row>
-                {isNewCard ? (<Button onClick={() => setShowNewCardForm(true)} style={{backgroundColor: "#E42435", borderRadius: '30.625px', color: 'white', fontWeight: '600', fontSize: '17.5px', lineHeight: '17.5px', textAlign: 'center', height: '50px', width: `${6.3409090909 * 50}px`}}>Add New Payment</Button>): null}
+                {isNewCard === "new" ? (<Button onClick={() => setShowNewCardForm(true)} style={{backgroundColor: "#E42435", borderRadius: '30.625px', color: 'white', fontWeight: '600', fontSize: '17.5px', lineHeight: '17.5px', textAlign: 'center', height: '50px', width: `${6.3409090909 * 50}px`}}>Add New Payment</Button>): <Button  loading={isSubmitting} onClick={submitSavedCard}  style={{backgroundColor: "#E42435", borderRadius: '30.625px', color: 'white', fontWeight: '600', fontSize: '17.5px', lineHeight: '17.5px', textAlign: 'center', height: '50px', width: `${6.3409090909 * 50}px`}}>Confirm & Pay</Button>}
               </div>
               </Col>
           </Row>
@@ -181,7 +258,13 @@ const ConfirmPayModal = ({
               {showNewCardForm ? (
                 <Elements stripe={stripePromise}>
                   <CheckoutForm
+                  errorMessage={errorMessage}
+                  setErrorMessage={setErrorMessage}
+                  setIsSubmitting={setIsSubmitting}
+                  isSubmitting={isSubmitting}
                   setShowNewCardForm={setShowNewCardForm}
+                  paymentMethod={paymentMethod}
+                  setPaymentMethod={setPaymentMethod}
                     handleConfirmAndPay={handleConfirmAndPay}
                     modalDataToShow={modalDataToShow}
                     itemInfo={itemInfo}

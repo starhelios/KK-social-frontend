@@ -78,7 +78,6 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
     }
     
     let specificExperiences = [];
-    console.log(daysAvailable)
     daysAvailable.forEach((element) => {
       let start = new Date(moment(element.startDayTime).format());
       let end = new Date(moment(element.endDayTime).format());
@@ -105,7 +104,6 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
 
       }
     })
-    return false
 
     let params = {
       ...value,
