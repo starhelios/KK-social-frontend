@@ -10,7 +10,7 @@ import Script from 'react-load-script';
 const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityChosen, showIcon}) => {
   
   const [cities, setCities] = useState([])
-  const googleKey = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAcHUaRR1URQlQR54ebNGeByyDR7Y6pJn4&libraries=places`
+  const googleKey = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`
   let autocomplete;
 
   const renderRows = (item) => {

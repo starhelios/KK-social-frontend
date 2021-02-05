@@ -51,6 +51,7 @@ export const Profile = (props) => {
     dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
     history.push('/');
   };
+  
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');

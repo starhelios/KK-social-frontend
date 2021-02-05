@@ -11,11 +11,11 @@ const NavLinkWithActivation = (props) => (
   <NavLink activeStyle={{ color: 'color' }} {...props} />
 );
 
-function HostExperience() {
+function HostExperience(props) {
   const [daysAvailable, setDayAvailable] = useState([]);
   const [price, setPrice] = useState('');
   const [values, setValues] = useState([]);
-  console.log(daysAvailable)
+  const [formErrors, setFormErrors] = useState({});
 
   return (
     <>
@@ -37,6 +37,7 @@ function HostExperience() {
               daysAvailable={daysAvailable}
               setPrice={setPrice}
               days={values}
+              setFormErrors={setFormErrors}
             />
             <DatesOfAvailability
               daysAvailable={daysAvailable}
@@ -44,6 +45,7 @@ function HostExperience() {
               price={price}
               values={values}
               setValues={setValues}
+              formErrors={formErrors}
             />
           </Row>
         </Col>

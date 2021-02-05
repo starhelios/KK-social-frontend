@@ -14,9 +14,11 @@ const DatesOfAvailability = ({
   price,
   values,
   setValues,
+  formErrors
 }) => {
   const [showDatepicker, setShowDatepicker] = React.useState(false);
   const [isEditAll, setEditAll] = useState(true);
+  const [tempValue, setTempValue] = useState([]);
 
   const handleShowDatepicker = (value) => {
     setShowDatepicker(value);
@@ -24,28 +26,15 @@ const DatesOfAvailability = ({
 
   const handleApplyDatepicker = () => {
     handleShowDatepicker(false);
-    setValues(values)
-    // if (values.length > 0) {
-    //   handleShowDatepicker(false);
-    //   let dates = [
-    //     {
-    //       day: values[0].format('MMMM DD, YYYY'),
-    //     },
-    //   ];
-
-    //   const currDate = moment(values[0]).startOf('day');
-    //   const lastDate = moment(values[1]).startOf('day');
-
-    //   while (currDate.add(1, 'days').diff(lastDate) < 0) {
-    //     dates.push({
-    //       day: currDate.clone().format('MMMM DD, YYYY'),
-    //     });
-    //   }
-
-    //   dates.push({ day: values[1].format('MMMM DD, YYYY') });
-
-    //   setDayAvailable(dates);
-    // }
+    let difference = 0
+    let datesArray = [];
+    const startDate = tempValue[0];
+    difference = parseInt(moment.duration(moment(tempValue[1]).diff(moment(tempValue[0]))).asDays());
+    for(let i = 0; i <= difference; i++){
+      const newDate = moment(startDate).add(i, 'days').format('LL');
+      datesArray.push(newDate)
+    }
+    setValues(datesArray)
   };
 
   const handleOpenChange = () => {
@@ -57,8 +46,7 @@ const DatesOfAvailability = ({
       const newDate = moment(item).format('LL')
       return newDate
     })
-    console.log(new Date().getFullYear())
-    setValues(newDates);
+    setTempValue(newDates);
   };
 
   const disabledDate = (current) => {
@@ -66,7 +54,11 @@ const DatesOfAvailability = ({
     return current && current < moment().startOf('day');
   };
 
-  console.log(values);
+  const errorDatePicker = () => {
+    return (
+      <div className="errorText">{formErrors.availability ? formErrors.availability: null}</div>
+    )
+  }
 
   return (
     <Col
@@ -165,6 +157,7 @@ const DatesOfAvailability = ({
           </Row>
         </Col>
       </Row>
+      {formErrors.availability ? errorDatePicker(): null}
     </Col>
   );
 };

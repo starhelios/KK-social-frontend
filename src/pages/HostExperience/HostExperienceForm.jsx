@@ -21,10 +21,11 @@ import SearchIcon from '../../assets/img/search-icon.png';
 import { categoryServices } from '../../services/categoryService';
 import { experienceServices } from '../../services/experienceService';
 import { formatDateBE } from '../../utils/utils';
+import axios from 'axios';
 
 const { TextArea } = Input;
 
-const HostExperienceForm = ({ setPrice, days, values, daysAvailable }) => {
+const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { register, handleSubmit, errors, control, watch } = useForm();
@@ -56,7 +57,7 @@ const HostExperienceForm = ({ setPrice, days, values, daysAvailable }) => {
 
   const handleSeachCategories = useCallback(_debounce(callApiSearch, 1000), []);
 
-  const onSubmit = (values) => {
+  const onSubmit = (value) => {
     if (images.length === 0) {
       toast.error('Please upload photos');
       return;
@@ -69,12 +70,19 @@ const HostExperienceForm = ({ setPrice, days, values, daysAvailable }) => {
     const addMinutes =  function (dt, minutes) {
       return new Date(dt.getTime() + minutes * 60000);
     };
+    console.log(days);
+    console.log(daysAvailable)
+    if(days.length !== daysAvailable.length || !days.length){
+      setFormErrors({availability: 'Please Complete/Save Your Availability'})
+      return false;
+    }
     
     let specificExperiences = [];
+    console.log(daysAvailable)
     daysAvailable.forEach((element) => {
       let start = new Date(moment(element.startDayTime).format());
       let end = new Date(moment(element.endDayTime).format());
-      let firstEnd = addMinutes(start, values.duration);
+      let firstEnd = addMinutes(start, value.duration);
       let startingObject = {
         day: moment(start).format('LL'),
         startTime: moment(start).format('LT'),
@@ -82,8 +90,8 @@ const HostExperienceForm = ({ setPrice, days, values, daysAvailable }) => {
       }
       specificExperiences.push(startingObject);
       while (start < end){
-        let newStartDate = addMinutes(start, values.duration)
-        let newEndDate = addMinutes(newStartDate, values.duration)
+        let newStartDate = addMinutes(start, value.duration)
+        let newEndDate = addMinutes(newStartDate, value.duration)
         let object = {
           day: moment(newStartDate).format('LL'),
           startTime: moment(newStartDate).format('LT'),
@@ -93,21 +101,40 @@ const HostExperienceForm = ({ setPrice, days, values, daysAvailable }) => {
         if(object.startTime !== object.endTime && newEndDate < end && newStartDate < end){
           specificExperiences.push(object);
         }
-        start = addMinutes(start, values.duration);
+        start = addMinutes(start, value.duration);
 
       }
     })
+    return false
 
     let params = {
-      ...values,
+      ...value,
       specificExperiences,
       images,
-      duration: values.duration,
-      price: values.price,
+      duration: value.duration,
+      price: value.price,
       startDay: moment(days[0]).format(formatDateBE),
       endDay: moment(days[1]).format(formatDateBE),
       categoryName: selectedCategory.name,
     };
+    // axios.post('https://api.zoom.us/v2/users/grayson.mcmurry23@gmail.com/meetings', {
+    //   startTime: "2021-02-04T19:55:31-06:00",
+    //   duration: 60
+    // }, {
+    //   headers: {
+    //     'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6IllUa0gxOU1NUkZ1akp3MVQ4VzhCYWciLCJleHAiOjE2MTI1NjgxMDgsImlhdCI6MTYxMjQ4MTcxMn0.20Oh_uVH0kezbuCFrpMatkxsuXMu0dmD_Xeu-qkR0p0`,
+    //     'Content-Type': 'application/json',
+    //     'Access-Control-Allow-Origin': '*'
+    //   }
+    // }).then(response => {
+    //   console.log(response)
+    // }).catch(err => {
+    //   console.log(err)
+    // })
+
+    console.log(moment(new Date()).format())
+
+    console.log(specificExperiences)
 
     experienceServices.createExperience(params).then((res) => {
       const { data } = res;
