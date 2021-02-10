@@ -41,6 +41,7 @@ const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityCho
   const handleScriptLoad = () => {
     const options = {
       types: ['(cities)'],
+      componentRestrictions: {country: "us"}
     };
 
     /*global google*/ // To disable any eslint 'google not defined' errors
@@ -50,8 +51,7 @@ const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityCho
     );
 
     autocomplete.setFields(['address_components', 'formatted_address']);
-
-   autocomplete.addListener('place_changed', handlePlaceSelect);
+    autocomplete.addListener('place_changed', handlePlaceSelect);
   }
   
   
