@@ -29,10 +29,9 @@ const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityCho
         let array = [];
         for(var i=0; i<nodes.length; i++) {
           const string = nodes[i].outerText;
-          // const whiteSpaceIndex = string.indexOf(',') - 2
-          // const newString = string.slice(0, whiteSpaceIndex) + " " + string.slice(whiteSpaceIndex)
-          const newString = string.replace(", USA", "")
-          array.push(newString)
+          const whiteSpaceIndex = string.indexOf(',') - 2
+          const newString = string.slice(0, whiteSpaceIndex) + ", " + string.slice(whiteSpaceIndex)
+          array.push(newString.replace(", USA", ""))
         }
         setCities(array)
       }
