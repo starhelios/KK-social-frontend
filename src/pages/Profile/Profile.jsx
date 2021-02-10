@@ -235,7 +235,7 @@ export const Profile = (props) => {
                       <Row className="profile-line" />
                     </>
                   )}
-                  {isHost && (
+                  { isHost && (
                     <>
                       <Row
                         style={{ cursor: 'pointer' }}
