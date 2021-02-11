@@ -97,7 +97,7 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
           endTime: moment(newEndDate).format('LT')
         };
         console.log(newEndDate < end)
-        if(object.startTime !== object.endTime && newEndDate < end && newStartDate < end){
+        if(object.startTime !== object.endTime && newEndDate <= end && newStartDate < end){
           specificExperiences.push(object);
         }
         start = addMinutes(start, value.duration);

@@ -1,26 +1,34 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './SliderComponent.scss';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Slider from 'react-slick';
 import { NavLink } from 'react-router-dom';
+import moment from 'moment'
+import _debounce from "lodash/debounce";
+import { toast } from "react-toastify";
 import { Button, Card, Col, Image, Row } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
+
 import _get from 'lodash/get';
 import { useDispatch, useSelector } from 'react-redux';
 import RatingComponent from './RatingComponent';
 import { experienceServices } from '../../services/experienceService';
+import Zoom from '../../pages/Zoom/Zoom';
 
 
 const { Meta } = Card;
 
 function SliderComponent(props) {
   const dispatch = useDispatch();
+  const [showZoom, setShowZoom] = useState(false);
   const { data, rows } = props.data;
   const popular_flag = props.data.flag;
   const header_title = props.data.header_title;
   const card_width = props.data.width;
   const card_height = props.data.height;
+  const history = useHistory();
 
   const font_color = props.data.color === 0 ? 0.25 : '';
   const header_title_color = props.data.color === 0 ? 0.15 : '';
@@ -37,9 +45,12 @@ function SliderComponent(props) {
       ? 4
       : 5;
   };
-
+  
+  const userId = localStorage.getItem('userId');
+  const getUserZoomRole = (itemIds) => {
+    return itemIds.indexOf(userId) > -1 ? '0': '1'
+  }
   const sendRatingData = (experienceId, rating) => {
-    const userId = localStorage.getItem('userId');
     console.log('send rating data', experienceId, rating, userId);
     if (experienceId && rating && userId) {
             experienceServices.rateSpecificExperience(experienceId, rating, userId).then((res) => {
@@ -60,6 +71,53 @@ function SliderComponent(props) {
         //   history.push('/');
         }
   }
+  useEffect(() => {
+    const timeRightNow = new Date().toISOString();
+    const itemsNeedUpdatedArray = data.map((item, idx) => {
+      const itemTimeStamp = new Date(item.day + " " + item.endTime).toISOString();
+      if(timeRightNow > itemTimeStamp){
+        return item.id
+      }
+    }).filter((element) => {
+      return element !== undefined
+    })
+    if(itemsNeedUpdatedArray.length){
+      console.log('calling backend...')
+      experienceServices.completeSpecificExperience(itemsNeedUpdatedArray).then((res) => {
+        const { data } = res;
+        const errorStatus = _get(data, 'error.status', true);
+        const payload = _get(data, 'payload', null);
+        if(!errorStatus) {
+          console.log(payload)
+        }
+      }
+      )}
+
+  }, [data])
+
+  const sendUserInfoToZoom = async (specExperienceId, idsArray) => {
+    const userRole = getUserZoomRole(idsArray);
+    console.log(specExperienceId)
+    experienceServices.buildUserZoomExperience(userId, specExperienceId, userRole).then(res => {
+      const { data } = res;
+      const errorStatus = _get(data, 'error.status', true);
+      const payload = _get(data, 'payload', null);
+      if (!errorStatus) {
+        //TODO event handler once finished sending experience
+        const base64Url = Buffer.from(payload.experienceBuilt, 'utf-8').toString('base64');
+        console.log(base64Url)
+        const buildUrl = `http://localhost:3001/${base64Url}`
+        toast.success('Re-directing to Zoom');
+        const redirect_user = _debounce(() => {
+          window.location.href = buildUrl;
+        }, 1500);
+        redirect_user();
+      } else {
+        toast.error('Something went wrong')
+          console.log("couldn't build experience");
+      }
+    }
+    )}
 
   const settings = {
     className: 'center',
@@ -338,15 +396,21 @@ function SliderComponent(props) {
     const userId = localStorage.getItem('userId');
     console.log(item);
     let obj;
-    item.ratings.map((item, idx) => {
-      const array = Object.values(item);
-      if(array.indexOf(item.id) > -1 && array.indexOf(userId) > -1){
-        return obj = item;
-      }else {
-        return false
-      }
-    })
-    return obj.rating;
+    console.log(item)
+    if(item.ratings.length){
+      item.ratings.map((item, idx) => {
+        const array = Object.values(item);
+        if(array.indexOf(item.id) > -1 && array.indexOf(userId) > -1){
+          console.log(item)
+          return obj = item;
+        }else {
+          return false
+        }
+      })
+      return obj.rating;
+    }else {
+      return null;
+    }
   }
 
   return (
@@ -363,6 +427,7 @@ function SliderComponent(props) {
       ) : (
         ''
       )}
+      
 
       {popular_flag > 2 ? (
         <Slider {...settings_booking}>
@@ -400,7 +465,7 @@ function SliderComponent(props) {
                                   justify='center'
                                   align='middle'
                                 >
-                                  <Button>Join Experience</Button>
+                                  <Button onClick={() => sendUserInfoToZoom(item.id, item.usersGoing)}>Join Experience</Button>
                                 </Row>
                               ) : (
                                 <Row
@@ -432,7 +497,9 @@ function SliderComponent(props) {
                 );
               })
             : ''}
+            
         </Slider>
+        
       ) : (
         <Slider {...settings} className='dashboard-card'>
           {data

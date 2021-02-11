@@ -1,16 +1,15 @@
-import firebase from 'firebase/app';
-import 'firebase/storage';
+import firebase from "firebase/app";
+import "firebase/storage";
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: 'AIzaSyCA4O_4tL5cYKcJ0TiAGI2jQn-8xK5153s',
-  authDomain: 'kloutkast-63bdc.firebaseapp.com',
-  databaseURL: 'https://kloutkast-63bdc.firebaseio.com',
-  projectId: 'kloutkast-63bdc',
-  storageBucket: 'kloutkast-63bdc.appspot.com',
-  messagingSenderId: '836615527905',
-  appId: '1:836615527905:web:fd8acfc4789e0fdbdd86a0',
-  measurementId: 'G-ST4DFKQG9Q',
+var firebaseConfig = {
+  apiKey: "AIzaSyDP4qDjxwMCAyuwY-6ZvKP3lf58qBxBydM",
+  authDomain: "klout-kast-development.firebaseapp.com",
+  projectId: "klout-kast-development",
+  storageBucket: "klout-kast-development.appspot.com",
+  messagingSenderId: "943789863268",
+  appId: "1:943789863268:web:9961ac852f48b55a8d8a71",
+  measurementId: "G-CJCMH0YB2M",
 };
 // Initialize Firebase
 if (!firebase.apps.length) {

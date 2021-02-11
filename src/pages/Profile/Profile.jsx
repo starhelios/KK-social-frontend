@@ -21,6 +21,8 @@ import { getUserInfo } from '../../redux/selectors/authSelector';
 import BecomeHost from '../BecomeHost';
 import { getQueryParams } from '../../utils/utils';
 import WithdrawalOption from '../WithdrawalOptions/WithdrawalOption';
+import ZoomIntegration from '../../components/ZoomIntegration/ZoomIntegration';
+import { toast } from 'react-toastify';
 
 const NavLinkWithActivation = (props) => (
   <NavLink activeStyle={{ color: 'color' }} {...props} />
@@ -35,6 +37,7 @@ export const Profile = (props) => {
   const [showPaymentMethods, setShowPaymentMethods] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [isCardEditMode, setIsCardEditMode] = useState(false);
+  const [userLoadedIn, setUserLoadedIn] = useState(false);
 
   const handleLogout = () => {
     authServices
@@ -51,7 +54,6 @@ export const Profile = (props) => {
     dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
     history.push('/');
   };
-  
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -66,6 +68,7 @@ export const Profile = (props) => {
           setIsHost(payload.isHost);
           dispatch({ type: AUTH_SET_AUTHENTICATED, payload: true });
           dispatch({ type: AUTH_SET_USER_INFO, payload });
+          setUserLoadedIn(true)
         } else {
           dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
           history.push('/');
@@ -81,13 +84,27 @@ export const Profile = (props) => {
     if (becomeHost) {
       setProfileContentSwitch(2);
     }
-  }, []);
+  }, [userLoadedIn]);
 
   useEffect(() => {
-    console.log(userInfoSelector);
-  }, [userInfoSelector]);
-
-  console.log(isHost);
+    const token = window.location.search.split('?code=')[1];
+    //send to backend to receive
+    if(userInfoSelector && userInfoSelector.id && window.location.pathname === "/profile/zoom-confirmation"){
+      console.log('running api')
+      authServices.updateUserInfo(userInfoSelector.id, {zoomAuthToken: token, email: userInfoSelector.email}).then((res) => {
+        const { data } = res;
+        const errorStatus = _get(data, 'error.status', true);
+        const errorMessage = _get(data, 'error.message', '');
+        const payload = _get(data, 'payload', null);
+        if (!errorStatus) {
+          toast.success('Thank you for connecting your Zoom account');
+        } else {
+          toast.error("You have already connected your zoom account");
+          history.push('/profile')
+        }
+      })
+    }
+  }, [userLoadedIn]);
 
   return (
     <div className="profile-wrapper">
@@ -308,6 +325,22 @@ export const Profile = (props) => {
                     </Col>
                   </Row>
                   <Row className="profile-line" />
+                  <Row
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setProfileContentSwitch(5)}
+                  >
+                    <Col sm={8} xs={8}>
+                      <h3>Zoom</h3>
+                    </Col>
+                    <Col sm={1} xs={1} offset={15}>
+                      <Row justify="end">
+                        <h3>
+                          <RightOutlined />
+                        </h3>
+                      </Row>
+                    </Col>
+                  </Row>
+                  <Row className="profile-line" />
                 </Col>
               </Row>
               <Row className="input-unit">
@@ -337,6 +370,7 @@ export const Profile = (props) => {
                   />
                 )}
                 {profileContentSwitch === 4 && <WithdrawalOption />}
+                {profileContentSwitch === 5 && <ZoomIntegration userInfoSelector={userInfoSelector} />}
               </Row>
             </Col>
           </Row>

@@ -41,7 +41,6 @@ function Dashboard() {
   const handleShowModal = (value) => {
     setShowFilterModal(value);
   };
-  console.log(categories)
 
   const handleClearFilters = () => {
     // setExperienceData([]);
@@ -161,7 +160,6 @@ function Dashboard() {
         });
     } else {
       const array = [...inputSearch]
-      console.log(array);
       const index = array.indexOf(value);
       array.splice(index, 1)
       setInputSearch(array);
@@ -170,7 +168,6 @@ function Dashboard() {
   };
 
   const handleInputChange = ({ target: { value } }) => {
-    console.log(value)
     return;
     // setValueSearch(value);
   };
@@ -179,7 +176,6 @@ function Dashboard() {
       const { data } = res;
       const errorStatus = _get(data, 'error.status', true);
       const payload = _get(data, 'payload', null);
-      console.log(payload);
       if (!errorStatus) {
         const result = convertExperience(payload);
 
@@ -242,7 +238,6 @@ function Dashboard() {
     // });
 
     authServices.getHosts().then((res) => {
-      console.log(res);
       const { data } = res;
       const errorStatus = _get(data, 'error.status', true);
       const payload = _get(data, 'payload', null);

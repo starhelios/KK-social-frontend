@@ -10,6 +10,8 @@ export const experienceServices = {
   getAllByUserId,
   reserveExperience,
   rateSpecificExperience,
+  buildUserZoomExperience,
+  completeSpecificExperience,
 };
 
 function createExperience(data) {
@@ -93,6 +95,23 @@ function rateSpecificExperience(experienceId, rating, userId) {
     userId,
   };
   return requestAPI.post("/v1/experiences/rate", data).then((res) => {
+    return res;
+  });
+}
+
+function buildUserZoomExperience(userId, specExperience, userRole) {
+  const data = {
+    userId,
+    specificExperienceId: specExperience,
+    userRole,
+  };
+  return requestAPI.post("/v1/experiences/build", data).then((res) => {
+    return res;
+  });
+}
+
+function completeSpecificExperience(ids) {
+  return requestAPI.post("/v1/experiences/complete", { ids }).then((res) => {
     return res;
   });
 }

@@ -17,6 +17,7 @@ import { EXPERIENCE_SET_BOOKINGS, EXPERIENCE_SET_COMPLETED_BOOKINGS } from '../.
 import {
   getBookings, getCompletedBookings
 } from '../../redux/selectors/experienceSelector';
+import { toast } from 'react-toastify';
 
 
 function MyBookings() {
@@ -32,8 +33,13 @@ function MyBookings() {
         
     };
 
+
     useEffect(() => {
         const userId = localStorage.getItem('userId');
+        console.log(window.location.pathname)
+        if(window.location.pathname === '/booking/completion'){
+            toast.success("We hope you enjoyed your experience")
+        }
         console.log(userId)
         if (userId) {
             experienceServices.getUserBookings(userId).then((res) => {
@@ -63,6 +69,7 @@ function MyBookings() {
 
 
     }, []);
+    console.log(inCompleteBookings)
 
     return (
         <div className="my-bookings">

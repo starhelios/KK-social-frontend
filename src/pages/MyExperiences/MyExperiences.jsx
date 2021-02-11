@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useParams, useHistory, useLocation } from 'react-router-dom';
 import Swiper from 'react-id-swiper';
 
-import { Row, Col, Button, DatePicker } from 'antd';
+import { Row, Col, Button, DatePicker, Rate } from 'antd';
 import {
   ClockCircleOutlined,
   ArrowLeftOutlined,
@@ -78,12 +78,42 @@ function MyExperiences(props) {
   const userInfoSelector = useSelector((state) => getUserInfo(state));
   const startDate = useSelector((state) => getStartDate(state));
   const endDate = useSelector((state) => getEndDate(state));
+  const [ratingsTotal, setRatingsTotal] = useState(0);
+  const [ratingsCount, setRatingsCount] = useState(0);
 
   const [showDatepicker, setShowDatepicker] = useState(false);
   const [values, setValues] = useState([]);
 
-  console.log(experienceData)
+  // console.log(experienceData)
 
+  useEffect(() => {
+    const data  = Object.values(detailData).length;
+    let ratingsCount = 0;
+    let ratingsTotal = 0;
+    if(data){
+      const promise = new Promise((resolve, reject) => {
+
+        detailData.specificExperience.map((item, idx) => {
+          if(item.ratings.length){
+  
+            item.ratings.forEach((element) => {
+              ratingsTotal += element.rating;
+              return ratingsCount++;
+            })
+          }
+          if(idx === detailData.specificExperience.length -1) {
+            resolve();
+          }
+        })
+      })
+      promise.then(() => {
+        setRatingsCount(ratingsCount);
+        setRatingsTotal(ratingsTotal);
+      })
+    }
+  }, [detailData])
+  // console.log(ratingsCount)
+  // console.log(ratingsTotal)
 
   useEffect(() => {
     if (query.get('start_date') && query.get('end_date')) {
@@ -96,7 +126,6 @@ function MyExperiences(props) {
 
   useEffect(() => {
     if (detailData.specificExperience) {
-      console.log(detailData)
       const formatArr = detailData.specificExperience.map((item, idx) => {
         console.log(item.day)
         if (startDateCalendar && endDateCalendar) {
@@ -321,6 +350,9 @@ function MyExperiences(props) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
   }
+
+  const rating = ratingsTotal / ratingsCount;
+  console.log(rating)
   return (
     <>
       <Row justify="end" className="myexperience">
@@ -357,7 +389,7 @@ function MyExperiences(props) {
                     <div style={{ width: 415, height: 415 }} key={idx}>
                       <img
                         src={item}
-                        style={{ width: '100%', height: 'auto' }}
+                        style={{ width: '100%', height: 'auto', borderRadius: '15px' }}
                       />
                     </div>
                   ))}
@@ -416,10 +448,13 @@ function MyExperiences(props) {
                   </Row>
                   <Row align="middle" justify="start">
                     <Col>
-                      <img src={ReviewIcon} alt="" />
+                      {ratingsTotal > 0 && ratingsCount > 0 && (
+
+                      <Rate disabled defaultValue={rating} />
+                      )}
                     </Col>
                     <Col>
-                      <h3>18 Reviews</h3>
+                      <h3>{ratingsCount.toString()} {ratingsCount > 1 ? 'Reviews': "Review"}</h3>
                     </Col>
                   </Row>
                   <Row style={{ marginTop: '39px' }}>

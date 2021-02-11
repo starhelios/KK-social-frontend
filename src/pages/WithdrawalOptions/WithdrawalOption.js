@@ -1,39 +1,17 @@
-import React, { useCallback } from 'react';
-import {
-  Row,
-  Col,
-  Upload,
-  message,
-  Button,
-  Input,
-  DatePicker,
-  Skeleton,
-  AutoComplete,
-  Spin,
-} from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { CameraOutlined, SearchOutlined } from '@ant-design/icons';
-import ImgCrop from 'antd-img-crop';
-import isEmail from 'validator/lib/isEmail';
-import moment from 'moment';
-import _get from 'lodash/get';
-import _debounce from 'lodash/debounce';
-import { toast } from 'react-toastify';
-import './styles.scss';
-import { storage } from '../../utils/firebase';
-import { authServices } from '../../services/authServices';
-import { useSelector, useDispatch } from 'react-redux';
-import { getUserInfo } from '../../redux/selectors/authSelector';
-import { AUTH_SET_USER_INFO } from '../../redux/types/authTypes';
-import SearchIcon from '../../assets/img/search-icon.png';
-import { categoryServices } from '../../services/categoryService';
-import { paymentsServices } from '../../services/paymentServices';
+import React from "react";
+import { Row, Col, Button } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import _get from "lodash/get";
+import _debounce from "lodash/debounce";
+import { toast } from "react-toastify";
+import "./styles.scss";
+import { paymentsServices } from "../../services/paymentServices";
 
 export default function WithdrawalOption(props) {
   const { handleSubmit, errors, reset, control, setValue, watch } = useForm({
-    mode: 'onBlur',
+    mode: "onBlur",
   });
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const [loadingStripeURL, setLoadingStripeURL] = useState(false);
@@ -55,14 +33,14 @@ export default function WithdrawalOption(props) {
                   try {
                     const result = await paymentsServices.generateAccountLink();
 
-                    toast.success('Re-directing to payment setup.');
+                    toast.success("Re-directing to payment setup");
                     const redirect_user = _debounce(() => {
                       window.location.href = `${result.data.payload}`;
                     }, 1500);
                     redirect_user();
                   } catch (err) {
                     console.log(err);
-                    toast.err('Something went wrong.');
+                    toast.err("Something went wrong.");
                   }
                   setLoadingStripeURL(false);
                 }}
