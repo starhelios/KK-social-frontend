@@ -15,7 +15,6 @@ import _get from 'lodash/get';
 import { useDispatch, useSelector } from 'react-redux';
 import RatingComponent from './RatingComponent';
 import { experienceServices } from '../../services/experienceService';
-import Zoom from '../../pages/Zoom/Zoom';
 
 
 const { Meta } = Card;
@@ -106,7 +105,7 @@ function SliderComponent(props) {
         //TODO event handler once finished sending experience
         const base64Url = Buffer.from(payload.experienceBuilt, 'utf-8').toString('base64');
         console.log(base64Url)
-        const buildUrl = `http://localhost:3001/${base64Url}`
+        const buildUrl = `https://kloutkast-zoom.herokuapp.com/${base64Url}`
         toast.success('Re-directing to Zoom');
         const redirect_user = _debounce(() => {
           window.location.href = buildUrl;
