@@ -23,7 +23,7 @@ function ZoomIntegration({userInfoSelector}) {
                   try {
                     toast.success('Re-directing to Zoom');
                     const redirect_user = _debounce(() => {
-                      window.location.href = `https://zoom.us/oauth/authorize?client_id=neNtJG1EQAG2YieBwjwTg&response_type=code&redirect_uri=https%3A%2F%2Fkloutkast.herokuapp.com%2Fprofile%2Fzoom-confirmation`;
+                      window.location.href = `https://zoom.us/oauth/authorize?client_id=uFVMOPgETiGcgTN25Tqb5w&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fprofile`;
                     }, 1500);
                     redirect_user();
                   } catch (err) {

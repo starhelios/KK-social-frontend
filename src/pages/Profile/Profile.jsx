@@ -23,6 +23,8 @@ import { getQueryParams } from '../../utils/utils';
 import WithdrawalOption from '../WithdrawalOptions/WithdrawalOption';
 import ZoomIntegration from '../../components/ZoomIntegration/ZoomIntegration';
 import { toast } from 'react-toastify';
+import { paymentsServices } from '../../services/paymentServices';
+
 
 const NavLinkWithActivation = (props) => (
   <NavLink activeStyle={{ color: 'color' }} {...props} />
@@ -63,12 +65,10 @@ export const Profile = (props) => {
         const { data } = res;
         const errorStatus = _get(data, 'error.status', true);
         const payload = _get(data, 'payload', null);
-
         if (!errorStatus) {
-          setIsHost(payload.isHost);
           dispatch({ type: AUTH_SET_AUTHENTICATED, payload: true });
           dispatch({ type: AUTH_SET_USER_INFO, payload });
-          setUserLoadedIn(true)
+          setIsHost(payload.isHost);
         } else {
           dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
           history.push('/');
@@ -86,25 +86,43 @@ export const Profile = (props) => {
     }
   }, [userLoadedIn]);
 
+  const deletePayment = (id) => {
+    paymentsServices.deletePayment(id).then(res => {
+      const { data } = res;
+        const errorStatus = _get(data, 'error.status', true);
+        const payload = _get(data, 'payload', null);
+        if (!errorStatus) {
+          toast.success('Card successfully deleted');
+          setUserLoadedIn(true);
+        } else {
+          toast.error("Card doesn't exist");
+        }
+    })
+  }
+
   useEffect(() => {
     const token = window.location.search.split('?code=')[1];
+    console.log(userInfoSelector && userInfoSelector.id && window.location.href.indexOf('/profile?code=') > -1)
     //send to backend to receive
-    if(userInfoSelector && userInfoSelector.id && window.location.pathname === "/profile/zoom-confirmation"){
+    if(userInfoSelector && userInfoSelector.id && window.location.href.indexOf('/profile?code=') > -1){
       console.log('running api')
       authServices.updateUserInfo(userInfoSelector.id, {zoomAuthToken: token, email: userInfoSelector.email}).then((res) => {
         const { data } = res;
         const errorStatus = _get(data, 'error.status', true);
         const errorMessage = _get(data, 'error.message', '');
         const payload = _get(data, 'payload', null);
+        console.log(data)
         if (!errorStatus) {
+          setProfileContentSwitch(1)
           toast.success('Thank you for connecting your Zoom account');
         } else {
+          console.log(errorStatus)
           toast.error("You have already connected your zoom account");
           history.push('/profile')
         }
       })
     }
-  }, [userLoadedIn]);
+  }, [isHost === true]);
 
   return (
     <div className="profile-wrapper">
@@ -116,6 +134,20 @@ export const Profile = (props) => {
           </Col>
         </NavLinkWithActivation>
       </Row>
+      <div>
+        <Row>
+      {userInfoSelector && !userInfoSelector.stripeAccountVerified && isHost &&
+         <div style={{textAlign: 'center', width: '100%'}} className="errorText">
+           Please complete withdrawal to begin hosting experiences
+         </div>
+      }
+      {userInfoSelector && !userInfoSelector.zoomAccessToken &&  (
+        <div style={{textAlign: 'center', width: '100%'}} className="errorText">
+           Please connect Zoom account to begin hosting experiences
+         </div>
+      )}
+        </Row>
+      </div>
       <Row className="profile-content">
         <Col sm={24} xs={24}>
           <Row>
@@ -183,7 +215,7 @@ export const Profile = (props) => {
                           (cardElem, cardIndex) => {
                             return (
                               <Row
-                                style={{ cursor: 'pointer' }}
+                                style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
                                 className="profile-available-cards"
                                 onClick={() => {
                                   // setShowPaymentMethods((elem) => !elem);
@@ -196,6 +228,17 @@ export const Profile = (props) => {
                                   {cardIndex + 1}. {cardElem.cardBrand} ending
                                   with {cardElem.last4digits}
                                 </h4>
+                                <Button 
+                                onClick={() => deletePayment(cardElem.id)}
+                                style={{
+                                  width: '20%',
+                                  display: 'inline-block',
+                                  textAlign: 'center',
+                                  color: 'white',
+                                  borderColor: '#D42F36',
+                                  background: '#D42F36',
+                                 }}
+                                type="primary">Delete</Button>
                               </Row>
                             );
                           }
@@ -309,7 +352,9 @@ export const Profile = (props) => {
                     </Col>
                   </Row>
                   <Row className="profile-line" />
-                  <Row
+                  {userInfoSelector && !userInfoSelector.stripeAccountVerified && (
+                    <div>
+                      <Row
                     style={{ cursor: 'pointer' }}
                     onClick={() => setProfileContentSwitch(4)}
                   >
@@ -325,7 +370,9 @@ export const Profile = (props) => {
                     </Col>
                   </Row>
                   <Row className="profile-line" />
-                  <Row
+                    </div>
+                  )}
+                  {userInfoSelector && !userInfoSelector.zoomAccessToken && <div><Row
                     style={{ cursor: 'pointer' }}
                     onClick={() => setProfileContentSwitch(5)}
                   >
@@ -340,7 +387,7 @@ export const Profile = (props) => {
                       </Row>
                     </Col>
                   </Row>
-                  <Row className="profile-line" />
+                  <Row className="profile-line" /> </div>}
                 </Col>
               </Row>
               <Row className="input-unit">
@@ -367,10 +414,11 @@ export const Profile = (props) => {
                     selectedCard={selectedCard}
                     isEditMode={isCardEditMode}
                     userData={userInfoSelector}
+
                   />
                 )}
                 {profileContentSwitch === 4 && <WithdrawalOption />}
-                {profileContentSwitch === 5 && <ZoomIntegration userInfoSelector={userInfoSelector} />}
+                {profileContentSwitch === 5 && !userInfoSelector.zoomAccessToken && <ZoomIntegration userInfoSelector={userInfoSelector} />}
               </Row>
             </Col>
           </Row>
