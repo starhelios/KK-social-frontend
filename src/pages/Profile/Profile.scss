@@ -26,6 +26,9 @@
     //     width: 100px;
     // }
   }
+  .profile-link {
+    text-decoration: none !important;
+  }
   .profile-content {
     margin-top: 84px;
     .profile-left-side {
@@ -93,11 +96,9 @@
       }
       .profile-available-cards {
         border-color: white;
-
       }
       .profile-available-cards:hover {
         background-color: #e41e35;
-        
       }
     }
     .profile-right-side {
@@ -107,7 +108,7 @@
   }
 }
 
-@media screen and (max-width: '720px') {
+@media screen and (max-width: "720px") {
   .profile-wrapper {
     padding: 19px 30px;
   }

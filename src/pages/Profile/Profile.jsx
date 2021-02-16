@@ -1,6 +1,6 @@
 import './Profile.scss';
 import React, { useState, useEffect } from 'react';
-import { NavLink, Redirect, withRouter } from 'react-router-dom';
+import { Link, NavLink, Redirect, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, Button } from 'antd';
 import {
@@ -352,15 +352,18 @@ export const Profile = (props) => {
                     </Col>
                   </Row>
                   <Row className="profile-line" />
-                  {userInfoSelector && !userInfoSelector.stripeAccountVerified && (
-                    <div>
                       <Row
                     style={{ cursor: 'pointer' }}
                     onClick={() => setProfileContentSwitch(4)}
                   >
+                    {userInfoSelector && !userInfoSelector.stripeAccountVerified ?
                     <Col sm={8} xs={8}>
                       <h3>Withdrawal Options</h3>
                     </Col>
+                    : <Col sm={8} xs={8}>
+                      <h3>Edit Withdrawal Options</h3>
+                    </Col>
+                    }
                     <Col sm={1} xs={1} offset={15}>
                       <Row justify="end">
                         <h3>
@@ -370,8 +373,6 @@ export const Profile = (props) => {
                     </Col>
                   </Row>
                   <Row className="profile-line" />
-                    </div>
-                  )}
                   {userInfoSelector && !userInfoSelector.zoomAccessToken && <div><Row
                     style={{ cursor: 'pointer' }}
                     onClick={() => setProfileContentSwitch(5)}
@@ -395,9 +396,31 @@ export const Profile = (props) => {
                   <Row>
                     <h4>Legal</h4>
                   </Row>
-                  <Row>
-                    <h3>Terms of Service</h3>
-                  </Row>
+                  <Link to="/terms-of-service" className="profile-link">
+                    <Row>
+                      <h3>Terms of Service</h3>
+                    </Row>
+                  </Link>
+                  <Row className="profile-line" />
+                </Col>
+              </Row>
+              <Row className="input-unit">
+                <Col sm={24} xs={24}>
+                  <Link to="/privacy-policy" className="profile-link">
+                    <Row>
+                      <h3>Privacy Policy</h3>
+                    </Row>
+                  </Link>
+                  <Row className="profile-line" />
+                </Col>
+              </Row>
+              <Row className="input-unit">
+                <Col sm={24} xs={24}>
+                  <Link to="/support" className="profile-link">
+                    <Row>
+                      <h3>Support</h3>
+                    </Row>
+                  </Link>
                   <Row className="profile-line" />
                 </Col>
               </Row>

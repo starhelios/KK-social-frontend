@@ -144,7 +144,7 @@ function Dashboard() {
       newArrayValue.push(value);
       setInputSearch(newArrayInput);
       setValueSearch(newArrayValue);
-
+      console.log('running category search')
       experienceServices
         .filterExperience({ categoryName: [...valueSearch, value] })
         .then((res) => {
@@ -163,7 +163,20 @@ function Dashboard() {
       const index = array.indexOf(value);
       array.splice(index, 1)
       setInputSearch(array);
-      setValueSearch(array)
+      setValueSearch(array);
+      experienceServices
+        .filterExperience({ categoryName: [...array] })
+        .then((res) => {
+          const { data } = res;
+          const errorStatus = _get(data, 'error.status', true);
+          const payload = _get(data, 'payload', null);
+
+          if (!errorStatus) {
+            const result = convertExperience(payload);
+
+            setExperienceData(result);
+          }
+        });
     }
   };
 

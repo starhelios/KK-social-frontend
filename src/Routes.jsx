@@ -1,6 +1,6 @@
 import './Routes.scss';
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { Layout } from 'antd';
 import LoadingAnimation from './components/LoadingAnimation';
 
@@ -12,6 +12,9 @@ import Profile from './pages/Profile/Profile';
 import HostDetails from './pages/HostDetails/HostDetails';
 import HostExperience from './pages/HostExperience/HostExperience';
 import ExperiencesHostedByMe from './pages/ExperiencesHostedByMe';
+import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService/TermsOfService';
+import NoMatch from './pages/404/404';
 
 const { Content } = Layout;
 
@@ -56,6 +59,17 @@ const ROOT = (props) => {
               <Route path='/experiences-hosted-by-me'>
                 <ExperiencesHostedByMe />
               </Route>
+              <Route path='/privacy-policy'>
+                <PrivacyPolicy />
+              </Route>
+              <Route path='/terms-of-service'>
+                <TermsOfService />
+              </Route>
+              <Route path='/support'>
+                <TermsOfService />
+              </Route>
+              <Route path="*" component={NoMatch} />
+              
             </Switch>
           </React.Suspense>
         </Content>
