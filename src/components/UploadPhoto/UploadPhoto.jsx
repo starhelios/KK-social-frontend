@@ -2,9 +2,12 @@ import './UploadPhoto';
 import React, { useState } from 'react';
 import { Upload, message, Row } from 'antd';
 import ImgCrop from 'antd-img-crop';
+import _get from 'lodash/get';
 
 import UploadIcon from '../../assets/img/experience/upload_photo.png';
 import { storage } from '../../utils/firebase';
+import { experienceServices } from '../../services/experienceService';
+import axios from 'axios';
 
 export const UploadPhoto = ({ images, setImages }) => {
   const [fileList, setFileList] = useState([]);
@@ -51,25 +54,24 @@ export const UploadPhoto = ({ images, setImages }) => {
   };
 
   const customUpload = ({ onError, onSuccess, file }) => {
-    const uploadTask = storage.ref(`images/${file.name}`).put(file);
+    //TODO make axios call to backend
+    console.log('file...',file)
+    let fileData = new FormData();
+    fileData.append('image', file)
+    experienceServices.uploadPhoto(fileData)
+    .then((res) => {
+          const { data } = res;
+          const errorStatus = _get(data, 'error.status', true);
+          const payload = _get(data, 'payload', null);
 
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {},
-      (error) => {
-        onError(error);
-      },
-      () => {
-        storage
-          .ref('images')
-          .child(`${file.name}`)
-          .getDownloadURL()
-          .then((url) => {
-            onSuccess(null, url);
-            setImages([...images, url]);
-          });
-      }
-    );
+          if (!errorStatus) {
+            onSuccess(null, payload.uploadedPhoto);
+            setImages([...images, payload.uploadedPhoto]);
+          } else{
+            onError(errorStatus)
+          }
+        });
+    
   };
 
   return (

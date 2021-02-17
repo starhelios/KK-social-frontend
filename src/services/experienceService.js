@@ -12,6 +12,7 @@ export const experienceServices = {
   rateSpecificExperience,
   buildUserZoomExperience,
   completeSpecificExperience,
+  uploadPhoto,
 };
 
 function createExperience(data) {
@@ -47,6 +48,18 @@ function reserveExperience(data) {
         },
       }
     )
+    .then((res) => {
+      return res;
+    });
+}
+
+function uploadPhoto(data) {
+  return requestAPI
+    .post("/v1/experiences/uploadPhoto", data, {
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    })
     .then((res) => {
       return res;
     });
