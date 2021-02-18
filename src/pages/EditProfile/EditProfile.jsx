@@ -168,9 +168,6 @@ export const EditProfile = () => {
       setLoading(false);
       setValue('fullname', userInfoSelector.fullname, { shouldDirty: true });
       setValue('email', userInfoSelector.email, { shouldDirty: true });
-      setValue('dateOfBirth', moment(userInfoSelector.dateOfBirth), {
-        shouldDirty: true,
-      });
 
       // warning
       if (userInfoSelector.avatarUrl) {
@@ -263,7 +260,7 @@ export const EditProfile = () => {
             </Row>
             <Row>
               <Controller
-                as={<DatePicker size='middle' format='DD-MM-YYYY' />}
+                as={<DatePicker size='middle' format='MM-DD-YYYY' />}
                 name='dateOfBirth'
                 control={control}
                 rules={{

@@ -93,7 +93,7 @@ export const Profile = (props) => {
         const payload = _get(data, 'payload', null);
         if (!errorStatus) {
           toast.success('Card successfully deleted');
-          setUserLoadedIn(true);
+          setProfileContentSwitch(3)
         } else {
           toast.error("Card doesn't exist");
         }

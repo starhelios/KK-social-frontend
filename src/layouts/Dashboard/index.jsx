@@ -316,6 +316,7 @@ function Dashboard() {
                   onOpenChange={handleOpenChange}
                   onChange={handleChange}
                   open={showDatepicker}
+                  style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingRight: '0', paddingLeft: '0'}}
                   renderExtraFooter={() => {
                     return (
                       <div>
@@ -350,7 +351,7 @@ function Dashboard() {
               <Col key={item.id}>
                 <button
                   className="search-values btn-border-white"
-                  style={inputSearch.indexOf(item.name) > -1 ? {backgroundColor: 'white', color: 'black'}: null}
+                  style={inputSearch.indexOf(item.name) > -1 ? {backgroundColor: 'white', color: 'black'}: {width: '170px', height: '50px'}}
                   onClick={() => handleSelectCategory(item.name)}
                 >
                   {item.name}
