@@ -92,9 +92,9 @@ export const EditProfile = () => {
     if (imageUrl) {
       params.avatarUrl = imageUrl;
     }
+    console.log('running')
 
     setLoadingSubmit(true);
-
     if (showChangePass) {
       const changePassParams = {
         userId: userInfoSelector.id,
@@ -109,6 +109,7 @@ export const EditProfile = () => {
         const errorMessage = _get(data, 'error.message', '');
 
         setLoadingSubmit(false);
+        console.log('running')
 
         if (!errorStatus) {
           authServices
@@ -135,18 +136,19 @@ export const EditProfile = () => {
         }
       });
     } else {
+      console.log('running')
       authServices.updateUserInfo(userInfoSelector.id, params).then((res) => {
         const { data } = res;
         const errorStatus = _get(data, 'error.status', true);
         const errorMessage = _get(data, 'error.message', '');
         const payload = _get(data, 'payload', null);
-
+        console.log(payload)
         if (!showChangePass) {
           setLoadingSubmit(false);
         }
 
         if (!errorStatus) {
-          toast.success(errorMessage);
+          toast.success('Successfully updated profile');
           dispatch({ type: AUTH_SET_USER_INFO, payload });
         } else {
           toast.error(errorMessage);
