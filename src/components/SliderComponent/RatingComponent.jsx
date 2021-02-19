@@ -6,6 +6,7 @@ function RatingComponent({id, callback, rated}) {
     const [rating, setRating] = useState();
 
     const handleRatingChange = (value) => {
+        console.log(value)
         setRating(value);
     };
 

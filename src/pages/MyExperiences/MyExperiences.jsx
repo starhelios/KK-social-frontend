@@ -112,8 +112,6 @@ function MyExperiences(props) {
       })
     }
   }, [detailData])
-  // console.log(ratingsCount)
-  // console.log(ratingsTotal)
 
   useEffect(() => {
     if (query.get('start_date') && query.get('end_date')) {

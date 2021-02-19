@@ -58,8 +58,7 @@ function SliderComponent(props) {
             const errorStatus = _get(data, 'error.status', true);
             const payload = _get(data, 'payload', null);
             if (!errorStatus) {
-                //TODO event handler once finished sending experience
-
+                props.setRefreshComponent('refresh')
             } else {
                 console.log("couldn't go through bookings");
             }
@@ -406,7 +405,7 @@ function SliderComponent(props) {
           return false
         }
       })
-      return obj.rating;
+      if(obj) return obj.rating;
     }else {
       return null;
     }
@@ -476,12 +475,21 @@ function SliderComponent(props) {
                                     md={24}
                                     className='booking-card-footer-rate-col'
                                   >
-                                    <Row>
-                                      <p> Rate this experience:</p>
-                                    </Row>
-                                    <Row>
-                                      <RatingComponent id={item.id} callback={sendRatingData} rated={findRating(item)} />
-                                    </Row>
+                                    {findRating(item) > 0 ?  (<Row>
+                                      <p>Thank you rating this experience!</p>
+                                    </Row>):
+                                    (
+                                      <div>
+                                        <Row>
+                                          <p> Rate this experience:</p>
+                                        </Row>
+                                        <Row>
+                                          <RatingComponent id={item.id} callback={sendRatingData} rated={findRating(item)} />
+                                        </Row>
+                                      </div>
+                                      
+                                    )}
+                                    
                                   </Col>
                                 </Row>
                               )}

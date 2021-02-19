@@ -270,38 +270,38 @@ function Dashboard() {
             <Col md={12} sm={16} xs={20}>
               <Input
                 className="searchbox"
-                prefix={<img style={{backgroundColor: 'white'}} src={SearchIcon} alt="" />}
+                prefix={<img style={{ backgroundColor: 'white' }} src={SearchIcon} alt="" />}
                 placeholder="Search KloutKast"
                 onSearch={() => handleShowModal(true)}
-                style={{borderRadius: '50px'}}
+                style={{ borderRadius: '50px' }}
                 onChange={handleInputChange}
                 value={inputSearch.map((item, idx) => {
-                  if(idx > 0)return " " + item;
+                  if (idx > 0) return " " + item;
                   else return item
                 })}
                 suffix={
-                  <Button onClick={()=>setShowFilterModal(!showFilterModal)} style={{marginRight: '10px', backgroundColor: "#2B2B29", height: '80%', width: '100%', borderRadius: '20px'}}>
-                    <img style={{padding: '10px'}} src={SearchSettingIcon} alt="" />
+                  <Button onClick={() => setShowFilterModal(!showFilterModal)} style={{ marginRight: '10px', backgroundColor: "#2B2B29", height: '80%', width: '100%', borderRadius: '20px' }}>
+                    <img style={{ padding: '10px' }} src={SearchSettingIcon} alt="" />
                   </Button>
                 }
               />
               <Col md={12} sm={16}>
-                  <ApplyFilterModal
-                    query={query}
-                    setQuery={setQuery}
-                    cityChosen={cityChosen}
-                    setCityChosen={setCityChosen}
-                    showFilterModal={showFilterModal}
-                    handleShowModal={handleShowModal}
-                    handleApplyFilters={handleApplyFilters}
-                    handleSliderChange={handleSliderChange}
-                    handleSliderAfterChange={handleSliderAfterChange}
-                    selectedCategory={selectedCategory}
-                    setSelectedCategory={setSelectedCategory}
-                    categories={categories}
-                  />
+                <ApplyFilterModal
+                  query={query}
+                  setQuery={setQuery}
+                  cityChosen={cityChosen}
+                  setCityChosen={setCityChosen}
+                  showFilterModal={showFilterModal}
+                  handleShowModal={handleShowModal}
+                  handleApplyFilters={handleApplyFilters}
+                  handleSliderChange={handleSliderChange}
+                  handleSliderAfterChange={handleSliderAfterChange}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                  categories={categories}
+                />
               </Col>
-              
+
             </Col>
           </Row>
           <Row className="search-values-wrapper" align="top" justify="center">
@@ -316,7 +316,7 @@ function Dashboard() {
                   onOpenChange={handleOpenChange}
                   onChange={handleChange}
                   open={showDatepicker}
-                  style={{display: 'flex', justifyContent: 'center', alignItems: 'center', paddingRight: '0', paddingLeft: '0'}}
+                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingRight: '0', paddingLeft: '0' }}
                   renderExtraFooter={() => {
                     return (
                       <div>
@@ -351,7 +351,7 @@ function Dashboard() {
               <Col key={item.id}>
                 <button
                   className="search-values btn-border-white"
-                  style={inputSearch.indexOf(item.name) > -1 ? {backgroundColor: 'white', color: 'black'}: {width: '170px', height: '50px'}}
+                  style={inputSearch.indexOf(item.name) > -1 ? { backgroundColor: 'white', color: 'black', width: '170px', height: '50px' } : { width: '170px', height: '50px' }}
                   onClick={() => handleSelectCategory(item.name)}
                 >
                   {item.name}
@@ -370,11 +370,10 @@ function Dashboard() {
                 valueSearch={valueSearch}
                 filterApplied={isFilterActive}
                 clearFilters={handleClearFilters}
-                title={`${
-                  experienceData.length > 0
+                title={`${experienceData.length > 0
                     ? `(${experienceData.length}) `
                     : '(0) '
-                }Popular Experiences`}
+                  }Popular Experiences`}
               />
             </Col>
           </Row>

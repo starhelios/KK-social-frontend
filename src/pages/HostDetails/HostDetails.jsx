@@ -1,7 +1,7 @@
 import './HostDetails.scss';
 import React, { useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Row, Col } from 'antd';
+import { Row, Col, Rate } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
@@ -22,6 +22,8 @@ const NavLinkWithActivation = (props) => (
 function HostDetails() {
   const { id } = useParams();
   const [hostData, setHostData] = useState({});
+  const [ratingsTotal, setRatingsTotal] = useState(0);
+  const [ratingsCount, setRatingsCount] = useState(0);
   const [experienceData, setExperienceData] = useState([]);
 
   useEffect(() => {
@@ -47,16 +49,49 @@ function HostDetails() {
 
         if (!errorStatus) {
           const result = convertExperience(payload);
-
-          setExperienceData(result);
+          console.log(result)
         }
       });
     }
   }, [id]);
 
+  useEffect(() => {
+    if(hostData.experiences && hostData.experiences.length){
+      let ratingsTotal = 0;
+      let ratingsCount = 0;
+      const promise = new Promise((resolve, reject) => {
+        hostData.experiences.map((item, idx) => {
+          if(item.specificExperience.length){
+            item.specificExperience.map((itemTwo, idxTwo) => {
+              if(itemTwo.ratings.length){
+                itemTwo.ratings.map((itemThree, idxThree) => {
+                  if(ratingsCount === itemTwo.ratings.length){
+                    resolve()
+                  }
+                  ratingsCount++;
+                  return ratingsTotal += itemThree.rating;
+                })
+              }else {
+                resolve()
+              }
+            })
+          }else {
+            resolve()
+          }
+        })
+      })
+      promise.then((res) => {
+        setRatingsCount(ratingsCount)
+        setRatingsTotal(ratingsTotal)
+      })
+    }
+  }, [hostData])
+  console.log(hostData)
+  const rating = ratingsTotal / ratingsCount;
+  console.log(rating)
   return (
     <>
-      <Row justify='end' className='host-details-wrapper'>
+      <Row justify='end' className='host-details-wrapper' style={{background: '#EAEAEA'}}>
         <Col md={23} xs={23} sm={23}>
           <Row className='host-details-back-btn'>
             <NavLinkWithActivation to='/'>
@@ -109,13 +144,13 @@ function HostDetails() {
                   </Row>
                   <Row align='middle' justify='start'>
                     <Col>
-                      <img src={ReviewIcon} alt='' />
+                      {ratingsTotal > 0 && ratingsCount > 0 && (
+
+                      <Rate disabled defaultValue={rating} />
+                      )}
                     </Col>
                     <Col>
-                      <h3>
-                        {hostData.ratingMark} Stars • {hostData.ratingCount}{' '}
-                        Ratings
-                      </h3>
+                      <h3>{ratingsCount.toString()} {ratingsCount > 1 || ratingsCount === 0 ? 'Reviews': "Review"}</h3>
                     </Col>
                   </Row>
                 </Col>

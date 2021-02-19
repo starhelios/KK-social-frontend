@@ -24,7 +24,7 @@ function MyBookings() {
     const dispatch = useDispatch();
     const inCompleteBookings = useSelector((state) => getBookings(state));
     const completeBookings = useSelector((state) => getCompletedBookings(state))
-    
+    const [refreshComponent, setRefreshComponent] = useState("");
     const [showBooking, setShowBooking] = React.useState("3");
 
     const handleBookingChange = (e) => {
@@ -68,7 +68,7 @@ function MyBookings() {
         }
 
 
-    }, []);
+    }, [refreshComponent]);
     console.log(inCompleteBookings)
 
     return (
@@ -97,7 +97,7 @@ function MyBookings() {
             <Row className="experiences-wrapper" justify="end">
                 <Col md={23} xs={23} sm={23}>
                     {
-                        showBooking === "3" ? <SliderComponent data={{data: inCompleteBookings, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438, color: 1}}/> : <SliderComponent data={{data: completeBookings, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438}}/>
+                        showBooking === "3" ? <SliderComponent setRefreshComponent={setRefreshComponent} data={{data: inCompleteBookings, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438, color: 1}}/> : <SliderComponent setRefreshComponent={setRefreshComponent} data={{data: completeBookings, rows: 1, flag: showBooking, header_title:"", width: 327, height: 438}}/>
                     }
                     
                 </Col>
