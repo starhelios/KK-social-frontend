@@ -394,7 +394,6 @@ function SliderComponent(props) {
     const userId = localStorage.getItem('userId');
     console.log(item);
     let obj;
-    console.log(item)
     if(item.ratings.length){
       item.ratings.map((item, idx) => {
         const array = Object.values(item);
@@ -476,7 +475,7 @@ function SliderComponent(props) {
                                     className='booking-card-footer-rate-col'
                                   >
                                     {findRating(item) > 0 ?  (<Row>
-                                      <p>Thank you rating this experience!</p>
+                                      <p>Thank you for rating this experience!</p>
                                     </Row>):
                                     (
                                       <div>

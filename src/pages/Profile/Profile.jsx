@@ -6,7 +6,7 @@ import { Row, Col, Button } from 'antd';
 import {
   ArrowLeftOutlined,
   RightOutlined,
-  DownOutlined,
+  DownOutlined, DeleteFilled
 } from '@ant-design/icons';
 import _get from 'lodash/get';
 
@@ -193,6 +193,7 @@ export const Profile = (props) => {
                     }}
                   >
                     <Col sm={8} xs={8}>
+
                       <h3>Payment Methods</h3>
                     </Col>
                     <Col sm={1} xs={1} offset={15}>
@@ -216,7 +217,7 @@ export const Profile = (props) => {
                             return (
                               <Row
                                 style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
-                                className="profile-available-cards"
+                                // className="profile-available-cards"
                                 onClick={() => {
                                   // setShowPaymentMethods((elem) => !elem);
                                   setSelectedCard(cardElem);
@@ -231,14 +232,15 @@ export const Profile = (props) => {
                                 <Button 
                                 onClick={() => deletePayment(cardElem.id)}
                                 style={{
-                                  width: '20%',
+                                  width: '50px',
                                   display: 'inline-block',
                                   textAlign: 'center',
                                   color: 'white',
-                                  borderColor: '#D42F36',
-                                  background: '#D42F36',
+                                  boxShadow: 'none',
+                                  background: 'transparent',
+                                  marginLeft: '20px'
                                  }}
-                                type="primary">Delete</Button>
+                                type="primary"><DeleteFilled /></Button>
                               </Row>
                             );
                           }
@@ -257,6 +259,7 @@ export const Profile = (props) => {
                             display: 'inline-block',
                             textAlign: 'center',
                             color: 'white',
+                            borderRadius: '50px',
                             borderColor: '#D42F36',
                             background: '#D42F36',
                           }}

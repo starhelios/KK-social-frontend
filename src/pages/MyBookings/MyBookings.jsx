@@ -4,13 +4,6 @@ import {Row, Col, Radio} from 'antd'
 import _get from 'lodash/get';
 import { useDispatch, useSelector } from 'react-redux';
 
-// import SliderComponent from '../../components/SliderComponent/SliderComponent';
-
-import image1 from "../../assets/img/booking/booking1.png";
-import image2 from "../../assets/img/booking/booking2.png";
-import image3 from "../../assets/img/booking/booking3.png";
-import image4 from "../../assets/img/booking/booking4.png";
-import image5 from "../../assets/img/booking/booking5.png";
 import SliderComponent from '../../components/SliderComponent/SliderComponent'
 import { experienceServices } from '../../services/experienceService';
 import { EXPERIENCE_SET_BOOKINGS, EXPERIENCE_SET_COMPLETED_BOOKINGS } from '../../redux/types/experienceTypes';
@@ -18,10 +11,13 @@ import {
   getBookings, getCompletedBookings
 } from '../../redux/selectors/experienceSelector';
 import { toast } from 'react-toastify';
+import { AUTH_SET_AUTHENTICATED } from '../../redux/types/authTypes';
+import { useHistory } from 'react-router-dom';
 
 
 function MyBookings() {
     const dispatch = useDispatch();
+    const history = useHistory();
     const inCompleteBookings = useSelector((state) => getBookings(state));
     const completeBookings = useSelector((state) => getCompletedBookings(state))
     const [refreshComponent, setRefreshComponent] = useState("");
@@ -62,9 +58,8 @@ function MyBookings() {
             }
             });
         } else {
-            console.log('user not logged in')
-        //   dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
-        //   history.push('/');
+          dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
+          history.push('/');
         }
 
 
