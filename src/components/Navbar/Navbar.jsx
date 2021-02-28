@@ -20,9 +20,9 @@ function Navbar(props) {
   const [loading, setLoading] = useState(false);
   const userInfoSelector = useSelector((state) => getUserInfo(state));
 
-  const onLogoutSuccess = (res) => {};
+  const onLogoutSuccess = (res) => { };
 
-  const onFailure = () => {};
+  const onFailure = () => { };
   const { signOut, loaded } = useGoogleLogout({
     clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
     onLogoutSuccess,
@@ -34,7 +34,7 @@ function Navbar(props) {
   const color =
     (location.pathname.includes('experience') ||
       location.pathname.includes('host')) &&
-    !hostedMe
+      !hostedMe
       ? 'black'
       : '';
 
@@ -157,17 +157,17 @@ function Navbar(props) {
                 </Menu.Item>
               </Menu>
             ) : (
-              <Menu mode={'inline'}>
-                <Menu.Item key='profile'>
-                  <NavLink exact to='/profile'>
-                    Profile
+                <Menu mode={'inline'}>
+                  <Menu.Item key='profile'>
+                    <NavLink exact to='/profile'>
+                      Profile
                   </NavLink>
-                </Menu.Item>
-                <Menu.Item key='logout'>
-                  <div onClick={() => handleLogout()}>Log Out</div>
-                </Menu.Item>
-              </Menu>
-            )
+                  </Menu.Item>
+                  <Menu.Item key='logout'>
+                    <div onClick={() => handleLogout()}>Log Out</div>
+                  </Menu.Item>
+                </Menu>
+              )
           }
           trigger={['click']}
         >

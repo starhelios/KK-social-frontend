@@ -36,13 +36,13 @@ function HeaderComponent(props) {
   const bgColor =
     (location.pathname.includes('experience') ||
       location.pathname.includes('host')) &&
-    !hostedMe
+      !hostedMe
       ? '#eaeaea'
       : '#383838';
   const logo_img =
     (location.pathname.includes('experience') ||
       location.pathname.includes('host')) &&
-    !hostedMe
+      !hostedMe
       ? logo_black
       : logo;
 
@@ -102,12 +102,12 @@ function HeaderComponent(props) {
                                     </Col> */}
                 </Row>
               ) : (
-                <Row justify='end' className='signup-link'>
-                  <button onClick={() => handleShowSignUpModal(true)}>
-                    Sign up • Log in
+                  <Row justify='end' className='signup-link'>
+                    <button onClick={() => handleShowSignUpModal(true)}>
+                      Sign up • Log in
                   </button>
-                </Row>
-              )}
+                  </Row>
+                )}
             </Col>
           </Row>
         </Col>

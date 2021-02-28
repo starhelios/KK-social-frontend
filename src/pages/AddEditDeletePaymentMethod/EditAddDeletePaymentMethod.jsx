@@ -272,7 +272,10 @@ export default function EditAddDeletePaymentMethod(props) {
             {props.isEditMode ? (
               <Row className="del-btn" justify="center">
                 <Col sm={20} xs={20}>
-                  <Button
+                  <Button style={{
+                    color: '#383838',
+                    borderColor: 'white',
+                    background:   'white'}}
                     onClick={() => {
                       showDeleteConfirmation();
                     }}

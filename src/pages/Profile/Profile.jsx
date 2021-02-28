@@ -2,11 +2,11 @@ import './Profile.scss';
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, Redirect, withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Modal } from 'antd';
 import {
   ArrowLeftOutlined,
   RightOutlined,
-  DownOutlined, DeleteFilled
+  DownOutlined, DeleteFilled, ExclamationCircleOutlined
 } from '@ant-design/icons';
 import _get from 'lodash/get';
 
@@ -57,6 +57,37 @@ export const Profile = (props) => {
     history.push('/');
   };
 
+  const showDeleteConfirmation = (id) => {
+    const { confirm } = Modal;
+    confirm({
+      title: 'Are you sure you want to delete this card?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'When clicked the OK button, we will delete your card.',
+      onOk() {
+        handleDeleteButton(id);
+      },
+      onCancel() { },
+    });
+  };
+
+  const handleDeleteButton = async (id) => {
+    if (id) {
+      const result = await paymentsServices.deletePaymentMethod({
+        payment_method_id: id,
+      });
+      if (result.data.error.status) {
+        toast.error('Failed to delete payment method.');
+      } else {
+        toast.success('Deleted payment method. Refreshing data.');
+        setTimeout(() => {
+          history.go(0);
+        }, 2500);
+      }
+    } else {
+      toast.error('Card data not found.');
+    }
+  };
+
   useEffect(() => {
     const userId = localStorage.getItem('userId');
 
@@ -89,14 +120,14 @@ export const Profile = (props) => {
   const deletePayment = (id) => {
     paymentsServices.deletePayment(id).then(res => {
       const { data } = res;
-        const errorStatus = _get(data, 'error.status', true);
-        const payload = _get(data, 'payload', null);
-        if (!errorStatus) {
-          toast.success('Card successfully deleted');
-          setProfileContentSwitch(3)
-        } else {
-          toast.error("Card doesn't exist");
-        }
+      const errorStatus = _get(data, 'error.status', true);
+      const payload = _get(data, 'payload', null);
+      if (!errorStatus) {
+        toast.success('Card successfully deleted');
+        setProfileContentSwitch(3)
+      } else {
+        toast.error("Card doesn't exist");
+      }
     })
   }
 
@@ -104,9 +135,9 @@ export const Profile = (props) => {
     const token = window.location.search.split('?code=')[1];
     console.log(userInfoSelector && userInfoSelector.id && window.location.href.indexOf('/profile?code=') > -1)
     //send to backend to receive
-    if(userInfoSelector && userInfoSelector.id && window.location.href.indexOf('/profile?code=') > -1){
+    if (userInfoSelector && userInfoSelector.id && window.location.href.indexOf('/profile?code=') > -1) {
       console.log('running api')
-      authServices.updateUserInfo(userInfoSelector.id, {zoomAuthToken: token, email: userInfoSelector.email}).then((res) => {
+      authServices.updateUserInfo(userInfoSelector.id, { zoomAuthToken: token, email: userInfoSelector.email }).then((res) => {
         const { data } = res;
         const errorStatus = _get(data, 'error.status', true);
         const errorMessage = _get(data, 'error.message', '');
@@ -124,6 +155,9 @@ export const Profile = (props) => {
     }
   }, [isHost === true]);
 
+  console.log(isHost)
+  console.log(profileContentSwitch)
+
   return (
     <div className="profile-wrapper">
       <Row className="profile-back-btn">
@@ -136,16 +170,16 @@ export const Profile = (props) => {
       </Row>
       <div>
         <Row>
-      {userInfoSelector && !userInfoSelector.stripeAccountVerified && isHost &&
-         <div style={{textAlign: 'center', width: '100%'}} className="errorText">
-           Please complete withdrawal to begin hosting experiences
+          {userInfoSelector && !userInfoSelector.stripeAccountVerified && isHost &&
+            <div style={{ textAlign: 'center', width: '100%' }} className="errorText">
+              Please complete withdrawal to begin hosting experiences
          </div>
-      }
-      {userInfoSelector && !userInfoSelector.zoomAccessToken &&  (
-        <div style={{textAlign: 'center', width: '100%'}} className="errorText">
-           Please connect Zoom account to begin hosting experiences
-         </div>
-      )}
+          }
+          {userInfoSelector && !userInfoSelector.zoomAccessToken && isHost && (
+            <div style={{ textAlign: 'center', width: '100%' }} className="errorText">
+              Please connect Zoom account to begin hosting experiences
+            </div>
+          )}
         </Row>
       </div>
       <Row className="profile-content">
@@ -202,8 +236,8 @@ export const Profile = (props) => {
                           {showPaymentMethods ? (
                             <DownOutlined />
                           ) : (
-                            <RightOutlined />
-                          )}
+                              <RightOutlined />
+                            )}
                         </h3>
                       </Row>
                     </Col>
@@ -229,18 +263,18 @@ export const Profile = (props) => {
                                   {cardIndex + 1}. {cardElem.cardBrand} ending
                                   with {cardElem.last4digits}
                                 </h4>
-                                <Button 
-                                onClick={() => deletePayment(cardElem.id)}
-                                style={{
-                                  width: '50px',
-                                  display: 'inline-block',
-                                  textAlign: 'center',
-                                  color: 'white',
-                                  boxShadow: 'none',
-                                  background: 'transparent',
-                                  marginLeft: '20px'
-                                 }}
-                                type="primary"><DeleteFilled /></Button>
+                                <Button
+                                  onClick={() => showDeleteConfirmation(cardElem.id)}
+                                  style={{
+                                    width: '50px',
+                                    display: 'inline-block',
+                                    textAlign: 'center',
+                                    color: 'white',
+                                    boxShadow: 'none',
+                                    background: 'transparent',
+                                    marginLeft: '20px'
+                                  }}
+                                  type="primary"><DeleteFilled /></Button>
                               </Row>
                             );
                           }
@@ -255,13 +289,16 @@ export const Profile = (props) => {
                       >
                         <Button
                           style={{
+                            fontFamily: 'Avenir Next',
+                            fontWeight: '600',
+                            fontSize: '14px',
                             width: '20%',
                             display: 'inline-block',
                             textAlign: 'center',
-                            color: 'white',
+                            color: '#383838',
                             borderRadius: '50px',
-                            borderColor: '#D42F36',
-                            background: '#D42F36',
+                            borderColor: 'white',
+                            background: 'white',
                           }}
                           type="primary"
                         >
@@ -282,7 +319,7 @@ export const Profile = (props) => {
                     <>
                       <Row
                         style={{ cursor: 'pointer' }}
-                        onClick={() => history.push('/hostexperience')}
+                        onClick={() => { return isHost ? history.push('/hostexperience') : setProfileContentSwitch(2) }}
                       >
                         <Col sm={8} xs={8}>
                           <h3>Host an Experience</h3>
@@ -298,49 +335,39 @@ export const Profile = (props) => {
                       <Row className="profile-line" />
                     </>
                   )}
-                  { isHost && (
-                    <>
-                      <Row
-                        style={{ cursor: 'pointer' }}
-                        onClick={() =>
-                          history.push('/experiences-hosted-by-me')
-                        }
-                      >
-                        <Col sm={8} xs={8}>
-                          <h3>Experiences Hosted by Me</h3>
-                        </Col>
-                        <Col sm={1} xs={1} offset={15}>
-                          <Row justify="end">
-                            <h3>
-                              <RightOutlined />
-                            </h3>
-                          </Row>
-                        </Col>
+                  <Row
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => { return isHost ? history.push('/experiences-hosted-by-me') : setProfileContentSwitch(2) }}
+                  >
+                    <Col sm={8} xs={8}>
+                      <h3>Experiences Hosted by Me</h3>
+                    </Col>
+                    <Col sm={1} xs={1} offset={15}>
+                      <Row justify="end">
+                        <h3>
+                          <RightOutlined />
+                        </h3>
                       </Row>
-                      <Row className="profile-line" />
-                    </>
-                  )}
+                    </Col>
+                  </Row>
+                  <Row className="profile-line" />
 
-                  {!isHost && (
-                    <>
-                      <Row
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => setProfileContentSwitch(2)}
-                      >
-                        <Col sm={8} xs={8}>
-                          <h3>Become a Host</h3>
-                        </Col>
-                        <Col sm={1} xs={1} offset={15}>
-                          <Row justify="end">
-                            <h3>
-                              <RightOutlined />
-                            </h3>
-                          </Row>
-                        </Col>
+                  <Row
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setProfileContentSwitch(2)}
+                  >
+                    <Col sm={8} xs={8}>
+                      <h3>Become a Host</h3>
+                    </Col>
+                    <Col sm={1} xs={1} offset={15}>
+                      <Row justify="end">
+                        <h3>
+                          <RightOutlined />
+                        </h3>
                       </Row>
-                      <Row className="profile-line" />
-                    </>
-                  )}
+                    </Col>
+                  </Row>
+                  <Row className="profile-line" />
 
                   <Row>
                     <Col sm={8} xs={8}>
@@ -355,17 +382,17 @@ export const Profile = (props) => {
                     </Col>
                   </Row>
                   <Row className="profile-line" />
-                      <Row
+                  <Row
                     style={{ cursor: 'pointer' }}
-                    onClick={() => setProfileContentSwitch(4)}
+                    onClick={() => { return isHost ? setProfileContentSwitch(4) : setProfileContentSwitch(2) }}
                   >
                     {userInfoSelector && !userInfoSelector.stripeAccountVerified ?
-                    <Col sm={8} xs={8}>
-                      <h3>Withdrawal Options</h3>
-                    </Col>
-                    : <Col sm={8} xs={8}>
-                      <h3>Edit Withdrawal Options</h3>
-                    </Col>
+                      <Col sm={8} xs={8}>
+                        <h3>Withdrawal Options</h3>
+                      </Col>
+                      : <Col sm={8} xs={8}>
+                        <h3>Edit Withdrawal Options</h3>
+                      </Col>
                     }
                     <Col sm={1} xs={1} offset={15}>
                       <Row justify="end">
@@ -378,7 +405,7 @@ export const Profile = (props) => {
                   <Row className="profile-line" />
                   {userInfoSelector && !userInfoSelector.zoomAccessToken && <div><Row
                     style={{ cursor: 'pointer' }}
-                    onClick={() => setProfileContentSwitch(5)}
+                    onClick={() => { return isHost ? setProfileContentSwitch(5) : setProfileContentSwitch(2) }}
                   >
                     <Col sm={8} xs={8}>
                       <h3>Zoom</h3>
@@ -391,7 +418,7 @@ export const Profile = (props) => {
                       </Row>
                     </Col>
                   </Row>
-                  <Row className="profile-line" /> </div>}
+                    <Row className="profile-line" /> </div>}
                 </Col>
               </Row>
               <Row className="input-unit">

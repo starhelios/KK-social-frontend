@@ -28,6 +28,17 @@ export default function WithdrawalOption(props) {
           <Row className="del-btn" justify="center">
             <Col sm={20} xs={20}>
               <Button
+              style={{
+                            fontFamily: 'Avenir Next',
+                            fontWeight: '600',
+                            fontSize: '14px',
+                            display: 'inline-block',
+                            textAlign: 'center',
+                            color: '#383838',
+                            borderRadius: '50px',
+                            borderColor: 'white',
+                            background: 'white',
+                          }}
                 onClick={async () => {
                   setLoadingStripeURL(true);
                   try {

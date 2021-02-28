@@ -3,10 +3,10 @@ import { Button, Col, Row } from 'antd';
 import _debounce from "lodash/debounce";
 import { toast } from "react-toastify";
 
-function ZoomIntegration({userInfoSelector}) {
-    const [loading, setLoading] = useState(false);
-    return (
-        <Col className="edit-profile-wrapper" sm={24} xs={24}>
+function ZoomIntegration({ userInfoSelector }) {
+  const [loading, setLoading] = useState(false);
+  return (
+    <Col className="edit-profile-wrapper" sm={24} xs={24}>
       <Row className="edit-profile-header" justify="center">
         <h2>Zoom Authorization</h2>
       </Row>
@@ -18,6 +18,17 @@ function ZoomIntegration({userInfoSelector}) {
           <Row className="del-btn" justify="center">
             <Col sm={20} xs={20}>
               <Button
+                style={{
+                  fontFamily: 'Avenir Next',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  display: 'inline-block',
+                  textAlign: 'center',
+                  color: '#383838',
+                  borderRadius: '50px',
+                  borderColor: 'white',
+                  background: 'white',
+                }}
                 onClick={async () => {
                   setLoading(true);
                   try {
@@ -32,7 +43,7 @@ function ZoomIntegration({userInfoSelector}) {
                   }
                   setLoading(false);
                 }}
-                disabled={userInfoSelector.id.length ? false: true}
+                disabled={userInfoSelector.id.length ? false : true}
                 loading={loading}
               >
                 Connect Your Zoom Account
@@ -42,6 +53,6 @@ function ZoomIntegration({userInfoSelector}) {
         </Col>
       </Row>
     </Col>
-    )
+  )
 }
 export default ZoomIntegration;

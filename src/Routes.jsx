@@ -69,7 +69,7 @@ const ROOT = (props) => {
                 <TermsOfService />
               </Route>
               <Route path="*" component={NoMatch} />
-              
+
             </Switch>
           </React.Suspense>
         </Content>
