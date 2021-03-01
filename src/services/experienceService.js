@@ -12,6 +12,7 @@ export const experienceServices = {
   rateSpecificExperience,
   buildUserZoomExperience,
   completeSpecificExperience,
+  getHostExperiencesById,
   uploadPhoto,
 };
 
@@ -69,6 +70,14 @@ function getAll() {
   return requestAPI.get(`/v1/experiences`).then((res) => {
     return res;
   });
+}
+
+function getHostExperiencesById(userId) {
+  return requestAPI
+    .get(`/v1/experiences/getHostExperiences/${userId}`)
+    .then((res) => {
+      return res;
+    });
 }
 
 function getAllByUserId(userId) {

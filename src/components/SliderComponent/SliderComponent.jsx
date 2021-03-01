@@ -21,7 +21,6 @@ const { Meta } = Card;
 
 function SliderComponent(props) {
   const dispatch = useDispatch();
-  const [showZoom, setShowZoom] = useState(false);
   const { data, rows } = props.data;
   const popular_flag = props.data.flag;
   const header_title = props.data.header_title;

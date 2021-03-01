@@ -15,6 +15,7 @@ import ExperiencesHostedByMe from './pages/ExperiencesHostedByMe';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService/TermsOfService';
 import NoMatch from './pages/404/404';
+import ConfirmedBookings from './pages/ConfirmedBookings/ConfirmedBookings';
 
 const { Content } = Layout;
 
@@ -33,11 +34,6 @@ const ROOT = (props) => {
         <Content className='route-content'>
           <React.Suspense fallback={<LoadingAnimation loading={props.busy} />}>
             <Switch>
-              {/* {indexRoutes.map((prop, key) => {
-                  if (prop.name === 'Home') {
-                    return <Route to={prop.path} component={prop.component} key={key} />
-                  } else return <Route exact path={prop.path} component={prop.component} key={key} />
-                })} */}
               <Route exact path='/'>
                 <Dashboard />
               </Route>
@@ -49,6 +45,9 @@ const ROOT = (props) => {
               </Route>
               <Route path='/profile'>
                 <Profile />
+              </Route>
+              <Route path='/confirmed-bookings'>
+                <ConfirmedBookings />
               </Route>
               <Route path='/hostdetails/:id'>
                 <HostDetails />

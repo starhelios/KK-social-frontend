@@ -34,7 +34,7 @@ import SearchLocationInput from '../../layouts/Dashboard/SearchLocationInput';
 
 
 export const BecomeHost = () => {
-  const[query, setQuery] = useState('')
+  const [query, setQuery] = useState('')
   const [cityChosen, setCityChosen] = useState(false)
   const [loading, setLoading] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
@@ -90,7 +90,7 @@ export const BecomeHost = () => {
     setLoading(true);
     uploadTask.on(
       'state_changed',
-      (snapshot) => {},
+      (snapshot) => { },
       (error) => {
         onError(error);
       },
@@ -189,6 +189,7 @@ export const BecomeHost = () => {
       </Menu>
     );
   };
+
   return (
     <Col className="edit-profile-wrapper" sm={24} xs={24}>
       <Row className="edit-profile-header" justify="center">
@@ -319,11 +320,11 @@ export const BecomeHost = () => {
                   },
                 }}
               />
-              
+
             </Row>
             {errors.location && (
-                <div className="errorText">{errors.location.message}</div>
-              )}
+              <div className="errorText">{errors.location.message}</div>
+            )}
             <Row className="edit-profile-line" />
             {/* Need confirm and remove below code. */}
             {/* <Row style={{ cursor: 'hover' }}>

@@ -24,6 +24,7 @@ import WithdrawalOption from '../WithdrawalOptions/WithdrawalOption';
 import ZoomIntegration from '../../components/ZoomIntegration/ZoomIntegration';
 import { toast } from 'react-toastify';
 import { paymentsServices } from '../../services/paymentServices';
+import { isObject } from 'lodash';
 
 
 const NavLinkWithActivation = (props) => (
@@ -40,6 +41,7 @@ export const Profile = (props) => {
   const [selectedCard, setSelectedCard] = useState(null);
   const [isCardEditMode, setIsCardEditMode] = useState(false);
   const [userLoadedIn, setUserLoadedIn] = useState(false);
+  const [userStep, setUserStep] = useState([])
 
   const handleLogout = () => {
     authServices
@@ -89,6 +91,12 @@ export const Profile = (props) => {
   };
 
   useEffect(() => {
+    if (userInfoSelector && props.history.action === "POP") {
+       determineStep(userInfoSelector.isHost)
+    }
+  }, [history])
+
+  useEffect(() => {
     const userId = localStorage.getItem('userId');
 
     if (userId) {
@@ -100,6 +108,7 @@ export const Profile = (props) => {
           dispatch({ type: AUTH_SET_AUTHENTICATED, payload: true });
           dispatch({ type: AUTH_SET_USER_INFO, payload });
           setIsHost(payload.isHost);
+          determineStep(payload.isHost);
         } else {
           dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
           history.push('/');
@@ -115,21 +124,7 @@ export const Profile = (props) => {
     if (becomeHost) {
       setProfileContentSwitch(2);
     }
-  }, [userLoadedIn]);
-
-  const deletePayment = (id) => {
-    paymentsServices.deletePayment(id).then(res => {
-      const { data } = res;
-      const errorStatus = _get(data, 'error.status', true);
-      const payload = _get(data, 'payload', null);
-      if (!errorStatus) {
-        toast.success('Card successfully deleted');
-        setProfileContentSwitch(3)
-      } else {
-        toast.error("Card doesn't exist");
-      }
-    })
-  }
+  }, []);
 
   useEffect(() => {
     const token = window.location.search.split('?code=')[1];
@@ -153,10 +148,66 @@ export const Profile = (props) => {
         }
       })
     }
-  }, [isHost === true]);
+  }, []);
 
-  console.log(isHost)
-  console.log(profileContentSwitch)
+  const determineStep = (host) => {
+    if(!host){
+      console.log('user is host...',host)
+      return setUserStep(hostingOptionsStepOne);
+    }
+    else if (host && userInfoSelector && !userInfoSelector.zoomAccessToken || userInfoSelector && userInfoSelector.status !== 'active') {
+      return  setUserStep(hostingOptionsStepTwo);
+    }else {
+      return setUserStep(hostingOptionsStepThree);
+    }
+  }
+  console.log(userInfoSelector)
+  const determineAction = (title) => {
+    switch(title){
+      case 'Become a Host':
+        return setProfileContentSwitch(2);
+      case 'Withdrawal Options':
+        return setProfileContentSwitch(4);
+      case 'Zoom':
+        return setProfileContentSwitch(5);
+      case 'Host an Experience':
+        return history.push('/hostexperience');
+      case 'Experiences Hosted by Me':
+        return history.push('/experiences-hosted-by-me');
+      case 'Confirmed Bookings':
+        return history.push('/confirmed-bookings');
+      case 'Edit Withdrawal Options':
+        return setProfileContentSwitch(4);
+      default:
+        return null
+
+    }
+  }
+  const hostingOptionsStepOne = [{
+    title: "Become a Host",
+  }]
+  const hostingOptionsStepTwo = [
+    {
+      title: 'Withdrawal Options',
+    },
+    {
+      title: 'Zoom',
+    },
+  ]
+  const hostingOptionsStepThree = [
+    {
+      title: 'Host an Experience',
+    },
+    {
+      title: 'Experiences Hosted by Me',
+    },
+    {
+      title: 'Confirmed Bookings',
+    },
+    {
+      title: 'Edit Withdrawal Options',
+    },
+  ]
 
   return (
     <div className="profile-wrapper">
@@ -315,14 +366,15 @@ export const Profile = (props) => {
                   <Row>
                     <h4>Hosting</h4>
                   </Row>
-                  {isHost && (
-                    <>
+                    {userStep.map((item, idx) => {
+                      return (
+                        <>
                       <Row
                         style={{ cursor: 'pointer' }}
-                        onClick={() => { return isHost ? history.push('/hostexperience') : setProfileContentSwitch(2) }}
+                        onClick={() => determineAction(item.title)}
                       >
                         <Col sm={8} xs={8}>
-                          <h3>Host an Experience</h3>
+                          <h3>{item.title}</h3>
                         </Col>
                         <Col sm={1} xs={1} offset={15}>
                           <Row justify="end">
@@ -334,8 +386,9 @@ export const Profile = (props) => {
                       </Row>
                       <Row className="profile-line" />
                     </>
-                  )}
-                  <Row
+                      )
+                    })}
+                  {/* <Row
                     style={{ cursor: 'pointer' }}
                     onClick={() => { return isHost ? history.push('/experiences-hosted-by-me') : setProfileContentSwitch(2) }}
                   >
@@ -418,7 +471,7 @@ export const Profile = (props) => {
                       </Row>
                     </Col>
                   </Row>
-                    <Row className="profile-line" /> </div>}
+                    <Row className="profile-line" /> </div>} */}
                 </Col>
               </Row>
               <Row className="input-unit">
@@ -461,7 +514,7 @@ export const Profile = (props) => {
             <Col className="profile-right-side" xs={0} sm={9} offset={1}>
               <Row className="right-side-wrapper" justify="center">
                 {profileContentSwitch === 1 && <EditProfile />}
-                {profileContentSwitch === 2 && <BecomeHost />}
+                {profileContentSwitch === 2 && <BecomeHost isHost={isHost} />}
                 {profileContentSwitch === 3 && (
                   <EditAddDeletePaymentMethod
                     selectedCard={selectedCard}
