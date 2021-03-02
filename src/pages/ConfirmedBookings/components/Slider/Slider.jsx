@@ -68,13 +68,11 @@ function SliderConfirmed(props) {
     const findBookingsWithUsers = (data) => {
         const clonedData = _.cloneDeep(data);
         let experiencesWithUsers = [];
-        let specificExperienceWithUsers = [];
         const promise = new Promise((resolve, reject) => {
             clonedData.map((item, idx) => {
                 item.specificExperience.map((itemTwo, idxTwo) => {
                     if(itemTwo.usersGoing && itemTwo.usersGoing.length > 0){  
-                       experiencesWithUsers.push(item)
-                       return specificExperienceWithUsers.push(itemTwo)
+                       return experiencesWithUsers.push(itemTwo)
                     }
                 })
                 if(idx === clonedData.length -1){
@@ -83,28 +81,8 @@ function SliderConfirmed(props) {
             })
         })
         promise.then((res) => {
-            finishFindingExperiences(experiencesWithUsers, specificExperienceWithUsers)
             return setNewHostData(experiencesWithUsers)
         })
-    }
-
-    const finishFindingExperiences = (experience, specExperience) => {
-        let clonedData = _.cloneDeep(experience);
-        const promise = new Promise((resolve, reject) => {
-            clonedData.map((item, idx) => {
-                item.experiencesWithPeople = [];
-                const index = _.findIndex(item.specificExperience, specExperience[idx])
-                if(index > 0) { item.experiencesWithPeople.push(specExperience[idx])}
-                if(idx === clonedData.length - 1) {
-                    resolve();
-                }
-            })
-        })
-        promise.then((res) => {
-            console.log(clonedData)
-        })
-
-
     }
 
     useEffect(() => {
@@ -132,7 +110,7 @@ function SliderConfirmed(props) {
                         style={{
                           width: card_width,
                           height: card_height,
-                          background: `url(${item.images[0]}) center center no-repeat`,
+                          background: `url(${item.experience ? item.experience.images[0]: ""}) center center no-repeat`,
                           backgroundSize: 'cover',
                           borderRadius: '18px 18px 18px 18px'
                         }}
@@ -143,13 +121,13 @@ function SliderConfirmed(props) {
                               <Row className='booking-card-content'>
                                 <Col>
                                   <Row>
-                                    <p> {item.title}</p>
+                                    <p> {item.experience ? item.experience.title: ""}</p>
                                   </Row>
                                   <Row>
-                                    <p>Users Going: 1</p>
+                                    <p>Users Going: {parseInt(item.usersGoing.length)}</p>
                                   </Row>
                                   <Row>
-                                    <p>{moment(item.startDay).format('MMMM Do YYYY')} • {item.specificExperience[0].startTime} - {moment(item.endDay).format('MMMM Do YYYY')} • {item.specificExperience[item.specificExperience.length - 1].endTime}</p>
+                                    <p>{moment(item.experience.startDay).format('MMMM Do YYYY')} • {item.startTime}</p>
                                   </Row>
                                 </Col>
                               </Row>
