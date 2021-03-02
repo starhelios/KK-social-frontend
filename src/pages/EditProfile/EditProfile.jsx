@@ -125,14 +125,14 @@ export const EditProfile = () => {
               }
 
               if (!errorStatus) {
-                toast.success(errorMessage);
+                toast.success("Successfully updated info");
                 dispatch({ type: AUTH_SET_USER_INFO, payload });
               } else {
                 toast.error(errorMessage);
               }
             });
         } else {
-          toast.error(errorMessage);
+          toast.error("Something went wrong");
         }
       });
     } else {
@@ -170,6 +170,7 @@ export const EditProfile = () => {
       setLoading(false);
       setValue('fullname', userInfoSelector.fullname, { shouldDirty: true });
       setValue('email', userInfoSelector.email, { shouldDirty: true });
+      setValue('dateOfBirth',userInfoSelector && userInfoSelector.dateOfBirth ? moment(userInfoSelector.dateOfBirth ): null, {shouldDirty: true})
 
       // warning
       if (userInfoSelector.avatarUrl) {

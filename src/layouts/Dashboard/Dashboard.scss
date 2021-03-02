@@ -300,7 +300,7 @@ html {
 }
 
 .search-values-wrapper {
-  margin-top: 33px;
+  margin: 33px 0px;
   display: flex;
   height: 100%;
   font-family: Avenir Next;
@@ -535,9 +535,9 @@ h4.ant-typography {
   }
 }
 
-.experiences-wrapper {
-  margin-top: 84px;
-}
+// .experiences-wrapper {
+//   margin-top: 84px;
+// }
 .hosts-wrapper {
   margin-top: 84px;
 }

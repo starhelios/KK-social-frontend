@@ -304,6 +304,10 @@ function Dashboard() {
 
             </Col>
           </Row>
+        </Col>
+      </Row>
+      <Row justify="center">
+        <Col>
           <Row className="search-values-wrapper" align="top" justify="center">
             <Col className="dates-wrapper-col">
               <button className="search-values btn-border-white">
@@ -347,8 +351,8 @@ function Dashboard() {
               </button>
             </Col>
             <Col className="between-line"></Col>
-            {categories.map((item) => (
-              <Col key={item.id}>
+            {categories.map((item, idx) => (
+              <Col key={item.id} style={idx === categories.length -1 ? {marginBottom: '25px'}: {}}>
                 <button
                   className="search-values btn-border-white"
                   style={inputSearch.indexOf(item.name) > -1 ? { backgroundColor: 'white', color: 'black', width: '170px', height: '50px' } : { width: '170px', height: '50px' }}
