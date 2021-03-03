@@ -59,6 +59,7 @@ const DatesOfAvailability = ({
       <div className="errorText">{formErrors.availability ? formErrors.availability: null}</div>
     )
   }
+  console.log(values)
 
   return (
     <Col

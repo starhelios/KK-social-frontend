@@ -16,6 +16,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService/TermsOfService';
 import NoMatch from './pages/404/404';
 import ConfirmedBookings from './pages/ConfirmedBookings/ConfirmedBookings';
+import EditExperience from './pages/ExperiencesHostedByMe/pages/EditExperiences';
 
 const { Content } = Layout;
 
@@ -58,6 +59,7 @@ const ROOT = (props) => {
               <Route path='/experiences-hosted-by-me'>
                 <ExperiencesHostedByMe />
               </Route>
+              <Route render={(routeParams) =>  <EditExperience {...routeParams} />} path='/edit-experience' />
               <Route path='/privacy-policy'>
                 <PrivacyPolicy />
               </Route>

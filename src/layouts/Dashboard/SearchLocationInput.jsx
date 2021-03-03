@@ -7,9 +7,10 @@ import SearchIcon from '../../assets/img/search-icon.png';
 
 import Script from 'react-load-script';
 
-const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityChosen, showIcon}) => {
+const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityChosen, showIcon, userInfo}) => {
   
   const [cities, setCities] = useState([])
+  const [isHost, setIsHost] = useState()
   const googleKey = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`
   let autocomplete;
 
@@ -70,13 +71,14 @@ const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityCho
         />
         <Row md={6} className='location-search-box-item'>
           <Col>
-            <Input autoComplete={false} id="autocomplete" className="searchlocationbox" placeholder="Search City" onChange={handleQueryChange} value={query}
+            <Input autoComplete={false} id="autocomplete" className="searchlocationbox" placeholder="Search City" onChange={handleQueryChange} value={query.length ? query: userInfo.location}
               style={{
                 margin: '0 auto',
-                maxWidth: 800
+                maxWidth: 800,
+                padding: '4px 11px'
               }}
               prefix={showIcon ? <img src={SearchIcon} alt='' />: null}
-              suffix={<img src={DirectionIcon} alt='' />}
+              // suffix={<img src={DirectionIcon} alt='' />}
             />
           </Col>
         </Row>

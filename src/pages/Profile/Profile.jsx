@@ -166,6 +166,8 @@ export const Profile = (props) => {
     switch(title){
       case 'Become a Host':
         return setProfileContentSwitch(2);
+      case "Edit Host Profile":
+        return setProfileContentSwitch(2)
       case 'Withdrawal Options':
         return setProfileContentSwitch(4);
       case 'Zoom':
@@ -195,6 +197,9 @@ export const Profile = (props) => {
     },
   ]
   const hostingOptionsStepThree = [
+    {
+      title: "Edit Host Profile",
+    },
     {
       title: 'Host an Experience',
     },

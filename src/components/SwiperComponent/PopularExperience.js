@@ -63,8 +63,8 @@ const PopularExperience = ({
                 cover={
                   <LazyLoadImage
                     src={item.imgLink}
-                    height="100%"
-                    width="232"
+                    height={309}
+                    width={231}
                     placeholderSrc="image"
                     effect="blur"
                     style={{ borderRadius: 12 }}

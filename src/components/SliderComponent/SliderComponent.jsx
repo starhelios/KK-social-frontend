@@ -135,7 +135,7 @@ function SliderComponent(props) {
           slidesToShow: 4,
           infinite: data.length > 3,
           centerPadding: '60px',
-          centerMode: true,
+          centerMode: false,
           initialSlide: 0,
           // slidesToScroll: 3,
           // infinite: true,
@@ -226,7 +226,7 @@ function SliderComponent(props) {
   const settings_booking = {
     className: 'center',
     centerMode: true,
-    infinite: true,
+    infinite: data.length > 3,
     centerPadding: popular_flag === 5 ? '300px' : '-80px',
     slidesToShow: popular_flag === 5 ? 3 : 5,
     rows: rows,
@@ -431,15 +431,15 @@ function SliderComponent(props) {
             ? data.map((item) => {
                 return (
                   <div key={item.id}>
-                    <h3>
                       <div
                         className='booking-card'
                         style={{
-                          width: card_width,
-                          height: card_height,
+                          width: 327,
+                          height: 437.5,
                           background: `url(${item.experience ? item.experience.images[0]: null}) center center no-repeat`,
                           backgroundSize: 'cover',
-                          borderRadius: '18px 18px 18px 18px'
+                          borderRadius: '18px 18px 18px 18px',
+                          overflow: 'hidden'
                         }}
                       >{console.log(item.imageUrl)}
                         {popular_flag < 5 ? (
@@ -497,7 +497,6 @@ function SliderComponent(props) {
                           ''
                         )}
                       </div>
-                    </h3>
                   </div>
                 );
               })

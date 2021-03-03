@@ -2,6 +2,7 @@ import requestAPI from "../utils/request";
 
 export const experienceServices = {
   createExperience,
+  updateExperience,
   getAll,
   getUserBookings,
   filterExperience,
@@ -20,6 +21,25 @@ function createExperience(data) {
   return requestAPI
     .post(
       `/v1/experiences`,
+      {
+        ...data,
+        userId: localStorage.getItem("userId"),
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+      }
+    )
+    .then((res) => {
+      return res;
+    });
+}
+
+function updateExperience(data) {
+  return requestAPI
+    .post(
+      "/v1/experiences/updateExperience",
       {
         ...data,
         userId: localStorage.getItem("userId"),

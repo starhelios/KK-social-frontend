@@ -17,6 +17,8 @@ const DateItem = ({
   const [end, setEnd] = useState('');
   const priceText = `$ ${price || 0} / person`;
 
+  console.log(daysAvailable)
+
   useEffect(() => {
     if (isEditAll) {
       setEdit(true);
@@ -51,6 +53,7 @@ const DateItem = ({
 
   const onChange = (time, timeString) => {
     console.log(time, timeString)
+    console.log(timeString[0])
     setStart(timeString[0]);
     setEnd(timeString[1]);
   };

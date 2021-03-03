@@ -33,7 +33,7 @@ import { categoryServices } from '../../services/categoryService';
 import SearchLocationInput from '../../layouts/Dashboard/SearchLocationInput';
 
 
-export const BecomeHost = () => {
+const BecomeHost = (props) => {
   const [query, setQuery] = useState('')
   const [cityChosen, setCityChosen] = useState(false)
   const [loading, setLoading] = useState(false);
@@ -44,7 +44,12 @@ export const BecomeHost = () => {
   const [showChangePass, setShowChangePass] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isHost, setIsHost] = useState()
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsHost(props.isHost)
+  }, [])
 
   let setFirstPass = localStorage.getItem('setFirstPass');
   if (setFirstPass === 'true') {
@@ -162,6 +167,7 @@ export const BecomeHost = () => {
       setValue('dateOfBirth', moment(userInfoSelector.dateOfBirth), {
         shouldDirty: true,
       });
+      setValue('aboutMe', userInfoSelector.aboutMe, {shouldDirty: true})
 
       // warning
       if (userInfoSelector.avatarUrl) {
@@ -193,7 +199,7 @@ export const BecomeHost = () => {
   return (
     <Col className="edit-profile-wrapper" sm={24} xs={24}>
       <Row className="edit-profile-header" justify="center">
-        <h2>Become A Host</h2>
+        <h2>{isHost ? "Edit Host Profile": "Become A Host"}</h2>
       </Row>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -310,7 +316,7 @@ export const BecomeHost = () => {
             </Row>
             <Row>
               <Controller
-                as={<SearchLocationInput query={query} setQuery={setQuery} pageClass="search-profile" cityChosen={cityChosen} setCityChosen={setCityChosen} showIcon={false} />}
+                as={<SearchLocationInput userInfo={userInfoSelector} query={query} setQuery={setQuery} pageClass="search-profile" cityChosen={cityChosen} setCityChosen={setCityChosen} showIcon={false} />}
                 name="location"
                 control={control}
                 rules={{
@@ -343,7 +349,7 @@ export const BecomeHost = () => {
             <Row className="save-btn" justify="center">
               <Col sm={20} xs={20}>
                 <Button htmlType="submit" loading={loadingSubmit}>
-                  Become A Host
+                  {userInfoSelector.isHost ? "Save": "Become A Host"}
                 </Button>
               </Col>
             </Row>

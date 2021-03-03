@@ -14,30 +14,35 @@ import { useForm, Controller } from 'react-hook-form';
 import _get from 'lodash/get';
 import { toast } from 'react-toastify';
 import { DownOutlined } from '@ant-design/icons';
+import _, { difference } from 'lodash'
 import moment from 'moment';
 
-import UploadPhoto from '../../components/UploadPhoto/UploadPhoto';
-import SearchIcon from '../../assets/img/search-icon.png';
-import { categoryServices } from '../../services/categoryService';
-import { experienceServices } from '../../services/experienceService';
-import { formatDateBE } from '../../utils/utils';
-import axios from 'axios';
+
+import UploadPhoto from '../../../../components/UploadPhoto/UploadPhoto';
+import { categoryServices } from '../../../../services/categoryService';
+import { experienceServices } from '../../../../services/experienceService';
+import { formatDateBE } from '../../../../utils/utils';
 
 const { TextArea } = Input;
 
-const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) => {
+const EditExperienceForm = ({experience, days}) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const { register, handleSubmit, errors, control, watch } = useForm();
+  const { register, handleSubmit, errors, control, setValue, watch } = useForm();
   const [images, setImages] = useState([]);
 
-  const price = watch('price');
+//   const price = watch('price');
+
+//   useEffect(() => {
+//     setPrice(price);
+//   }, [price]);
 
   useEffect(() => {
-    setPrice(price);
-  }, [price]);
+    setValue('title', experience.title, {shouldDirty: true})
+    setValue('description', experience.description, {shouldDirty: true})
+    setValue('duration', experience.duration, {shouldDirty: true})
+    setValue('price', experience.price, {shouldDirty: true})
 
-  useEffect(() => {
     const fetchData = async () => {
       callApiSearch('');
     };
@@ -55,53 +60,37 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
     });
   };
 
-  const handleSeachCategories = useCallback(_debounce(callApiSearch, 1000), []);
-
+//   const handleSeachCategories = useCallback(_debounce(callApiSearch, 1000), []);
   const onSubmit = (value) => {
     if (images.length === 0) {
       toast.error('Please upload photos');
       return;
     }
-    // if (specificExperience.length === 0) {
-    //   toast.error('Please select dates of availability');
-    //   return;
-    // }
 
-    const addMinutes =  function (dt, minutes) {
-      return new Date(dt.getTime() + minutes * 60000);
-    };
-    console.log(days);
-    console.log(daysAvailable)
-    if(days.length !== daysAvailable.length || !days.length){
-      setFormErrors({availability: 'Please Complete/Save Your Availability'})
-      return false;
-    }
     
     let specificExperiences = [];
-    daysAvailable.forEach((element) => {
-      let start = new Date(moment(element.startDayTime).format());
-      let end = new Date(moment(element.endDayTime).format());
-      let firstEnd = addMinutes(start, value.duration);
-      let startingObject = {
-        day: moment(start).format('LL'),
-        startTime: moment(start).format('LT'),
-        endTime: moment(firstEnd).format('LT')
-      }
-      specificExperiences.push(startingObject);
-      while (start < end){
-        let newStartDate = addMinutes(start, value.duration)
-        let newEndDate = addMinutes(newStartDate, value.duration)
-        let object = {
-          day: moment(newStartDate).format('LL'),
-          startTime: moment(newStartDate).format('LT'),
-          endTime: moment(newEndDate).format('LT')
-        };
-        console.log(newEndDate < end)
-        if(object.startTime !== object.endTime && newEndDate <= end && newStartDate < end){
+    let clonedExperience = _.cloneDeep(experience);
+    clonedExperience.images = images;
+    clonedExperience.specificExperience = days;
+
+    days.forEach((element, idx) => {
+      const startTime = element.startTime;
+      const endTime = element.endTime;
+      const day = element.day
+      element.imageUrl = images[0]
+      let difference = parseInt(moment.duration(moment(day+ " " + endTime).diff(moment(day + " " + startTime))).asMinutes());
+      if(difference >= (experience.duration * 2)){
+        for(let i = 0; i < (difference / experience.duration); i++){
+          let object = _.cloneDeep(element);
+          let newStartTime = moment(day + " " + startTime).add(experience.duration * i, 'minutes').format('LT');
+          let newEndTime = moment(day + " " + startTime).add(experience.duration * i + experience.duration, 'minutes').format('LT');
+          object.startTime = newStartTime;
+          object.endTime = newEndTime;
+          delete object["id"]
           specificExperiences.push(object);
         }
-        start = addMinutes(start, value.duration);
-
+      }else {
+        specificExperiences.push(element)
       }
     })
 
@@ -111,30 +100,14 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
       images,
       duration: value.duration,
       price: value.price,
-      startDay: moment(days[0]).format(formatDateBE),
-      endDay: moment(days[1]).format(formatDateBE),
-      categoryName: selectedCategory.name,
+      startDay: moment(experience.specificExperience[0].day).format(formatDateBE),
+      endDay: moment(experience.specificExperience[experience.specificExperience.length - 1].day).format(),
+      categoryName: !selectedCategory ? experience.categoryName : selectedCategory.name,
     };
-    // axios.post('https://api.zoom.us/v2/users/grayson.mcmurry23@gmail.com/meetings', {
-    //   startTime: "2021-02-04T19:55:31-06:00",
-    //   duration: 60
-    // }, {
-    //   headers: {
-    //     'Authorization': `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOm51bGwsImlzcyI6IllUa0gxOU1NUkZ1akp3MVQ4VzhCYWciLCJleHAiOjE2MTI1NjgxMDgsImlhdCI6MTYxMjQ4MTcxMn0.20Oh_uVH0kezbuCFrpMatkxsuXMu0dmD_Xeu-qkR0p0`,
-    //     'Content-Type': 'application/json',
-    //     'Access-Control-Allow-Origin': '*'
-    //   }
-    // }).then(response => {
-    //   console.log(response)
-    // }).catch(err => {
-    //   console.log(err)
-    // })
 
-    console.log(moment(new Date()).format())
+    console.log('params found here',params)
 
-    console.log(specificExperiences)
-
-    experienceServices.createExperience(params).then((res) => {
+    experienceServices.updateExperience(params).then((res) => {
       const { data } = res;
       const errorStatus = _get(data, 'error.status', true);
       const errorMessage = _get(data, 'error.message', '');
@@ -143,6 +116,7 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
       if (!errorStatus) {
         toast.success('Host an experience success!');
       } else {
+        console.log(errorMessage)
         toast.error(errorMessage);
       }
     });
@@ -152,6 +126,7 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
     return (
       <Menu>
         {categories.map((elem, index) => {
+            console.log(elem)
           return (
             <Menu.Item
               onClick={() => {
@@ -165,6 +140,7 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
       </Menu>
     );
   };
+  console.log(experience)
   return (
     <Col md={13} sm={13} xs={23} className="host-experience-content-left">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -179,7 +155,7 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
               <h5>Photos</h5>
             </Row>
             <Row className="host-experience-upload">
-              <UploadPhoto setImages={setImages} images={images} />
+              <UploadPhoto setImages={setImages} images={images} propImages={experience.images} />
             </Row>
           </Col>
         </Row>
@@ -313,57 +289,17 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
               <Col style={{cursor: 'pointer'}} md={24} sm={24} xs={24}>
                 <Dropdown overlay={showDropDownMenu} trigger={['click']}>
                   <p style={{ fontSize: '20px' }}>{`${
-                    selectedCategory ? selectedCategory.name : `Select Category`
+                    !selectedCategory ? experience.categoryName : selectedCategory.name
                   }`}</p>
                 </Dropdown>
               </Col>
             </Row>
           </Col>
         </Row>
-
-        {/* <Row className="host-experience-content-left-item">
-          <Col md={24} sm={24} xs={24}>
-            <Row>
-              <h5>Category</h5>
-            </Row>
-            <Row align="middle" justify="start">
-              <Col md={24} sm={24} xs={24}>
-                <Controller
-                  as={
-                    <AutoComplete
-                      onSearch={handleSeachCategories}
-                      dataSource={categories.map((item) => ({
-                        value: item.name,
-                        label: item.id,
-                      }))}
-                    >
-                      <Input
-                        className="searchlocationbox"
-                        prefix={<img src={SearchIcon} alt="" />}
-                        placeholder="Search Category"
-                      />
-                    </AutoComplete>
-                  }
-                  name="categoryName"
-                  control={control}
-                  rules={{
-                    required: {
-                      value: true,
-                      message: 'You must choose category',
-                    },
-                  }}
-                />
-                {errors.categoryName && (
-                  <div className="errorText">{errors.categoryName.message}</div>
-                )}
-              </Col>
-            </Row>
-          </Col>
-        </Row> */}
         <Row justify="center">
           <Col md={18} sm={18} xs={18}>
             <Row justify="center" className="create-btn">
-              <Button htmlType="submit">Create Experience</Button>
+              <Button htmlType="submit">Save Experience</Button>
             </Row>
           </Col>
         </Row>
@@ -372,4 +308,4 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
   );
 };
 
-export default HostExperienceForm;
+export default EditExperienceForm;

@@ -81,7 +81,13 @@ function SliderConfirmed(props) {
             })
         })
         promise.then((res) => {
-            return setNewHostData(experiencesWithUsers)
+          const sortedArray = _.orderBy(experiencesWithUsers,[
+          function(object) {
+            const startDayTime = object.day.split(',').join("") + ", " + object.startTime;
+            const momentObject = moment(startDayTime).format()
+            return new Date(momentObject);
+          }],["asc"])
+            return setNewHostData(sortedArray)
         })
     }
 
@@ -90,7 +96,6 @@ function SliderConfirmed(props) {
         findBookingsWithUsers(data);
     }, [data])
 
-    console.log(newHostData)
 
   
 
@@ -127,7 +132,7 @@ function SliderConfirmed(props) {
                                     <p>Users Going: {parseInt(item.usersGoing.length)}</p>
                                   </Row>
                                   <Row>
-                                    <p>{moment(item.experience.startDay).format('MMMM Do YYYY')} • {item.startTime}</p>
+                                    <p>{moment(item.day).format('MMMM Do YYYY')} • {item.startTime}</p>
                                   </Row>
                                 </Col>
                               </Row>

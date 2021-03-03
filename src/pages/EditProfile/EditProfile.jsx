@@ -25,7 +25,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo } from '../../redux/selectors/authSelector';
 import { AUTH_SET_USER_INFO } from '../../redux/types/authTypes';
 
-export const EditProfile = () => {
+const EditProfile = (props) => {
   const [loading, setLoading] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
@@ -263,7 +263,7 @@ export const EditProfile = () => {
             </Row>
             <Row>
               <Controller
-                as={<DatePicker size='middle' format='MM-DD-YYYY' />}
+                as={<DatePicker defaultPickerValue={false} size='middle' format='MM-DD-YYYY' />}
                 name='dateOfBirth'
                 control={control}
                 rules={{

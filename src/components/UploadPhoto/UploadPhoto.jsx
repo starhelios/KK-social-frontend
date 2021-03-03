@@ -1,5 +1,5 @@
 import './UploadPhoto';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, message, Row } from 'antd';
 import ImgCrop from 'antd-img-crop';
 import _get from 'lodash/get';
@@ -9,12 +9,27 @@ import { storage } from '../../utils/firebase';
 import { experienceServices } from '../../services/experienceService';
 import axios from 'axios';
 
-export const UploadPhoto = ({ images, setImages }) => {
+export const UploadPhoto = ({ images, setImages, propImages }) => {
   const [fileList, setFileList] = useState([]);
 
   const onChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
+
+  useEffect(() => {
+    if(propImages && propImages.length && !fileList.length){
+      const props = propImages.map((item, idx) => {
+        const newObject = Object.create({})
+        newObject.url = item;
+        newObject.uid = idx
+        return newObject;
+      })
+      setImages(propImages)
+      setFileList(props)
+    }
+  }, [])
+
+  console.log(fileList)
 
   const uploadButton = (
     <div style={{ marginTop: '-5px' }}>

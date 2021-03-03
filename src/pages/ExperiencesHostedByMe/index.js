@@ -1,48 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { Row, Col } from 'antd';
-import _get from 'lodash/get';
+import React, { useEffect, useState } from "react";
+import { Row, Col } from "antd";
+import _get from "lodash/get";
+import { useDispatch, useSelector } from "react-redux";
 
-import PopularExperience from '../../components/SwiperComponent/PopularExperience';
-import PopularExperienceByMe from '../../components/SwiperComponent/PopularExperienceByMe';
-import './styles.scss';
-import { experienceServices } from '../../services/experienceService';
-import { convertExperience } from '../../utils/utils';
-import ExperienceCalendar from '../../components/SwiperComponent/ExperienceCalendar';
+import { getUserInfo } from "../../redux/selectors/authSelector";
+import PopularExperienceByMe from "../../components/SwiperComponent/PopularExperienceByMe";
+import "./styles.scss";
+import { experienceServices } from "../../services/experienceService";
+import { convertExperience } from "../../utils/utils";
 
 const ExperiencesHostedByMe = () => {
   const [experienceData, setExperienceData] = useState([]);
+  const userInfoSelector = useSelector((state) => getUserInfo(state));
 
   useEffect(() => {
-    experienceServices
-      .getAllByUserId(localStorage.getItem('userId'))
-      .then((res) => {
-        const { data } = res;
-        const errorStatus = _get(data, 'error.status', true);
-        const payload = _get(data, 'payload', null);
+    if (userInfoSelector && userInfoSelector.experiences.length) {
+      setExperienceData(userInfoSelector.experiences);
+    }
+  }, [userInfoSelector]);
 
-        if (!errorStatus) {
-          const result = convertExperience(payload);
-
-          setExperienceData(result);
-        }
-      });
-  }, []);
   return (
     <div className="dashboard-wrapper">
-      <Row justify="end">
-        <Col md={23} xs={23} sm={23}>
-          <Row className="experiences-wrapper">
+      <Row>
+        <Col md={24} xs={24} sm={24}>
+          <Row
+            className="experiences-wrapper"
+            style={{ minWidth: "100vw", padding: "0px 5%" }}
+            justify="center"
+          >
             <Col>
               <PopularExperienceByMe data={experienceData} />
             </Col>
           </Row>
 
           {/* <Row className='hosts-wrapper' style={{ marginBottom: 226 }}> */}
-          <Row className="hosts-wrapper">
-            <Col>
-              <ExperienceCalendar data={experienceData} title="Calendar" />
-            </Col>
-          </Row>
         </Col>
       </Row>
     </div>
