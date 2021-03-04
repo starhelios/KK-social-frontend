@@ -22,7 +22,8 @@ function HostExperience(props) {
   const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
-    setValues(experience.specificExperience)
+    const result = experience.specificExperience.filter((item) => item.usersGoing.length > 0)
+    setValues(result)
   }, [])
 
   console.log(values)

@@ -91,7 +91,7 @@ const EditDatesOfAvailability = ({
               )}
               <Row className='host-experience-content-right-body-row-choose'>
                 <Col sm={24} xs={24}>
-                  {values.map((item, index) => (
+                  {values.length ? values.map((item, index) => (
                     <EditDateItem
                       item={item}
                       idx={index}
@@ -102,7 +102,7 @@ const EditDatesOfAvailability = ({
                       daysAvailable={daysAvailable}
                       price={price}
                     />
-                  ))}
+                  )): <div className="no-experiences-to-edit">All experiences have been booked</div>}
                 </Col>
               </Row>
             </Col>

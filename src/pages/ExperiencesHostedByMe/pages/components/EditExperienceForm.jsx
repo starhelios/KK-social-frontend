@@ -13,8 +13,8 @@ import _debounce from 'lodash/debounce';
 import { useForm, Controller } from 'react-hook-form';
 import _get from 'lodash/get';
 import { toast } from 'react-toastify';
-import { DownOutlined } from '@ant-design/icons';
-import _, { difference } from 'lodash'
+import { useHistory } from 'react-router-dom';
+import _ from 'lodash';
 import moment from 'moment';
 
 
@@ -30,6 +30,7 @@ const EditExperienceForm = ({experience, days}) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { register, handleSubmit, errors, control, setValue, watch } = useForm();
   const [images, setImages] = useState([]);
+  const history = useHistory();
 
 //   const price = watch('price');
 
@@ -115,9 +116,13 @@ const EditExperienceForm = ({experience, days}) => {
 
       if (!errorStatus) {
         toast.success('Host an experience success!');
+        const redirect_user = _debounce(() => {
+          history.push('/experiences-hosted-by-me');
+        }, 1500);
+        redirect_user();
       } else {
         console.log(errorMessage)
-        toast.error(errorMessage);
+        toast.error("Something went wrong. Try again later.");
       }
     });
   };
