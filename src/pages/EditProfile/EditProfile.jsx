@@ -170,7 +170,7 @@ const EditProfile = (props) => {
       setLoading(false);
       setValue('fullname', userInfoSelector.fullname, { shouldDirty: true });
       setValue('email', userInfoSelector.email, { shouldDirty: true });
-      setValue('dateOfBirth',userInfoSelector && userInfoSelector.dateOfBirth ? moment(userInfoSelector.dateOfBirth ): null, {shouldDirty: true})
+      setValue('dateOfBirth',userInfoSelector && userInfoSelector.dateOfBirth ? moment(userInfoSelector.dateOfBirth): null, {shouldDirty: true})
 
       // warning
       if (userInfoSelector.avatarUrl) {

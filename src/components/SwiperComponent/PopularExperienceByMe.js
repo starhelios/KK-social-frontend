@@ -7,6 +7,8 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./PopularExperience.scss";
 
+import * as globalFunctions from "../../utils/globalFunctions";
+
 const { Meta } = Card;
 
 const PopularExperienceByMe = ({ data, theme }) => {
@@ -80,6 +82,10 @@ const PopularExperienceByMe = ({ data, theme }) => {
                     <Row justify="start" align="middle">
                       <Col sm={24} xs={24}>
                         <Row style={colorDark}>{item.title}</Row>
+                        <Row style={colorDark}>
+                          {globalFunctions.determineIcon(item.categoryName)}{" "}
+                          {item.categoryName}
+                        </Row>
                         <Row align="middle">
                           <Col
                             sm={24}
@@ -127,7 +133,7 @@ const PopularExperienceByMe = ({ data, theme }) => {
                               ...colorDark,
                             }}
                           >
-                            From {item.price} / person
+                            From ${item.price} / person
                           </Col>
                         </Row>
                       </Col>

@@ -164,7 +164,7 @@ const BecomeHost = (props) => {
       setLoading(false);
       setValue('fullname', userInfoSelector.fullname, { shouldDirty: true });
       setValue('email', userInfoSelector.email, { shouldDirty: true });
-      setValue('dateOfBirth', moment(userInfoSelector.dateOfBirth), {
+      setValue('dateOfBirth', userInfoSelector.dateOfBirth ? moment(userInfoSelector.dateOfBirth): null, {
         shouldDirty: true,
       });
       setValue('aboutMe', userInfoSelector.aboutMe, {shouldDirty: true})
@@ -278,7 +278,7 @@ const BecomeHost = (props) => {
             </Row>
             <Row>
               <Controller
-                as={<DatePicker size="middle" format="DD-MM-YYYY" />}
+                as={<DatePicker size="middle" format="MM-DD-YYYY" />}
                 name="dateOfBirth"
                 control={control}
                 rules={{

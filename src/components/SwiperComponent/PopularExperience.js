@@ -6,6 +6,8 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./PopularExperience.scss";
 
+import * as globalFunctions from "../../utils/globalFunctions";
+
 const { Meta } = Card;
 
 const PopularExperience = ({
@@ -35,7 +37,7 @@ const PopularExperience = ({
         <h2 className="title" style={{ ...colorDark, ...titleStyle }}>
           {title}
         </h2>
-        {valueSearch && valueSearch.length ? (
+        {(valueSearch && valueSearch.length) || filterApplied ? (
           <h6
             style={{
               cursor: "pointer",
@@ -97,6 +99,7 @@ const PopularExperience = ({
                                 ...colorDark,
                               }}
                             >
+                              {globalFunctions.determineIcon(item.category)}{" "}
                               {item.category}
                             </span>
                             {item.time ? ` • ${item.time}` : ``}
@@ -109,7 +112,7 @@ const PopularExperience = ({
                               ...colorDark,
                             }}
                           >
-                            From {item.price} / person
+                            From ${item.price.split("$ ").join("")} / person
                           </Col>
                         </Row>
                       </Col>

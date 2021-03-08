@@ -12,16 +12,15 @@ import {
 import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
+import Avatar from 'antd/lib/avatar/avatar';
 import { useSelector } from 'react-redux';
 import { CloseOutlined } from '@ant-design/icons';
 import { none } from 'ramda';
-
-import WaterIcon from '../../assets/img/experience/water.png';
-import ReviewIcon from '../../assets/img/experience/review_star.png';
-import avatar_img from '../../assets/img/avatar.jpg';
-import Avatar from 'antd/lib/avatar/avatar';
-
 import { toast } from 'react-toastify';
+
+import ReviewIcon from '../../assets/img/experience/review-star';
+import avatar_img from '../../assets/img/avatar.jpg';
+
 import './MyExperiences.scss';
 import ConfirmPayModal from './ConfirmPayModal';
 import { experienceServices } from '../../services/experienceService';
@@ -30,6 +29,7 @@ import {
   convertExperience,
   formatDateBE,
 } from '../../utils/utils';
+import * as globalFunctions from '../../utils/globalFunctions';
 import PopularExperience from '../../components/SwiperComponent/PopularExperience';
 import {
   getEndDate,
@@ -349,7 +349,7 @@ function MyExperiences(props) {
     });
   }
 
-  const rating = ratingsTotal / ratingsCount;
+  const rating = ratingsTotal > 0 && ratingsCount > 0 ? ratingsTotal / ratingsCount : 0;
   console.log(rating)
   return (
     <>
@@ -423,7 +423,7 @@ function MyExperiences(props) {
                   </Row>
                   <Row align="middle" justify="start">
                     <Col>
-                      <img src={WaterIcon} alt="" />
+                      {globalFunctions.determineIcon(detailData.categoryName)}
                     </Col>
                     <Col>
                       <h3 style={{ textTransform: 'capitalize' }}>
@@ -445,14 +445,11 @@ function MyExperiences(props) {
                     <h2>Say Hello! to {fullname}</h2>
                   </Row>
                   <Row align="middle" justify="start">
-                    <Col>
-                      {ratingsTotal > 0 && ratingsCount > 0 && (
-
-                      <Rate disabled defaultValue={rating} />
-                      )}
+                    <Col style={{display: 'flex', justify: 'center', alignItems: 'center'}}>
+                        <ReviewIcon />
                     </Col>
                     <Col>
-                      <h3>{ratingsCount.toString()} {ratingsCount > 1 ? 'Reviews': "Review"}</h3>
+                      <h3>{ratingsCount > 0 && ratingsTotal > 0 ? rating.toFixed(1).toString() + " • ": ""}{ratingsCount.toString()} {ratingsCount > 1 || ratingsCount === 0 ? 'Reviews': "Review"}</h3>
                     </Col>
                   </Row>
                   <Row style={{ marginTop: '39px' }}>

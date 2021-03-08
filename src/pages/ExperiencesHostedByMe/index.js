@@ -25,7 +25,7 @@ const ExperiencesHostedByMe = () => {
         <Col md={24} xs={24} sm={24}>
           <Row
             className="experiences-wrapper"
-            style={{ minWidth: "100vw", padding: "0px 5%" }}
+            style={{ minWidth: "100vw" }}
             justify="center"
           >
             <Col>

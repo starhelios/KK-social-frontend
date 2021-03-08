@@ -78,17 +78,7 @@ function Navbar(props) {
             </Menu.Item>
           )}
 
-          {!isHost && (
-            <Menu.Item>
-              <NavLink
-                exact
-                to='/profile?becomeHost=1'
-                style={{ color: color }}
-              >
-                Become an Host
-              </NavLink>
-            </Menu.Item>
-          )}
+
 
           <Menu.Item>
             <NavLink exact to='/booking' style={{ color: color }}>

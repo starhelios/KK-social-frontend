@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, DatePicker } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -60,6 +60,14 @@ const EditDatesOfAvailability = ({
   //   )
   // }
   // console.log(values)
+
+  // useEffect(() => {
+  //   console.log(values)
+  //   const mappedValues = values.map((item, idx) =>{
+  //     return item.usersGoing === 0 ? item: {};
+  //   })
+
+  // }, [values])
 
   return (
     <Col

@@ -61,7 +61,9 @@ const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityCho
       setQuery(item)
   }
   console.log(query.length)
-
+  const queryUserValue = userInfo && userInfo.location && userInfo.location.length;
+  const queryValue = query;
+  const queryBuilt = !queryUserValue ? queryValue: {query: userInfo.location}
 
     return (
       <div>
@@ -71,7 +73,7 @@ const SearchLocationInput = ({query, setQuery, pageClass, cityChosen, setCityCho
         />
         <Row md={6} className='location-search-box-item'>
           <Col>
-            <Input autoComplete={false} id="autocomplete" className="searchlocationbox" placeholder="Search City" onChange={handleQueryChange} value={query.length ? query: userInfo.location}
+            <Input autoComplete={false} id="autocomplete" className="searchlocationbox" placeholder="Search City" onChange={handleQueryChange} value={queryBuilt}
               style={{
                 margin: '0 auto',
                 maxWidth: 800,

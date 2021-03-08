@@ -14,7 +14,7 @@ import { useForm, Controller } from 'react-hook-form';
 import _get from 'lodash/get';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import _ from 'lodash';
+import _, { times } from 'lodash';
 import moment from 'moment';
 
 
@@ -25,7 +25,7 @@ import { formatDateBE } from '../../../../utils/utils';
 
 const { TextArea } = Input;
 
-const EditExperienceForm = ({experience, days}) => {
+const EditExperienceForm = ({experience, days, unEditableExperiences}) => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { register, handleSubmit, errors, control, setValue, watch } = useForm();
@@ -68,13 +68,13 @@ const EditExperienceForm = ({experience, days}) => {
       return;
     }
 
-    
+    //TODO: check for overlapping experiences
+    console.log(days)
+    console.log(experience.specificExperience)
+    const concatArrayOfExperiences = days.concat(unEditableExperiences)
+    console.log(concatArrayOfExperiences);
     let specificExperiences = [];
-    let clonedExperience = _.cloneDeep(experience);
-    clonedExperience.images = images;
-    clonedExperience.specificExperience = days;
-
-    days.forEach((element, idx) => {
+    concatArrayOfExperiences.forEach((element, idx) => {
       const startTime = element.startTime;
       const endTime = element.endTime;
       const day = element.day
@@ -88,16 +88,128 @@ const EditExperienceForm = ({experience, days}) => {
           object.startTime = newStartTime;
           object.endTime = newEndTime;
           delete object["id"]
-          specificExperiences.push(object);
+          if(newEndTime <= endTime)
+            specificExperiences.push(object);
         }
       }else {
         specificExperiences.push(element)
       }
     })
+    console.log(specificExperiences)
+    const dateFormat = '' // defaults to isoString. Check moment js docs
+    const getOverlappedTimes = (originalStartTime, originalEndTime, arrayStartTime, arrayEndTime) => {
+      //TODO: Check if the days are the same first then validate
+      const startTime = moment(originalStartTime, dateFormat);
+      const endTime = moment(originalEndTime, dateFormat);
+      const arrayStart = moment(arrayStartTime, dateFormat);
+      const arrayEnd = moment(arrayEndTime, dateFormat);
 
+      if(startTime.isBetween(arrayStart, arrayEnd) || endTime.isBetween(arrayStart, arrayEnd) ){
+        return false;
+      }else {
+        return true;
+      }
+    }
+    const validate = (sTime, eTime, array, idx) => {
+      const clonedArray = _.cloneDeep(array);
+      clonedArray.splice(idx, 1)
+      return clonedArray.map((item, idx) => {
+        const arrayStartTime = moment(item.day + " " + item.startTime).format();
+        const arrayEndTime = moment(item.day + " " + item.endTime).format();
+        const originalStartTime = sTime;
+        const originalEndTime = eTime;
+        if(moment(originalStartTime).format("MMM Do YY") === moment(arrayStartTime).format("MMM Do YY")){
+          // console.log('comparing...', moment(originalStartTime).format("MMM Do YY") + " " + moment(arrayStartTime).format("MMM Do YY"))
+
+          return getOverlappedTimes(originalStartTime, originalEndTime, arrayStartTime, arrayEndTime);
+  
+          // console.log(getOverlap)
+        }
+      })
+    }
+    const truth = specificExperiences.map((experience, idx) =>{
+      return validate(moment(experience.day + " " + experience.startTime).format(), moment(experience.day + " " + experience.endTime).format(), specificExperiences, idx)
+    })
+    const data = _.flattenDeep(truth).filter((element, idx) => {
+      return element !== undefined
+    })
+    if(data.indexOf(false) !== -1){
+      toast.error("Your new edited experience overlap existing ones. Please try again!")
+      return false
+    }
+    // let clonedExperience = _.cloneDeep(experience);
+    // clonedExperience.images = images;
+    // clonedExperience.specificExperience = clonedExperience.specificExperience.concat(days);
+    // console.log(clonedExperience.specificExperience)
+
+    // console.log('experiences!!!',experience.id)
+
+
+
+    const uniqueArray = specificExperiences.filter((v,i,a)=>a.findIndex(t=>(t.day.toLowerCase() === v.day.toLowerCase() && t.startTime.toLowerCase() === v.startTime.toLowerCase()))===i)
+    // const checkOverlap = (timeSegments) => {
+    //   if (timeSegments.length === 1) return false;
+      
+    //   timeSegments.sort((timeSegment1, timeSegment2) =>
+    //   timeSegment1[0].localeCompare(timeSegment2[0])
+    //   );
+    //   console.log(timeSegments)
+
+    //   for (let i = 0; i < timeSegments.length - 1; i++) {
+    //     const currentEndTime = timeSegments[i][1];
+    //     const nextStartTime = timeSegments[i + 1][0];
+
+    //     if (currentEndTime > nextStartTime) {
+    //       console.log(currentEndTime, nextStartTime)
+    //       return true;
+    //     }
+    //   }
+
+    //   return false;
+    // };
+    
+    // const seperateExperiencesByDays = (experiences) => {
+    //   let arrayofExperiences = [];
+    //   let differentDays = [];
+    //   let times = []
+    //   experiences.forEach((item, idx) => {
+    //     const day = item.day; // March 4, 2021
+    //     if(!differentDays.includes(day)){
+    //       let newArray = new Array();
+    //       times.push(newArray);
+    //       differentDays.push(day);
+    //     }
+    //     const index = differentDays.indexOf(day)
+    //     let newArray = new Array();
+    //     newArray.push(item.startTime);
+    //     newArray.push(item.endTime);
+
+    //     const a = JSON.stringify(times[index]);
+    //     const b = JSON.stringify(newArray);
+    //     const c = a.indexOf(b);
+
+    //     if(c === -1){
+    //       times[index].push(newArray)
+    //     }
+    //   })
+    //   console.log(times)
+    //   const overlappedResultsArray = times.map((item, idx) => {
+    //     return checkOverlap(times[idx])
+    //   })
+    //   console.log(overlappedResultsArray)
+    //   return overlappedResultsArray
+    // }
+    // const filtered = seperateExperiencesByDays(uniqueArray).filter(x => !!x);
+    // if(filtered.length){
+    //   toast.error('Your new edited experiences overlap current ones. Please try again.')
+    //   return false;
+    // }
+    // console.log(specificExperiences);
+    // console.log(uniqueArray);
     let params = {
       ...value,
-      specificExperiences,
+      id: experience.id,
+      specificExperiences: uniqueArray,
       images,
       duration: value.duration,
       price: value.price,
@@ -105,8 +217,8 @@ const EditExperienceForm = ({experience, days}) => {
       endDay: moment(experience.specificExperience[experience.specificExperience.length - 1].day).format(),
       categoryName: !selectedCategory ? experience.categoryName : selectedCategory.name,
     };
-
-    console.log('params found here',params)
+    console.log(params);
+    // return false;
 
     experienceServices.updateExperience(params).then((res) => {
       const { data } = res;
@@ -116,10 +228,10 @@ const EditExperienceForm = ({experience, days}) => {
 
       if (!errorStatus) {
         toast.success('Host an experience success!');
-        const redirect_user = _debounce(() => {
-          history.push('/experiences-hosted-by-me');
-        }, 1500);
-        redirect_user();
+        // const redirect_user = _debounce(() => {
+        //   history.push('/experiences-hosted-by-me');
+        // }, 1500);
+        // redirect_user();
       } else {
         console.log(errorMessage)
         toast.error("Something went wrong. Try again later.");

@@ -15,18 +15,37 @@ const NavLinkWithActivation = (props) => (
 
 function HostExperience(props) {
   const location = useLocation();
-  const experience = location.state.experience
+  const [experience, setExperience] = useState(location.state.experience);
   const [daysAvailable, setDayAvailable] = useState([]);
   const [price, setPrice] = useState('');
-  const [values, setValues] = useState([]);
+  const [unEditableExperiences, setUneditableExperiences] = useState([]);
+  const [editableExperiences, setEditableExperiences] = useState([]);
   const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
-    const result = experience.specificExperience.filter((item) => item.usersGoing.length > 0)
-    setValues(result)
-  }, [])
+    // const result = experience.specificExperience.filter((item) => item.usersGoing.length === 0)
+    // const sortedResult = result.sort((a, b) => {
+    //   return new Date(moment(a.day + " " + a.startTime).format()) - new Date(moment(b.day + " " + b.startTime).format())
+    // })
+    // console.log(sortedResult);
+    // console.log(experience.specificExperience)
+    let editableArray = [];
+    let unEditableArray = [];
 
-  console.log(values)
+    location.state.experience.specificExperience.forEach((item, idx) => {
+      return item.usersGoing.length === 0 ? editableArray.push(item): unEditableArray.push(item);
+    })
+    if(editableArray.length){
+
+      const sortedEditableArray = editableArray.sort((a, b) => {
+        return new Date(moment(a.day + " " + a.startTime).format()) - new Date(moment(b.day + " " + b.startTime).format())
+      })
+      setEditableExperiences(sortedEditableArray)
+    }
+
+    setUneditableExperiences(unEditableArray)
+
+  }, [])
 
   return (
     <>
@@ -45,18 +64,19 @@ function HostExperience(props) {
 
           <Row className='host-experience-content'>
             <EditExperienceForm
+            unEditableExperiences={unEditableExperiences}
             experience={experience}
               daysAvailable={daysAvailable}
               setPrice={setPrice}
-              days={values}
+              days={editableExperiences}
               setFormErrors={setFormErrors}
             />
             <EditDatesOfAvailability
               daysAvailable={daysAvailable}
               setDayAvailable={setDayAvailable}
               price={price}
-              values={values}
-              setValues={setValues}
+              values={editableExperiences}
+              setValues={setEditableExperiences}
               formErrors={formErrors}
             />
           </Row>

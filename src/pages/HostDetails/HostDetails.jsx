@@ -6,9 +6,9 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 import _get from 'lodash/get';
 import _isEmpty from 'lodash/isEmpty';
 import moment from 'moment';
-
+import ReviewIcon from '../../assets/img/experience/review-star'
 import LocationIcon from '../../assets/img/experience/location.png';
-import ReviewIcon from '../../assets/img/experience/review_star.png';
+
 import Avatar from 'antd/lib/avatar/avatar';
 import { authServices } from '../../services/authServices';
 import { experienceServices } from '../../services/experienceService';
@@ -87,8 +87,7 @@ function HostDetails() {
     }
   }, [hostData])
   console.log(hostData)
-  const rating = ratingsTotal / ratingsCount;
-  console.log(rating)
+  const rating = ratingsTotal > 0 && ratingsCount > 0 ? ratingsTotal / ratingsCount : 0;
   return (
     <>
       <Row justify='end' className='host-details-wrapper' style={{background: '#EAEAEA'}}>
@@ -139,18 +138,15 @@ function HostDetails() {
                       <img src={LocationIcon} alt='' />
                     </Col>
                     <Col>
-                      <h3>Brooklyn, NY</h3>
+                      <h3>{hostData.location}</h3>
                     </Col>
                   </Row>
                   <Row align='middle' justify='start'>
-                    <Col>
-                      {ratingsTotal > 0 && ratingsCount > 0 && (
-
-                      <Rate disabled defaultValue={rating} />
-                      )}
+                    <Col style={{display: 'flex', justify: 'center', alignItems: 'center'}}>
+                        <ReviewIcon />
                     </Col>
                     <Col>
-                      <h3>{ratingsCount.toString()} {ratingsCount > 1 || ratingsCount === 0 ? 'Reviews': "Review"}</h3>
+                      <h3>{ratingsCount > 0 && ratingsTotal > 0 ? rating.toFixed(1).toString() + " • ": ""}{ratingsCount.toString()} {ratingsCount > 1 || ratingsCount === 0 ? 'Reviews': "Review"}</h3>
                     </Col>
                   </Row>
                 </Col>

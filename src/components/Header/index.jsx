@@ -103,7 +103,7 @@ function HeaderComponent(props) {
                 </Row>
               ) : (
                   <Row justify='end' className='signup-link'>
-                    <button onClick={() => handleShowSignUpModal(true)}>
+                    <button style={{cursor: 'pointer' }} onClick={() => handleShowSignUpModal(true)}>
                       Sign up • Log in
                   </button>
                   </Row>
