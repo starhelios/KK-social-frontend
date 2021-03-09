@@ -75,6 +75,18 @@
   margin-top: 0px;
   padding: 0 5%;
   overflow: visible;
+  #kloutkast-placeholder {
+    position: absolute;
+    top: 22px;
+    left: 70px;
+    font-weight: 600;
+    font-size: 19.1px;
+    line-height: 19px;
+    color: black;
+    span {
+      color: #e31e35;
+    }
+  }
 }
 
 .filters-wrapper {

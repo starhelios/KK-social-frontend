@@ -185,6 +185,15 @@ function Dashboard() {
 
   const handleInputChange = ({ target: { value } }) => {
     setInputValues(value)
+    experienceServices.filterExperience({ searchText: value}).then((res) => {
+      const { data } = res;
+          const errorStatus = _get(data, 'error.status', true);
+          const payload = _get(data, 'payload', null);
+          if(!errorStatus && payload.length) {
+            const result = convertExperience(payload);
+            setExperienceData(result);
+          }
+    })
   };
   const getAllExperience = async () => {
     experienceServices.getAll().then((res) => {
@@ -229,7 +238,7 @@ function Dashboard() {
   const params = {
     centeredSlides: true,
     resistance: true,
-    resistanceRatio: 1.85,
+    resistanceRatio: .1,
     slidesPerView: "auto",
     spaceBetween: 10,
     observer: true,
@@ -275,6 +284,7 @@ function Dashboard() {
   }, []);
 
 
+
   return (
     <div className="dashboard-wrapper">
       <Row>
@@ -284,8 +294,13 @@ function Dashboard() {
               <Input
                 className="searchbox"
                 prefix={<img style={{ backgroundColor: 'white' }} src={SearchIcon} alt="" />}
-                placeholder="Search KloutKast"
                 onSearch={() => handleShowModal(true)}
+                onFocus={() => document.getElementById('kloutkast-placeholder').style.display = 'none'}
+                onBlur={() => {
+                  if(!inputValues.length > 0){
+                    document.getElementById('kloutkast-placeholder').style.display = 'block'
+                  }
+                }}
                 style={{ borderRadius: '50px' }}
                 onChange={handleInputChange}
                 value={inputValues}
@@ -295,6 +310,7 @@ function Dashboard() {
                   </Button>
                 }
               />
+              <div id="kloutkast-placeholder">Search <span>KloutKast</span></div>
               <Col md={12} sm={16}>
                 <ApplyFilterModal
                   query={query}

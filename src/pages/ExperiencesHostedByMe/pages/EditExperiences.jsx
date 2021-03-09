@@ -40,9 +40,12 @@ function HostExperience(props) {
       const sortedEditableArray = editableArray.sort((a, b) => {
         return new Date(moment(a.day + " " + a.startTime).format()) - new Date(moment(b.day + " " + b.startTime).format())
       })
-      setEditableExperiences(sortedEditableArray)
+      const filteredEditableArray = sortedEditableArray.filter((element, idx) => {
+        return new Date(moment(element.day + " " + element.startTime).format()) > new Date(moment().format())
+      })
+      setEditableExperiences(filteredEditableArray)
     }
-
+    
     setUneditableExperiences(unEditableArray)
 
   }, [])
