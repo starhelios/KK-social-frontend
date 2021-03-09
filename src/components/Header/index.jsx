@@ -5,8 +5,6 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import _get from 'lodash/get';
 
-import logo from '../../assets/img/logo.png';
-import logo_black from '../../assets/img/logo_black.png';
 import AuthComponent from '../../layouts/AuthComponent/AuthComponent';
 import Navbar from '../Navbar/Navbar';
 import { authServices } from '../../services/authServices';
@@ -14,6 +12,7 @@ import {
   AUTH_SET_AUTHENTICATED,
   AUTH_SET_USER_INFO,
 } from '../../redux/types/authTypes';
+import KloutKastLogo from '../../assets/img/kloutkast-logo';
 
 const { Header } = Layout;
 
@@ -34,17 +33,17 @@ function HeaderComponent(props) {
   const hostedMe = location.pathname.includes('experiences-hosted-by-me');
 
   const bgColor =
-    (location.pathname.includes('experience') ||
+    (location.pathname.includes('profile') ||
       location.pathname.includes('host')) &&
       !hostedMe
       ? '#eaeaea'
       : '#383838';
-  const logo_img =
+  const logoStyles =
     (location.pathname.includes('experience') ||
       location.pathname.includes('host')) &&
       !hostedMe
-      ? logo_black
-      : logo;
+      ? "dark"
+      : "light";
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -71,7 +70,9 @@ function HeaderComponent(props) {
   }, [location]);
 
   return (
-    <Header className='header-component' style={{ background: bgColor }}>
+    <Header className='header-component' style={(location.pathname.includes('experience') ||
+      location.pathname.includes('host')) &&
+      !hostedMe ? { background: '#EAEAEA' }: location.pathname.includes('profile') ? {background: "#383838"}: {background: "transparent"}}>
       <Row>
         <AuthComponent
           showSignUpModal={showSignUpModal}
@@ -80,9 +81,10 @@ function HeaderComponent(props) {
         />
       </Row>
       <Row>
-        <Col md={4} sm={4} xs={4}>
-          <NavLinkWithActivation to='/'>
-            <img className='logo' src={logo_img} alt='logo' />
+        <Col md={4} sm={4} xs={4} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <NavLinkWithActivation to='/' style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+            {/* <img className='logo' src={logo_img} alt='logo' /> */}
+            <KloutKastLogo style={logoStyles} />
           </NavLinkWithActivation>
         </Col>
         <Col md={20} sm={20} xs={20}>

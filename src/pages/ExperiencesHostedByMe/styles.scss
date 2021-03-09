@@ -72,7 +72,8 @@
 }
 
 .dashboard-wrapper {
-  margin-top: 68px;
+  margin-top: 0px;
+  padding: 0 5%;
 }
 
 .searchbox {
@@ -255,18 +256,6 @@ html {
   }
 }
 
-@media screen and (min-width: 576px) {
-  .search-values-wrapper {
-    padding: 0px 30px;
-  }
-}
-
-@media screen and (max-width: 576px) {
-  .search-values-wrapper {
-    padding: 0px 10px;
-  }
-}
-
 .search-values-wrapper {
   margin-top: 33px;
   display: flex;
@@ -285,7 +274,6 @@ html {
   .search-values {
     cursor: pointer;
     text-transform: capitalize;
-    margin-right: 12px;
   }
   .between-line {
     border-right: 1px solid white;
@@ -503,9 +491,8 @@ h4.ant-typography {
   margin-top: 84px;
 }
 .swiper-wrapper {
-  min-width: 100vw;
+  min-width: 100%;
   max-width: 100vw;
 }
 .swiper-container {
-  // overflow: visible !important;
 }

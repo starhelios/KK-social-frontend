@@ -6,6 +6,7 @@ import { CloseOutlined } from '@ant-design/icons';
 import { none } from 'ramda';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
+import Swiper from "react-id-swiper";
 
 import SearchSettingIcon from '../../assets/img/search-setting-icon.png';
 import SearchIcon from '../../assets/img/search-icon.png';
@@ -32,6 +33,7 @@ function Dashboard() {
   const [categories, setCategories] = useState([]);
   const [valueSearch, setValueSearch] = useState([]);
   const [inputSearch, setInputSearch] = useState([]);
+  const [inputValues, setInputValues] = useState("");
   const [values, setValues] = useState([]);
   const [showDatepicker, setShowDatepicker] = useState(false);
   const [rangeData, setRangeData] = useState([20, 800]);
@@ -44,6 +46,7 @@ function Dashboard() {
 
   const handleClearFilters = () => {
     // setExperienceData([]);
+    setInputValues("")
     getAllExperience();
     setValueSearch([]);
     setInputSearch([]);
@@ -57,7 +60,7 @@ function Dashboard() {
       const minPrice = rangeData[0];
       const maxPrice = rangeData[1];
 
-      let params = { categoryName: valueSearch, minPrice, maxPrice, location: query };
+      let params = { categoryName: inputValues, minPrice, maxPrice, location: query };
 
       if (values.length > 0) {
         params.startDay = moment(values[0]).format(formatDateBE);
@@ -114,7 +117,7 @@ function Dashboard() {
       );
 
       experienceServices
-        .filterExperience({ categoryName: valueSearch, startDay, endDay })
+        .filterExperience({ categoryName: inputValues, startDay, endDay })
         .then((res) => {
           const { data } = res;
           const errorStatus = _get(data, 'error.status', true);
@@ -181,8 +184,7 @@ function Dashboard() {
   };
 
   const handleInputChange = ({ target: { value } }) => {
-    return;
-    // setValueSearch(value);
+    setInputValues(value)
   };
   const getAllExperience = async () => {
     experienceServices.getAll().then((res) => {
@@ -223,6 +225,17 @@ function Dashboard() {
         setCategories(payload);
       }
     });
+  };
+  const params = {
+    centeredSlides: true,
+    resistance: true,
+    resistanceRatio: 1.85,
+    slidesPerView: "auto",
+    spaceBetween: 10,
+    observer: true,
+    observeParents: true,
+    wrapperClass: "filters-wrapper",
+    containerClass: "swiper-container-filters"
   };
   useEffect(() => {
     getAllExperience();
@@ -275,10 +288,7 @@ function Dashboard() {
                 onSearch={() => handleShowModal(true)}
                 style={{ borderRadius: '50px' }}
                 onChange={handleInputChange}
-                value={inputSearch.map((item, idx) => {
-                  if (idx > 0) return " " + item;
-                  else return item
-                })}
+                value={inputValues}
                 suffix={
                   <Button onClick={() => setShowFilterModal(!showFilterModal)} style={{ marginRight: '10px', backgroundColor: "#2B2B29", height: '80%', width: '100%', borderRadius: '20px' }}>
                     <img style={{ padding: '10px' }} src={SearchSettingIcon} alt="" />
@@ -306,66 +316,69 @@ function Dashboard() {
           </Row>
         </Col>
       </Row>
-      <Row justify="center">
+      <Row>
         <Col>
-          <Row className="search-values-wrapper" align="top" justify="center">
-            <Col className="dates-wrapper-col">
-              <button className="search-values btn-border-white">
-                <RangePicker
-                  className="search-dates"
-                  allowClear={true}
-                  suffixIcon={none}
-                  separator={dateSelectedText || 'Dates'}
-                  bordered={false}
-                  onOpenChange={handleOpenChange}
-                  onChange={handleChange}
-                  open={showDatepicker}
-                  style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingRight: '0', paddingLeft: '0' }}
-                  renderExtraFooter={() => {
-                    return (
-                      <div>
-                        <Row
-                          className="datepicker-header"
-                          justify="end"
-                          align="middle"
-                        >
-                          <Col>
-                            <p>Dates</p>
-                          </Col>
-                          <Col>
-                            <Button onClick={() => handleShowDatepicker(false)}>
-                              <CloseOutlined />
-                            </Button>
-                          </Col>
-                        </Row>
-                        <Row
-                          className="datapicker-footer-apply-btn"
-                          justify="center"
-                        >
-                          <Button onClick={handleApplyDatepicker}>Apply</Button>
-                        </Row>
-                      </div>
-                    );
-                  }}
-                />
-              </button>
-            </Col>
+          <Row className="search-values-wrapper">
+            
+            <Swiper {...params}>
+              <Col className="dates-wrapper-col">
+                <button className="search-values btn-border-white">
+                  <RangePicker
+                    className="search-dates"
+                    allowClear={true}
+                    suffixIcon={none}
+                    separator={dateSelectedText || 'Dates'}
+                    bordered={false}
+                    onOpenChange={handleOpenChange}
+                    onChange={handleChange}
+                    open={showDatepicker}
+                    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingRight: '0', paddingLeft: '0' }}
+                    renderExtraFooter={() => {
+                      return (
+                        <div>
+                          <Row
+                            className="datepicker-header"
+                            justify="end"
+                            align="middle"
+                          >
+                            <Col>
+                              <p>Dates</p>
+                            </Col>
+                            <Col>
+                              <Button onClick={() => handleShowDatepicker(false)}>
+                                <CloseOutlined />
+                              </Button>
+                            </Col>
+                          </Row>
+                          <Row
+                            className="datapicker-footer-apply-btn"
+                            justify="center"
+                          >
+                            <Button onClick={handleApplyDatepicker}>Apply</Button>
+                          </Row>
+                        </div>
+                      );
+                    }}
+                  />
+                </button>
+              </Col>
             <Col className="between-line"></Col>
             {categories.map((item, idx) => (
               <Col key={item.id} style={idx === categories.length -1 ? {marginBottom: '25px'}: {}}>
                 <button
                   className="search-values btn-border-white"
-                  style={inputSearch.indexOf(item.name) > -1 ? { backgroundColor: 'white', color: 'black', width: '170px', height: '50px' } : { width: '170px', height: '50px' }}
+                  style={inputSearch.indexOf(item.name) > -1 ? { backgroundColor: 'white', color: 'black', width: '140px', height: '50px' } : { width: '140px', height: '50px' }}
                   onClick={() => handleSelectCategory(item.name)}
                 >
                   {item.name}
                 </button>
               </Col>
             ))}
+            </Swiper>
           </Row>
         </Col>
       </Row>
-      <Row justify="end">
+      <Row justify="center">
         <Col md={23} xs={23} sm={23}>
           <Row className="experiences-wrapper">
             <Col>

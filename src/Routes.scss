@@ -2,13 +2,12 @@
   width: 100%;
   height: 100%;
   background: #eaeaea;
-  .route-content {
-    background: url(./assets/img/home_back.png) no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+  background: url(./assets/img/home_back.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  overflow: hidden;
 
-    min-height: 100vh;
-  }
+  min-height: 100vh;
 }

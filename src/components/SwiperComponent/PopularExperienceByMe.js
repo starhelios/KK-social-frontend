@@ -23,6 +23,7 @@ const PopularExperienceByMe = ({ data, theme }) => {
     spaceBetween: 30,
     observer: true,
     observeParents: true,
+    wrapperClass: "hosted-by-me-wrapper",
   };
 
   const colorDark = theme === "dark" ? { color: "black" } : {};

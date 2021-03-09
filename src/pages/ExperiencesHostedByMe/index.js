@@ -23,11 +23,7 @@ const ExperiencesHostedByMe = () => {
     <div className="dashboard-wrapper">
       <Row>
         <Col md={24} xs={24} sm={24}>
-          <Row
-            className="experiences-wrapper"
-            style={{ minWidth: "100vw" }}
-            justify="center"
-          >
+          <Row className="experiences-wrapper" justify="center">
             <Col>
               <PopularExperienceByMe data={experienceData} />
             </Col>
