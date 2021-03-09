@@ -189,7 +189,7 @@ function Dashboard() {
       const { data } = res;
           const errorStatus = _get(data, 'error.status', true);
           const payload = _get(data, 'payload', null);
-          if(!errorStatus && payload.length) {
+          if(!errorStatus) {
             const result = convertExperience(payload);
             setExperienceData(result);
           }
