@@ -190,7 +190,22 @@ function Dashboard() {
           const errorStatus = _get(data, 'error.status', true);
           const payload = _get(data, 'payload', null);
           if(!errorStatus) {
-            const result = convertExperience(payload);
+            console.log(payload)
+            const result = convertExperience(payload.experiences);
+            if(value.length === 0){
+              authServices.getHosts().then((res) => {
+                const { data } = res;
+                const errorStatus = _get(data, 'error.status', true);
+                const payload = _get(data, 'payload', null);
+                console.log(payload)
+                if (!errorStatus) {
+                  setHostData(payload.results);
+                }
+              });
+            }else {
+
+              setHostData(payload.users)
+            }
             setExperienceData(result);
           }
     })
@@ -276,7 +291,7 @@ function Dashboard() {
       const { data } = res;
       const errorStatus = _get(data, 'error.status', true);
       const payload = _get(data, 'payload', null);
-
+      console.log(payload)
       if (!errorStatus) {
         setHostData(payload.results);
       }
@@ -333,10 +348,8 @@ function Dashboard() {
         </Col>
       </Row>
       <Row>
-        <Col>
+        <Col style={{width: '100%'}}>
           <Row className="search-values-wrapper">
-            
-            <Swiper {...params}>
               <Col className="dates-wrapper-col">
                 <button className="search-values btn-border-white">
                   <RangePicker
@@ -390,7 +403,6 @@ function Dashboard() {
                 </button>
               </Col>
             ))}
-            </Swiper>
           </Row>
         </Col>
       </Row>

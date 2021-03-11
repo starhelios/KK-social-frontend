@@ -70,16 +70,20 @@ function Navbar(props) {
     <Col md={24} sm={24} xs={24}>
       <Row justify='end' className='loged-in-nav-bar'>
         <Menu mode={'horizontal'}>
-          {isHost && (
-            <Menu.Item>
-              <NavLink exact to='/hostexperience' style={{ color: color }}>
-                Host an Experience
-              </NavLink>
-            </Menu.Item>
-          )}
-
-
-
+          {userInfoSelector && userInfoSelector.isHost && (
+                  <Menu.Item key='experience'>
+                    <NavLink exact to={userInfoSelector.zoomAccessToken && userInfoSelector.status === 'active' ? '/hostexperience': '/profile'}>
+                      Host Experience
+                    </NavLink>
+                  </Menu.Item>
+                )}
+                {userInfoSelector && !userInfoSelector.isHost && (
+                  <Menu.Item key='experience'>
+                    <NavLink exact to='/profile'>
+                      Become Host
+                    </NavLink>
+                  </Menu.Item>
+                )}
           <Menu.Item>
             <NavLink exact to='/booking' style={{ color: color }}>
               My Bookings
@@ -127,11 +131,20 @@ function Navbar(props) {
           overlay={
             !sm ? (
               <Menu mode={'inline'}>
-                <Menu.Item key='experience'>
-                  <NavLink exact to='/hostexperience'>
-                    Host an Experience
-                  </NavLink>
-                </Menu.Item>
+                {userInfoSelector && userInfoSelector.isHost && (
+                  <Menu.Item key='experience'>
+                    <NavLink exact to={userInfoSelector.zoomAccessToken && userInfoSelector.status === 'active' ? '/hostexperience': '/profile'}>
+                      Host Experience
+                    </NavLink>
+                  </Menu.Item>
+                )}
+                {userInfoSelector && !userInfoSelector.isHost && (
+                  <Menu.Item key='experience'>
+                    <NavLink exact to='/profile'>
+                      Become Host
+                    </NavLink>
+                  </Menu.Item>
+                )}
                 <Menu.Item key='booking'>
                   <NavLink exact to='/booking'>
                     My Bookings

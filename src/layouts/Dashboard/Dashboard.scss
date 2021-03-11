@@ -326,6 +326,10 @@ html {
   display: flex;
   height: 100%;
   font-family: Avenir Next;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   //padding: 0px 83px 0px 83px;
   button {
     background: none;
@@ -339,6 +343,7 @@ html {
   .search-values {
     cursor: pointer;
     text-transform: capitalize;
+    margin-right: 5px;
   }
   .between-line {
     border-right: 1px solid white;

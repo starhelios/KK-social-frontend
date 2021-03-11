@@ -20,6 +20,12 @@ function login(data) {
   });
 }
 
+function generateCsrfToken() {
+  return requestAPI.get("/v1/auth/csrf").then((res) => {
+    return res;
+  });
+}
+
 function googleLogin(data) {
   return requestAPI.post("/v1/auth/google-login", data).then((res) => {
     return res;

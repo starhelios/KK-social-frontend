@@ -30,8 +30,18 @@ async function resetTokenAndReattemptRequest(error) {
     });
     if (!isAlreadyFetchingAccessToken) {
       isAlreadyFetchingAccessToken = true;
+      // const csrfResponse = await requestAPI({
+      //   method: "get",
+      //   url: `${API_ENDPOINT}/v1/auth/csrf`,
+      // });
+      // axios.defaults.headers.post["X-CSRF-Token"] =
+      //   csrfResponse.data.payload.token.csrf;
+      // console.log(csrfResponse.data.payload.token.csrf);
       const response = await requestAPI({
         method: "post",
+        // headers: {
+        //   "X-CSRF-Token": csrfResponse.data.payload.token.csrf,
+        // },
         url: `${API_ENDPOINT}/v1/auth/refresh-tokens`,
         data: {
           refreshToken: refreshToken,

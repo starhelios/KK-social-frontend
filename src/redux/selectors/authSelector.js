@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
 
 const authReducer = (state) => state.authReducer;
 
@@ -16,3 +16,5 @@ export const getUserInfo = createSelector(
   authReducer,
   (state) => state.userInfo
 );
+
+export const getCsrfToken = createSelector(authReducer, (state) => state.csrf);

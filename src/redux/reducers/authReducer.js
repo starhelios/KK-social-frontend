@@ -1,14 +1,18 @@
-import { AUTH_SET_AUTHENTICATED, AUTH_SET_USER_INFO } from '../types/authTypes';
+import {
+  AUTH_SET_AUTHENTICATED,
+  AUTH_SET_USER_INFO,
+  AUTH_SET_CSRF_TOKEN,
+} from "../types/authTypes";
 
 const getInitialState = () => ({
   isAuthenticated: false,
-  avatarUrl: '',
+  avatarUrl: "",
   userInfo: null,
 });
 
 function authReducer(state = getInitialState(), { type, payload }) {
   switch (type) {
-    case 'SAVE_AVATAR':
+    case "SAVE_AVATAR":
       return {
         ...state,
         avatarUrl: payload,
@@ -22,6 +26,11 @@ function authReducer(state = getInitialState(), { type, payload }) {
       return {
         ...state,
         userInfo: payload,
+      };
+    case AUTH_SET_CSRF_TOKEN:
+      return {
+        ...state,
+        csrf: payload,
       };
     default:
       return state;
