@@ -16,5 +16,3 @@ export const getUserInfo = createSelector(
   authReducer,
   (state) => state.userInfo
 );
-
-export const getCsrfToken = createSelector(authReducer, (state) => state.csrf);

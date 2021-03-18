@@ -71,6 +71,7 @@ export const Profile = (props) => {
       onCancel() { },
     });
   };
+  console.log(userInfoSelector)
 
   const handleDeleteButton = async (id) => {
     if (id) {
@@ -128,11 +129,11 @@ export const Profile = (props) => {
 
   useEffect(() => {
     const token = window.location.search.split('?code=')[1];
-    console.log(userInfoSelector && userInfoSelector.id && window.location.href.indexOf('/profile?code=') > -1)
+    console.log(userInfoSelector && userInfoSelector.randomString && window.location.href.indexOf('/profile?code=') > -1)
     //send to backend to receive
-    if (userInfoSelector && userInfoSelector.id && window.location.href.indexOf('/profile?code=') > -1) {
+    if (userInfoSelector && userInfoSelector.randomString && window.location.href.indexOf('/profile?code=') > -1) {
       console.log('running api')
-      authServices.updateUserInfo(userInfoSelector.id, { zoomAuthToken: token, email: userInfoSelector.email }).then((res) => {
+      authServices.updateUserInfo(userInfoSelector.randomString, { zoomAuthToken: token, email: userInfoSelector.email }).then((res) => {
         const { data } = res;
         const errorStatus = _get(data, 'error.status', true);
         const errorMessage = _get(data, 'error.message', '');
@@ -155,7 +156,7 @@ export const Profile = (props) => {
       console.log('user is host...',host)
       return setUserStep(hostingOptionsStepOne);
     }
-    else if (host && userInfoSelector && !userInfoSelector.zoomAccessToken || userInfoSelector && userInfoSelector.status !== 'active') {
+    else if (host && userInfoSelector && !userInfoSelector.zoomConnected || userInfoSelector && userInfoSelector.status !== 'active') {
       return  setUserStep(hostingOptionsStepTwo);
     }else {
       return setUserStep(hostingOptionsStepThree);
@@ -231,7 +232,7 @@ export const Profile = (props) => {
               Please complete withdrawal to begin hosting experiences
          </div>
           }
-          {userInfoSelector && !userInfoSelector.zoomAccessToken && isHost && (
+          {userInfoSelector && !userInfoSelector.zoomConnected && isHost && (
             <div style={{ textAlign: 'center', width: '100%' }} className="errorText">
               Please connect Zoom account to begin hosting experiences
             </div>
@@ -529,7 +530,7 @@ export const Profile = (props) => {
                   />
                 )}
                 {profileContentSwitch === 4 && <WithdrawalOption />}
-                {profileContentSwitch === 5 && !userInfoSelector.zoomAccessToken && <ZoomIntegration userInfoSelector={userInfoSelector} />}
+                {profileContentSwitch === 5 && !userInfoSelector.zoomConnected && <ZoomIntegration userInfoSelector={userInfoSelector} />}
               </Row>
             </Col>
           </Row>
