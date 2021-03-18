@@ -156,7 +156,7 @@ function Dashboard() {
           const payload = _get(data, 'payload', null);
 
           if (!errorStatus) {
-            const result = convertExperience(payload);
+            const result = convertExperience(payload.experiences);
 
             setExperienceData(result);
           }
@@ -175,7 +175,7 @@ function Dashboard() {
           const payload = _get(data, 'payload', null);
 
           if (!errorStatus) {
-            const result = convertExperience(payload);
+            const result = convertExperience(payload.experiences);
 
             setExperienceData(result);
           }
@@ -199,7 +199,7 @@ function Dashboard() {
                 const payload = _get(data, 'payload', null);
                 console.log(payload)
                 if (!errorStatus) {
-                  setHostData(payload.results);
+                  setHostData(payload);
                 }
               });
             }else {
@@ -293,7 +293,7 @@ function Dashboard() {
       const payload = _get(data, 'payload', null);
       console.log(payload)
       if (!errorStatus) {
-        setHostData(payload.results);
+        setHostData(payload);
       }
     });
   }, []);
