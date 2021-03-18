@@ -45,7 +45,7 @@ function YourProfile(props) {
               if (userInfo) {
                 dispatch({ type: AUTH_SET_USER_INFO, payload: userInfo });
                 localStorage.setItem('user_info', JSON.stringify(userInfo));
-                localStorage.setItem('userId', userInfo.id);
+                localStorage.setItem('userId', userInfo.randomString);
               }
 
               if (setFirstPass) {

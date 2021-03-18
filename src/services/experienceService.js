@@ -107,6 +107,7 @@ function getAllByUserId(userId) {
 }
 
 function getUserBookings(userId) {
+  console.log(userId);
   return requestAPI.get(`/v1/experiences/reserved/${userId}`).then((res) => {
     return res;
   });
