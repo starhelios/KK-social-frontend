@@ -14,46 +14,60 @@ import { authServices } from '../../services/authServices';
 import { experienceServices } from '../../services/experienceService';
 import PopularExperience from '../../components/SwiperComponent/PopularExperience';
 import { convertExperience } from '../../utils/utils';
-
+import { useLocation } from "react-router-dom";
+import { locationsAreEqual } from 'history';
 const NavLinkWithActivation = (props) => (
   <NavLink activeStyle={{ color: 'color' }} {...props} />
 );
 
 function HostDetails() {
+  const location = useLocation();
   const { id } = useParams();
   const [hostData, setHostData] = useState({});
   const [ratingsTotal, setRatingsTotal] = useState(0);
   const [ratingsCount, setRatingsCount] = useState(0);
   const [experienceData, setExperienceData] = useState([]);
+  // useEffect(() => {
+  //   if (id) {
+  //     authServices.getHostInfo(id).then((res) => {
+  //       const { data } = res;
+  //       const errorStatus = _get(data, 'error.status', true);
+  //       const payload = _get(data, 'payload', null);
 
+  //       if (!errorStatus) {
+  //         setHostData({
+  //           ...payload.user,
+  //           ratingMark: payload.ratingMark,
+  //           ratingCount: payload.ratingCount,
+  //         });
+  //       }
+  //     });
+
+  //     experienceServices.getByUserId(id).then((res) => {
+  //       const { data } = res;
+  //       const errorStatus = _get(data, 'error.status', true);
+  //       const payload = _get(data, 'payload', null);
+
+  //       if (!errorStatus) {
+  //         const result = convertExperience(payload);
+  //         console.log(result)
+  //       }
+  //     });
+  //   }
+  // }, [id]);
   useEffect(() => {
-    if (id) {
-      authServices.getHostInfo(id).then((res) => {
-        const { data } = res;
-        const errorStatus = _get(data, 'error.status', true);
-        const payload = _get(data, 'payload', null);
-
-        if (!errorStatus) {
-          setHostData({
-            ...payload.user,
-            ratingMark: payload.ratingMark,
-            ratingCount: payload.ratingCount,
-          });
-        }
-      });
-
-      experienceServices.getByUserId(id).then((res) => {
-        const { data } = res;
-        const errorStatus = _get(data, 'error.status', true);
-        const payload = _get(data, 'payload', null);
-
-        if (!errorStatus) {
-          const result = convertExperience(payload);
-          console.log(result)
-        }
-      });
+    setHostData(location.state.hostData)
+    console.log('running....')
+    if(location.state.hostData.experiences && location.state.hostData.experiences.length){
+      let newExperiences = [];
+      location.state.hostData.experiences.map((item, idx)=> {
+        console.log(new Date(item.endDay) >= new Date())
+        if(new Date(item.endDay) >= new Date())newExperiences.push(item)
+      })
+      setExperienceData(newExperiences)
+      
     }
-  }, [id]);
+  }, [location.state.hostData])
 
   useEffect(() => {
     if(hostData.experiences && hostData.experiences.length){
@@ -164,6 +178,18 @@ function HostDetails() {
           {experienceData.length > 0 && (
             <Row className='experiences-wrapper'>
               <Col>
+                <PopularExperience
+                  data={experienceData}
+                  theme='dark'
+                  title={`${hostData.fullname}'s Experiences`}
+                  isDetail
+                />
+              </Col>
+            </Row>
+          )}
+          {experienceData.length === 0 && (
+            <Row className='experiences-wrapper'>
+              <Col style={{width: '100%'}}>
                 <PopularExperience
                   data={experienceData}
                   theme='dark'

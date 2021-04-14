@@ -6,7 +6,7 @@ import { CloseOutlined } from '@ant-design/icons';
 import { none } from 'ramda';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
-import Swiper from "react-id-swiper";
+import { useLocation } from "react-router-dom";
 
 import SearchSettingIcon from '../../assets/img/search-setting-icon.png';
 import SearchIcon from '../../assets/img/search-icon.png';
@@ -21,13 +21,15 @@ import { EXPERIENCE_SET_DATE_FILTER } from '../../redux/types/experienceTypes';
 
 const { RangePicker } = DatePicker;
 
-function Dashboard() {
+function Dashboard({callback}) {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [query, setQuery] = useState('')
   const [modalState, setModalState] = useState(false)
   const [cityChosen, setCityChosen] = useState(false)
   const [experienceData, setExperienceData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [filteredHostData, setFilteredHostData] = useState([])
   const [hostData, setHostData] = useState([]);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -39,7 +41,8 @@ function Dashboard() {
   const [rangeData, setRangeData] = useState([20, 800]);
   const [isFilterActive, setIsFilterActive] = useState(false);
   const [dateSelectedText, setDateSelectedText] = useState('');
-
+  const [loading, setLoading] = useState(false)
+  
   const handleShowModal = (value) => {
     setShowFilterModal(value);
   };
@@ -48,6 +51,7 @@ function Dashboard() {
     // setExperienceData([]);
     setInputValues("")
     getAllExperience();
+    setFilteredHostData([])
     setValueSearch([]);
     setInputSearch([]);
     setRangeData([20, 800]);
@@ -55,7 +59,16 @@ function Dashboard() {
     setIsFilterActive(false);
   };
 
+  useEffect(() => {
+    if(location.state && location.state.needsToLogin === true){
+      console.log(location.state)
+      callback();
+      location.state.needsToLogin = false
+    }
+  }, [location.state])
+  console.log(filteredHostData)
   const handleApplyFilters = () => {
+    setLoading(true)
     if (rangeData.length > 0) {
       const minPrice = rangeData[0];
       const maxPrice = rangeData[1];
@@ -73,9 +86,22 @@ function Dashboard() {
         const payload = _get(data, 'payload', null);
 
         if (!errorStatus) {
-          const result = convertExperience(payload);
+          const result = convertExperience(payload.experiences);
+          console.log(payload)
+          if(payload.experiences && payload.experiences.length) {
 
-          setExperienceData(result);
+            let hosts = payload.experiences.map((item, idx) => {
+              return item.userId
+            })
+            console.log('setting filtered data...')
+            setExperienceData(result);
+            setFilteredHostData(hosts)
+            setLoading(false)
+          }else {
+
+            setLoading(false)
+          }
+
         }
       });
     }
@@ -140,6 +166,7 @@ function Dashboard() {
   };
 
   const handleSelectCategory = (value) => {
+    console.log(value)
     if (!valueSearch.includes(value)) {
       const newArrayInput = [...inputSearch];
       const newArrayValue = [...valueSearch];
@@ -215,9 +242,9 @@ function Dashboard() {
       const { data } = res;
       const errorStatus = _get(data, 'error.status', true);
       const payload = _get(data, 'payload', null);
+      console.log(payload)
       if (!errorStatus) {
         const result = convertExperience(payload);
-
         setExperienceData(result);
       }
     });
@@ -226,11 +253,15 @@ function Dashboard() {
   useEffect(() => {
     if (valueSearch.length > 0) {
       setIsFilterActive(true);
+    }else {
+      setIsFilterActive(false);
     }
   }, [valueSearch]);
   useEffect(() => {
     if (dateSelectedText.length > 0) {
       setIsFilterActive(true);
+    }else {
+      setIsFilterActive(false)
     }
   }, [dateSelectedText]);
   useEffect(() => {
@@ -265,28 +296,6 @@ function Dashboard() {
     getAllExperience();
   }, []);
   useEffect(() => {
-    // experienceServices.getAll().then((res) => {
-    //   const { data } = res;
-    //   const errorStatus = _get(data, 'error.status', true);
-    //   const payload = _get(data, 'payload', null);
-
-    //   if (!errorStatus) {
-    //     const result = convertExperience(payload);
-
-    //     setExperienceData(result);
-    //   }
-    // });
-
-    // categoryServices.searchCategory('').then((res) => {
-    //   const { data } = res;
-    //   const errorStatus = _get(data, 'error.status', true);
-    //   const payload = _get(data, 'payload', null);
-
-    //   if (!errorStatus) {
-    //     setCategories(payload);
-    //   }
-    // });
-
     authServices.getHosts().then((res) => {
       const { data } = res;
       const errorStatus = _get(data, 'error.status', true);
@@ -297,6 +306,12 @@ function Dashboard() {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if(window.location.search.split("=")[0] === "?token"){
+      callback()
+    }
+  }, [])
 
 
 
@@ -409,23 +424,21 @@ function Dashboard() {
       <Row justify="center">
         <Col md={23} xs={23} sm={23}>
           <Row className="experiences-wrapper">
-            <Col>
+            <Col style={{width: '100%'}}>
               <PopularExperience
                 data={experienceData}
+                experience={true}
                 valueSearch={valueSearch}
                 filterApplied={isFilterActive}
                 clearFilters={handleClearFilters}
-                title={`${experienceData.length > 0
-                    ? `(${experienceData.length}) `
-                    : '(0) '
-                  }Popular Experiences`}
+                title={`Popular Experiences`}
               />
             </Col>
           </Row>
 
           <Row className="hosts-wrapper">
             <Col>
-              <Hosts data={hostData} />
+              <Hosts data={hostData} filteredData={filteredHostData} />
             </Col>
           </Row>
         </Col>

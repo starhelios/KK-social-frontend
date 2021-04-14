@@ -42,7 +42,7 @@ async function resetTokenAndReattemptRequest(error) {
         // headers: {
         //   "X-CSRF-Token": csrfResponse.data.payload.token.csrf,
         // },
-        url: `${API_ENDPOINT}/v1/auth/refresh-tokens`,
+        url: `${API_ENDPOINT}v1/auth/refresh-tokens`,
         data: {
           refreshToken: refreshToken,
         },

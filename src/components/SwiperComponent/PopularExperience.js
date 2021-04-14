@@ -18,6 +18,7 @@ const PopularExperience = ({
   clearFilters,
   filterApplied,
   valueSearch,
+  experience,
 }) => {
   let history = useHistory();
 
@@ -27,10 +28,8 @@ const PopularExperience = ({
     observer: true,
     observeParents: true,
   };
-
   const colorDark = theme === "dark" ? { color: "black" } : {};
   const titleStyle = isDetail ? { fontSize: "36.56px" } : {};
-
   return (
     <div className="popularExperience">
       <Row>
@@ -53,81 +52,117 @@ const PopularExperience = ({
           </h6>
         ) : null}
       </Row>
-
-      <Swiper {...params}>
-        {data.map((item, idx) => (
-          <div key={item.id}>
-            <h3>
-              <Card
-                className="card-item"
-                hoverable
-                style={{ width: 232, borderRadius: "18px" }}
-                cover={
-                  <LazyLoadImage
-                    src={item.imgLink}
-                    height={309}
-                    width={231}
-                    placeholderSrc="image"
-                    effect="blur"
-                    style={{ borderRadius: 12 }}
-                  />
+      {console.log(window.location.pathname)}
+      {!data.length && (
+        <Row
+          style={
+            window.location.pathname !== "/hostdetails"
+              ? {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  fontSize: "24px",
+                  fontFamily: "Avenir Next",
+                  color: "white",
+                  fontWeight: "600",
                 }
-                onClick={() =>
-                  history.push({
-                    pathname: `/experience/${item.id}`,
-                    state: { itemData: item },
-                  })
+              : {
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                  fontSize: "24px",
+                  fontFamily: "Avenir Next",
+                  color: "black",
+                  fontWeight: "600",
                 }
-              >
-                <Meta
-                  // title={item.title}
-                  description={
-                    <Row justify="start" align="middle">
-                      <Col sm={24} xs={24}>
-                        <Row style={colorDark}>{item.title}</Row>
-                        <Row align="middle">
-                          <Col
-                            sm={24}
-                            xs={24}
-                            style={{
-                              opacity: 0.75,
-                            }}
-                          >
-                            <span
-                              style={{
-                                textTransform: "capitalize",
-                                ...colorDark,
-                              }}
-                            >
-                              {globalFunctions.determineIcon(item.category)}{" "}
-                              {item.category}
-                            </span>
-                            {item.time ? ` • ${item.time}` : ``}
+          }
+        >
+          No experiences
+        </Row>
+      )}
+      {data && data.length > 0 && (
+        <Swiper {...params}>
+          {data &&
+            data.map((item, idx) => (
+              <div key={item.id}>
+                <h3>
+                  <Card
+                    className="card-item"
+                    hoverable
+                    style={{ width: 232, borderRadius: "18px" }}
+                    cover={
+                      <LazyLoadImage
+                        src={item.imgLink || item.images[0]}
+                        height={309}
+                        width={231}
+                        placeholderSrc="image"
+                        effect="blur"
+                        style={{ borderRadius: 12 }}
+                      />
+                    }
+                    onClick={() =>
+                      history.push({
+                        pathname: `/experience/${item.id}`,
+                        state: { itemData: item },
+                      })
+                    }
+                  >
+                    <Meta
+                      // title={item.title}
+                      description={
+                        <Row justify="start" align="middle">
+                          <Col sm={24} xs={24}>
+                            <Row style={colorDark}>{item.title}</Row>
+                            <Row align="middle">
+                              <Col
+                                sm={24}
+                                xs={24}
+                                style={{
+                                  opacity: 0.75,
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    textTransform: "capitalize",
+                                    ...colorDark,
+                                  }}
+                                >
+                                  {globalFunctions.determineIcon(
+                                    item.category || item.categoryName
+                                  )}{" "}
+                                  {item.category || item.categoryName}
+                                </span>
+                                {item.time ? ` • ${item.time}` : ``}
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col
+                                style={{
+                                  opacity: 0.85,
+                                  ...colorDark,
+                                }}
+                              >
+                                From $
+                                {item.price.toString().split("$ ").join("")} /
+                                person
+                              </Col>
+                            </Row>
                           </Col>
                         </Row>
-                        <Row>
-                          <Col
-                            style={{
-                              opacity: 0.85,
-                              ...colorDark,
-                            }}
-                          >
-                            From ${item.price.split("$ ").join("")} / person
-                          </Col>
-                        </Row>
-                      </Col>
-                    </Row>
-                  }
-                  style={{
-                    opacity: 0.85,
-                    ...colorDark,
-                  }}
-                />
-              </Card>
-            </h3>
-          </div>
-        ))}
-      </Swiper>
+                      }
+                      style={{
+                        opacity: 0.85,
+                        ...colorDark,
+                      }}
+                    />
+                  </Card>
+                </h3>
+              </div>
+            ))}
+        </Swiper>
+      )}
     </div>
   );
 };

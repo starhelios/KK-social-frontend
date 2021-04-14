@@ -8,6 +8,7 @@ import {
   Input,
   DatePicker,
   Skeleton,
+  Avatar
 } from 'antd';
 import { CameraOutlined, RightOutlined, DownOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
@@ -17,23 +18,27 @@ import isEmail from 'validator/lib/isEmail';
 import moment from 'moment';
 import _get from 'lodash/get';
 import { toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import './EditProfile.scss';
-import { storage } from '../../utils/firebase';
+import avatar_img from '../../assets/img/avatar.jpg';
 import { authServices } from '../../services/authServices';
-import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo } from '../../redux/selectors/authSelector';
 import { AUTH_SET_USER_INFO } from '../../redux/types/authTypes';
+import { experienceServices } from '../../services/experienceService';
 
 const EditProfile = (props) => {
   const [loading, setLoading] = useState(false);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [newImage, setNewImage] = useState(false)
   const [imageUrl, setImageUrl] = useState('');
   const [styleAvatar, setStyleAvatar] = useState({});
   const userInfoSelector = useSelector((state) => getUserInfo(state));
   const [showChangePass, setShowChangePass] = useState(false);
+  const history = useHistory();
   const dispatch = useDispatch();
-
+  console.log(typeof imageUrl)
   let setFirstPass = localStorage.getItem('setFirstPass');
   if (setFirstPass === 'true') {
     setFirstPass = true;
@@ -60,26 +65,44 @@ const EditProfile = (props) => {
   };
 
   const customUpload = ({ onError, onSuccess, file }) => {
-    const uploadTask = storage.ref(`images/${file.name}`).put(file);
-    setLoading(true);
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {},
-      (error) => {
-        onError(error);
-      },
-      () => {
-        storage
-          .ref('images')
-          .child(`${file.name}`)
-          .getDownloadURL()
-          .then((url) => {
-            onSuccess(null, url);
-            setImageUrl(url);
-            setLoading(false);
-          });
-      }
-    );
+    console.log('file...',file)
+    let fileData = new FormData();
+    fileData.append('image', file)
+    experienceServices.uploadPhoto(fileData)
+    .then(async(res) => {
+          const { data } = res;
+          const errorStatus = await _get(data, 'error.status', true);
+          const payload =await  _get(data, 'payload', null);
+        console.log(payload)
+          if (!errorStatus) {
+            setNewImage(true)
+            const param = {
+              avatarUrl: payload.uploadedPhoto
+            }
+            setTimeout(() =>{
+              setImageUrl(payload.uploadedPhoto)
+            },3000
+            )
+            authServices.updateUserInfo(userInfoSelector.randomString, param).then((res) => {
+              const { data } = res;
+              const errorStatus = _get(data, 'error.status', true);
+              const errorMessage = _get(data, 'error.message', '');
+              const payload = _get(data, 'payload', null);
+              console.log(payload)
+              if (!errorStatus) {
+                toast.success('Successfully updated profile photo');
+                dispatch({ type: AUTH_SET_USER_INFO, payload });
+                setNewImage(false)
+              } else {
+                toast.error("Something went wrong saving profile photo");
+              }
+            });
+            onSuccess(null, payload.uploadedPhoto);
+          } else{
+            onError(errorStatus)
+            toast.error("Something went wrong")
+          }
+        });
   };
 
   const onSubmit = async (values) => {
@@ -97,7 +120,7 @@ const EditProfile = (props) => {
     setLoadingSubmit(true);
     if (showChangePass) {
       const changePassParams = {
-        userId: userInfoSelector.id,
+        userId: userInfoSelector.randomString,
         password: values.password,
         newPassword: values.newPassword,
         setFirstPass,
@@ -113,7 +136,7 @@ const EditProfile = (props) => {
 
         if (!errorStatus) {
           authServices
-            .updateUserInfo(userInfoSelector.id, params)
+            .updateUserInfo(userInfoSelector.randomString, params)
             .then((res) => {
               const { data } = res;
               const errorStatus = _get(data, 'error.status', true);
@@ -125,10 +148,11 @@ const EditProfile = (props) => {
               }
 
               if (!errorStatus) {
-                toast.success("Successfully updated info");
                 dispatch({ type: AUTH_SET_USER_INFO, payload });
+                setNewImage(false);
+                toast.success("Successfully updated info,");
               } else {
-                toast.error(errorMessage);
+                toast.error("Something went wrong. Please try again later");
               }
             });
         } else {
@@ -137,7 +161,7 @@ const EditProfile = (props) => {
       });
     } else {
       console.log('running')
-      authServices.updateUserInfo(userInfoSelector.id, params).then((res) => {
+      authServices.updateUserInfo(userInfoSelector.randomString, params).then((res) => {
         const { data } = res;
         const errorStatus = _get(data, 'error.status', true);
         const errorMessage = _get(data, 'error.message', '');
@@ -150,6 +174,7 @@ const EditProfile = (props) => {
         if (!errorStatus) {
           toast.success('Successfully updated profile');
           dispatch({ type: AUTH_SET_USER_INFO, payload });
+          setNewImage(false)
         } else {
           toast.error(errorMessage);
         }
@@ -159,8 +184,17 @@ const EditProfile = (props) => {
 
   useEffect(() => {
     if (imageUrl) {
+      console.log('image url...',imageUrl)
       setStyleAvatar({
-        background: `url(${imageUrl}) center center no-repeat`,
+        background: `url(${imageUrl}) center no-repeat`,
+        position: 'relative',
+        height: '150px',
+        width: '150px',
+        minHeight: "150px",
+        minWidth: "150px",
+        zIndex: 99,
+        display: 'flex',
+        justifyContent: 'center', alignItems: 'flex-end', borderRadius: '50%'
       });
     }
   }, [imageUrl]);
@@ -186,32 +220,29 @@ const EditProfile = (props) => {
       <Row className='edit-profile-header' justify='center'>
         <h2>Edit Profile</h2>
       </Row>
-
+              
       <form onSubmit={handleSubmit(onSubmit)}>
         <Row className='edit-profile-content'>
           <Col sm={24} xs={24}>
-            <Row className='edit-profile-photo' justify='center'>
-              {loading && (
-                <Skeleton.Avatar
-                  active={loading}
-                  size={150}
-                  shape='circle'
-                  style={{ marginBottom: 33 }}
-                />
-              )}
-              {!loading && (
+            {console.log('image url...',imageUrl)}
+            <Row className='edit-profile-photo' justify='center'
+            align='middle' style={{ marginBottom: 33, position: 'relative', flexDirection: 'column'}}>
+                <div>
                 <ImgCrop>
                   <Upload
-                    fileList={[]}
+                    showUploadList={false}
                     beforeUpload={beforeUpload}
                     customRequest={customUpload}
                   >
-                    <Button style={styleAvatar}>
-                      <CameraOutlined />
-                    </Button>
+                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+
+                    <Avatar size={150} src={imageUrl && imageUrl.length ? imageUrl : avatar_img} />
+                      <CameraOutlined style={imageUrl.length ? {zIndex: 999, color: 'white', position: 'relative', bottom: 20}: {zIndex: 999, color: 'white', position: 'relative', bottom: 35}} />
+                    
+                    </div>
                   </Upload>
                 </ImgCrop>
-              )}
+                </div>
             </Row>
 
             <Row>

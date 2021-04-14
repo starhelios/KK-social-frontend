@@ -8,9 +8,7 @@ import {
   Input,
   DatePicker,
   Skeleton,
-  AutoComplete,
-  Dropdown,
-  Menu,
+  Avatar,
 } from 'antd';
 import { CameraOutlined, SearchOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
@@ -21,8 +19,10 @@ import moment from 'moment';
 import _get from 'lodash/get';
 import { toast } from 'react-toastify';
 import _debounce from 'lodash/debounce';
+import { useHistory } from 'react-router-dom';
 
 import './styles.scss';
+import avatar_img from '../../assets/img/avatar.jpg';
 import { storage } from '../../utils/firebase';
 import { authServices } from '../../services/authServices';
 import { useSelector, useDispatch } from 'react-redux';
@@ -46,6 +46,7 @@ const BecomeHost = (props) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isHost, setIsHost] = useState()
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     setIsHost(props.isHost)
@@ -126,10 +127,10 @@ const BecomeHost = (props) => {
     if (imageUrl) {
       params.avatarUrl = imageUrl;
     }
-
     setLoadingSubmit(true);
 
-    authServices.updateUserInfo(userInfoSelector.id, params).then((res) => {
+    console.log(userInfoSelector.randomString)
+    authServices.updateUserInfo(userInfoSelector.randomString, params).then((res) => {
       const { data } = res;
       const errorStatus = _get(data, 'error.status', true);
       const errorMessage = _get(data, 'error.message', '');
@@ -140,18 +141,30 @@ const BecomeHost = (props) => {
       }
 
       if (!errorStatus) {
-        toast.success(errorMessage);
+        toast.success("Success, refreshing...");
         dispatch({ type: AUTH_SET_USER_INFO, payload });
+        setTimeout(() => {
+          history.go(0);
+        }, 2500);
       } else {
         toast.error(errorMessage);
       }
     });
   };
 
-  useEffect(() => {
+ useEffect(() => {
     if (imageUrl) {
+      console.log('image url...',imageUrl)
       setStyleAvatar({
-        background: `url(${imageUrl}) center center no-repeat`,
+        background: `url(${imageUrl}) center no-repeat`,
+        position: 'relative',
+        height: '150px',
+        width: '150px',
+        minHeight: "150px",
+        minWidth: "150px",
+        zIndex: 99,
+        display: 'flex',
+        justifyContent: 'center', alignItems: 'flex-end', borderRadius: '50%'
       });
     }
   }, [imageUrl]);
@@ -168,6 +181,7 @@ const BecomeHost = (props) => {
         shouldDirty: true,
       });
       setValue('aboutMe', userInfoSelector.aboutMe, {shouldDirty: true})
+      setValue('location', userInfoSelector.location, {shouldDirty: true})
 
       // warning
       if (userInfoSelector.avatarUrl) {
@@ -177,25 +191,7 @@ const BecomeHost = (props) => {
       setLoading(true);
     }
   }, [userInfoSelector]);
-
-  const showDropDownMenu = () => {
-    return (
-      <Menu>
-        {categories.map((elem, index) => {
-          return (
-            <Menu.Item
-              onClick={() => {
-                setSelectedCategory(elem);
-              }}
-            >
-              <p>{elem.name}</p>
-            </Menu.Item>
-          );
-        })}
-      </Menu>
-    );
-  };
-
+  
   return (
     <Col className="edit-profile-wrapper" sm={24} xs={24}>
       <Row className="edit-profile-header" justify="center">
@@ -205,28 +201,24 @@ const BecomeHost = (props) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Row className="edit-profile-content">
           <Col sm={24} xs={24}>
-            <Row className="edit-profile-photo" justify="center">
-              {loading && (
-                <Skeleton.Avatar
-                  active={loading}
-                  size={150}
-                  shape="circle"
-                  style={{ marginBottom: 33 }}
-                />
-              )}
-              {!loading && (
+            <Row className='edit-profile-photo' justify='center'
+            align='middle' style={{ marginBottom: 33, position: 'relative', flexDirection: 'column'}}>
+                <div>
                 <ImgCrop>
                   <Upload
-                    fileList={[]}
+                    showUploadList={false}
                     beforeUpload={beforeUpload}
                     customRequest={customUpload}
                   >
-                    <Button style={styleAvatar}>
-                      <CameraOutlined />
-                    </Button>
+                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+
+                    <Avatar size={150} src={imageUrl && imageUrl.length ? imageUrl : avatar_img} />
+                      <CameraOutlined style={imageUrl.length ? {zIndex: 999, color: 'white', position: 'relative', bottom: 20}: {zIndex: 999, color: 'white', position: 'relative', bottom: 35}} />
+                    
+                    </div>
                   </Upload>
                 </ImgCrop>
-              )}
+                </div>
             </Row>
 
             <Row>

@@ -95,16 +95,17 @@ export const Profile = (props) => {
     if (userInfoSelector && props.history.action === "POP") {
        determineStep(userInfoSelector.isHost)
     }
-  }, [history])
+  }, [history, userInfoSelector])
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
-
+    console.log('getting user...', userId);
     if (userId) {
       authServices.getUserInfo(userId).then((res) => {
         const { data } = res;
         const errorStatus = _get(data, 'error.status', true);
         const payload = _get(data, 'payload', null);
+        console.log(payload)
         if (!errorStatus) {
           dispatch({ type: AUTH_SET_AUTHENTICATED, payload: true });
           dispatch({ type: AUTH_SET_USER_INFO, payload });
@@ -129,7 +130,10 @@ export const Profile = (props) => {
 
   useEffect(() => {
     const token = window.location.search.split('?code=')[1];
-    console.log(userInfoSelector && userInfoSelector.randomString && window.location.href.indexOf('/profile?code=') > -1)
+    console.log(token)
+    console.log(window.location)
+    console.log(userInfoSelector && userInfoSelector.randomString && token)
+    console.log(userInfoSelector)
     //send to backend to receive
     if (userInfoSelector && userInfoSelector.randomString && window.location.href.indexOf('/profile?code=') > -1) {
       console.log('running api')
@@ -149,16 +153,18 @@ export const Profile = (props) => {
         }
       })
     }
-  }, []);
+  }, [userInfoSelector]);
 
   const determineStep = (host) => {
     if(!host){
       console.log('user is host...',host)
       return setUserStep(hostingOptionsStepOne);
     }
-    else if (host && userInfoSelector && !userInfoSelector.zoomConnected || userInfoSelector && userInfoSelector.status !== 'active') {
+    else if (host && userInfoSelector && !userInfoSelector.zoomConnected || userInfoSelector && !userInfoSelector.stripeAccountVerified) {
+      console.log('step two...')
       return  setUserStep(hostingOptionsStepTwo);
-    }else {
+    }else if(userInfoSelector && userInfoSelector.zoomConnected && userInfoSelector.stripeAccountVerified) {
+      console.log('step three...')
       return setUserStep(hostingOptionsStepThree);
     }
   }
@@ -214,7 +220,7 @@ export const Profile = (props) => {
       title: 'Edit Withdrawal Options',
     },
   ]
-
+  console.log(userInfoSelector)
   return (
     <div className="profile-wrapper">
       <Row className="profile-back-btn">

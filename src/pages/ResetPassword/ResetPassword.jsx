@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { Row, Col, Typography, Button, Carousel } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import _get from 'lodash/get';
+import {useHistory} from 'react-router-dom'
 import { authServices } from '../../services/authServices';
 
 import './ResetPassword.scss';
@@ -11,6 +12,7 @@ import './ResetPassword.scss';
 function ResetPassword(props) {
   const { handleCurrentAuthPageIndexChange, token } = props;
   const { register, handleSubmit, errors, watch } = useForm();
+  const history = useHistory();
 
   const onSubmit = (values) => {
     authServices.resetPassword(token, { password: values.password }).then(
@@ -20,6 +22,8 @@ function ResetPassword(props) {
 
         if (!error.status) {
           toast.success(error.message);
+          console.log('pushing to another page')
+          history.push('/')
           handleCurrentAuthPageIndexChange(5);
         } else {
           toast.error(error.message);

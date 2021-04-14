@@ -125,7 +125,7 @@ function MyExperiences(props) {
   useEffect(() => {
     if (detailData.specificExperience) {
       const formatArr = detailData.specificExperience.map((item, idx) => {
-        console.log(item.day)
+        // console.log(item.day)
         if (startDateCalendar && endDateCalendar) {
           if (startDateCalendar === endDateCalendar) {
             const date = moment(new Date(item.day)).format(formatDateBE);
@@ -181,7 +181,9 @@ function MyExperiences(props) {
             }
           }
         }
-
+        if(moment(item.day + " " + item.startTime).format() < moment(new Date()).format()){
+          return false
+        }
         return (
           <Col sm={24} xs={24} key={idx}>
             <Row className="exp-content-right-body-row-choose-item-line" />
@@ -204,6 +206,10 @@ function MyExperiences(props) {
                       } else {
                         window.scrollTo(0, 0);
                         toast.error('please login to continue');
+                        history.push({
+                          pathname: '/',
+                          state: {needsToLogin: true}
+                        })
                       }
                     }}
                   >
@@ -228,7 +234,7 @@ function MyExperiences(props) {
     endDateCalendar,
     startDate,
   ]);
-  console.log(detailData.id)
+  // console.log(detailData.id)
   useEffect(() => {
     if (id) {
       experienceServices.getById(id).then((res) => {
@@ -259,9 +265,10 @@ function MyExperiences(props) {
           }
           setDetailData(payload.experience);
           setFullName(titleCase(payload.experience.hostData.fullname));
-          setAboutme(payload.aboutMe);
-          setAvatarUrl(payload.avatarUrl);
+          setAboutme(payload.experience.aboutMe);
+          setAvatarUrl(payload.experience.avatarUrl);
           setImageUrl(payload.experience.images[0])
+          // console.log(payload)
 
           experienceServices
             .getAllByUserId(payload.experience.userId)
@@ -269,11 +276,12 @@ function MyExperiences(props) {
               const { data } = res;
               const errorStatus = _get(data, 'error.status', true);
               const payload = _get(data, 'payload', null);
-
+              console.log(payload)
               if (!errorStatus) {
                 const result = convertExperience(payload);
                 const finalResult = result.filter((item) => item.id !== id);
                 console.log(finalResult)
+                //! TODO fix backend issue
                 setExperienceData(finalResult);
               }
             });
@@ -281,6 +289,7 @@ function MyExperiences(props) {
       });
     }
   }, [id]);
+
 
   const handleDecreaseButton = () => {
     if (guest_number > 0) {
@@ -350,7 +359,7 @@ function MyExperiences(props) {
   }
 
   const rating = ratingsTotal > 0 && ratingsCount > 0 ? ratingsTotal / ratingsCount : 0;
-  console.log(rating)
+  // console.log(rating)
   return (
     <>
       <Row justify="end" className="myexperience">
@@ -384,7 +393,7 @@ function MyExperiences(props) {
               <Swiper {...params}>
                 {detailData.images &&
                   detailData.images.map((item, idx) => (
-                    <div style={{ width: 415, height: 415 }} key={idx}>
+                    <div style={{ width: 300, height: 300 }} key={idx}>
                       <img
                         src={item}
                         style={{ width: '100%', height: 'auto', borderRadius: '15px' }}

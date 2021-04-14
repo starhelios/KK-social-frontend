@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Button, DatePicker } from 'antd';
+import { Row, Col, Button, DatePicker, TimePicker } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
@@ -7,6 +7,7 @@ import { none } from 'ramda';
 import DateItem from './DateItem';
 
 const { RangePicker } = DatePicker;
+const TimeRange = TimePicker.RangePicker;
 
 const DatesOfAvailability = ({
   daysAvailable,
@@ -17,7 +18,10 @@ const DatesOfAvailability = ({
   formErrors
 }) => {
   const [showDatepicker, setShowDatepicker] = React.useState(false);
-  const [isEditAll, setEditAll] = useState(true);
+  const [isEditAll, setEditAll] = useState(false);
+  const [isEdit, setEdit] = useState(true)
+  const [saved, setSaved] = useState(false)
+  const [editAllTimes, setEditAllTimes] = useState([]);
   const [tempValue, setTempValue] = useState([]);
 
   const handleShowDatepicker = (value) => {
@@ -37,9 +41,21 @@ const DatesOfAvailability = ({
     setValues(datesArray)
   };
 
+
   const handleOpenChange = () => {
     handleShowDatepicker(true);
   };
+  console.log(daysAvailable)
+  const handleEditAll = () => {
+    setEditAll(false)
+    setSaved(true)
+      let newValues = [];
+      values.map((item, idx) => {
+        const object = new Object({startDayTime: `${item} ${editAllTimes[0]}`, endDayTime: `${item} ${editAllTimes[1]}`});
+        newValues.push(object)
+      })
+      setDayAvailable(newValues)
+  }
 
   const handleChange = (values) => {
     const newDates = values.map((item, idx) => {
@@ -60,6 +76,7 @@ const DatesOfAvailability = ({
     )
   }
   console.log(values)
+  console.log('edit all times...', editAllTimes)
 
   return (
     <Col
@@ -130,7 +147,7 @@ const DatesOfAvailability = ({
                     <Row justify='end'>
                       <h5
                         style={{ cursor: 'pointer' }}
-                        onClick={() => setEditAll(true)}
+                        onClick={() => setEditAll(!isEditAll)}
                       >
                         Edit All
                       </h5>
@@ -138,6 +155,42 @@ const DatesOfAvailability = ({
                   </Col>
                 </Row>
               )}
+              {isEditAll === true && (
+                <Row
+      className='host-experience-content-right-body-row-choose-item'
+      align='middle'
+    >
+                <Col sm={14} xs={14}>
+        <h5>
+          {isEdit ? (
+            <TimeRange
+              use12Hours
+              format='h:mm a'
+              bordered={false}
+              onChange={(time, timestring) => setEditAllTimes(timestring)}
+            />
+          ) : (
+            <span style={{ textTransform: 'uppercase' }}>
+              {`${""} - ${""} (EDT)`}
+            </span>
+          )}
+        </h5>
+        </Col>
+        <Col sm={10} xs={10}>
+        <Row justify='end'>
+          <Button
+            onClick={() => handleEditAll()}
+            style={{backgroundColor: 'black'}}
+            className='host-experience-content-right-body-row-choose-item-btn'
+          >
+            {!isEdit ? 'Edit' : 'Save All'}
+          </Button>
+        </Row>
+      </Col>
+      </Row>
+      )}
+      
+      {isEditAll || editAllTimes.length ? null: (
               <Row className='host-experience-content-right-body-row-choose'>
                 <Col sm={24} xs={24}>
                   {values.map((item, index) => (
@@ -150,10 +203,18 @@ const DatesOfAvailability = ({
                       values={values}
                       daysAvailable={daysAvailable}
                       price={price}
+                      editAllTimes={editAllTimes}
                     />
                   ))}
                 </Col>
               </Row>
+      )}
+      {saved === true && (
+        <div><span style={{ textTransform: 'uppercase' }}>
+              {`${editAllTimes[0]} - ${editAllTimes[1]} (EDT)`}
+            </span></div>
+      )}
+              
             </Col>
           </Row>
         </Col>

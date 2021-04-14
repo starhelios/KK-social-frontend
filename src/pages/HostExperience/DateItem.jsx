@@ -11,18 +11,17 @@ const DateItem = ({
   daysAvailable,
   values,
   price,
+  editAllTimes
 }) => {
   const [isEdit, setEdit] = useState(isEditAll);
-  const [start, setStart] = useState('');
-  const [end, setEnd] = useState('');
+  const [start, setStart] = useState(editAllTimes[0] && editAllTimes[0].length ? editAllTimes[0]: "");
+  const [end, setEnd] = useState(editAllTimes[1] && editAllTimes[1].length ? editAllTimes[1]: "");
   const priceText = `$ ${price || 0} / person`;
-
+  console.log('edit all times.....',editAllTimes)
   console.log(daysAvailable)
 
   useEffect(() => {
-    if (isEditAll) {
-      setEdit(true);
-    }
+    
 
     // setDayAvailable([
     //   ...daysAvailable.map((element) => {

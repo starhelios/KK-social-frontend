@@ -34,7 +34,7 @@ function ZoomIntegration({ userInfoSelector }) {
                   try {
                     toast.success('Re-directing to Zoom');
                     const redirect_user = _debounce(() => {
-                      window.location.href = `https://zoom.us/oauth/authorize?client_id=neNtJG1EQAG2YieBwjwTg&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fprofile`;
+                      window.location.href = `https://zoom.us/oauth/authorize?response_type=code&client_id=3q8wZJkuT8ebN53HGxBXg&redirect_uri=https://www.kloutkast.com/profile`;
                     }, 1500);
                     redirect_user();
                   } catch (err) {
@@ -43,7 +43,7 @@ function ZoomIntegration({ userInfoSelector }) {
                   }
                   setLoading(false);
                 }}
-                disabled={userInfoSelector.id.length ? false : true}
+                disabled={userInfoSelector.randomString.length && userInfoSelector.isHost? false : true}
                 loading={loading}
               >
                 Connect Your Zoom Account

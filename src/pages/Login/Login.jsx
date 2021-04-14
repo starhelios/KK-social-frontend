@@ -27,11 +27,12 @@ function Login(props) {
         const { data } = res;
         const error = _get(data, 'error', {});
         setLoading(false);
+        console.log(data)
 
         if (!error.status) {
           const accessToken = _get(data.payload, 'tokens.access.token', '');
           const refreshToken = _get(data.payload, 'tokens.refresh.token', '');
-          const userInfo = _get(data.payload, 'user', {});
+          const userInfo = _get(data.payload, 'newUser', {});
 
           if (accessToken) {
             localStorage.setItem('access_token', accessToken);

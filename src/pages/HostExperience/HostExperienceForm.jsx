@@ -27,8 +27,9 @@ const { TextArea } = Input;
 
 const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) => {
   const [categories, setCategories] = useState([]);
+  const [title, setTitle] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const { register, handleSubmit, errors, control, watch } = useForm();
+  const { register, handleSubmit, errors, control, watch, setValue } = useForm();
   const [images, setImages] = useState([]);
 
   const price = watch('price');
@@ -56,7 +57,7 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
   };
 
   const handleSeachCategories = useCallback(_debounce(callApiSearch, 1000), []);
-
+  console.log(days)
   const onSubmit = (value) => {
     if (images.length === 0) {
       toast.error('Please upload photos');
@@ -71,7 +72,7 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
       return new Date(dt.getTime() + minutes * 60000);
     };
     console.log(days);
-    console.log(daysAvailable)
+console.log(`${days.length} ${daysAvailable.length}`)
     if(days.length !== daysAvailable.length || !days.length){
       setFormErrors({availability: 'Please Complete/Save Your Availability'})
       return false;
@@ -107,12 +108,13 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
 
     let params = {
       ...value,
+      title: title,
       specificExperiences,
       images,
       duration: value.duration,
       price: value.price,
-      startDay: moment(days[0]).format(formatDateBE),
-      endDay: moment(days[1]).format(formatDateBE),
+      startDay: moment(specificExperiences[0].day).format(formatDateBE),
+      endDay: moment(specificExperiences[specificExperiences.length - 1].day).format(formatDateBE),
       categoryName: selectedCategory.name,
     };
     // axios.post('https://api.zoom.us/v2/users/grayson.mcmurry23@gmail.com/meetings', {
@@ -191,9 +193,10 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
             <Row align="middle" justify="start">
               <Col md={24} sm={24} xs={24}>
                 <Controller
-                  as={<Input placeholder="Enter title" />}
+                  render={(onChange) =><Input placeholder="Enter title" maxLength="40" onChange={(e) => {setTitle(e.target.value); setValue('title', e.target.value, {shouldDirty: true})}} value={title} />}
                   name="title"
                   control={control}
+                  value={title}
                   rules={{
                     required: {
                       value: true,
@@ -201,14 +204,15 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
                     },
                   }}
                 />
-                {errors.title && (
-                  <div className="errorText">{errors.title.message}</div>
-                )}
               </Col>
             </Row>
           </Col>
-        </Row>
         <Row className="host-experience-content-left-item-line" />
+                {errors.title && (
+                  <div className="errorText">{errors.title.message}</div>
+                )}
+        <div style={{textAlign: 'left'}}>Characters Remaining: {40 - title.length}</div>
+        </Row>
 
         <Row className="host-experience-content-left-item">
           <Col md={24} sm={24} xs={24}>
@@ -228,14 +232,14 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
                     },
                   }}
                 />
-                {errors.description && (
-                  <div className="errorText">{errors.description.message}</div>
-                )}
               </Col>
             </Row>
           </Col>
-        </Row>
         <Row className="host-experience-content-left-item-line" />
+                {errors.description && (
+                  <div className="errorText">{errors.description.message}</div>
+                )}
+        </Row>
         <Row className="host-experience-content-left-item">
           <Col md={24} sm={24} xs={24}>
             <Row>
@@ -261,14 +265,14 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
                     },
                   }}
                 />
-                {errors.duration && (
-                  <div className="errorText">{errors.duration.message}</div>
-                )}
               </Col>
             </Row>
           </Col>
-        </Row>
         <Row className="host-experience-content-left-item-line" />
+                {errors.duration && (
+                  <div className="errorText">{errors.duration.message}</div>
+                )}
+        </Row>
         <Row className="host-experience-content-left-item">
           <Col md={24} sm={24} xs={24}>
             <Row>
@@ -296,14 +300,14 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
                     },
                   }}
                 />
-                {errors.price && (
-                  <div className="errorText">{errors.price.message}</div>
-                )}
               </Col>
             </Row>
           </Col>
-        </Row>
         <Row className="host-experience-content-left-item-line" />
+                {errors.price && (
+                  <div className="errorText">{errors.price.message}</div>
+                )}
+        </Row>
         <Row className="host-experience-content-left-item">
           <Col md={24} sm={24} xs={24}>
             <Row>

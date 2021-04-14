@@ -74,22 +74,7 @@ const ApplyFilterModal = ({
           />
         </Col>
       </Row>
-      {/* <Row className="category-group">
-        <Col md={24} sm={24} xs={24}>
-          <Row>
-            <h1>Category</h1>
-          </Row>
-          <Row align="middle" justify="start">
-            <Col md={24} sm={24} xs={24}>
-              <Dropdown overlay={showDropDownMenu}>
-                <p style={{ fontSize: '20px' }}>{`${
-                  selectedCategory ? selectedCategory.name : `Select Category`
-                }`}</p>
-              </Dropdown>
-            </Col>
-          </Row>
-        </Col>
-      </Row> */}
+
       <Row className="location-group">
         <Row>
           <Col>

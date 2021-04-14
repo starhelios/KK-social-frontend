@@ -48,26 +48,26 @@ function SliderComponent(props) {
   const getUserZoomRole = (itemIds) => {
     return itemIds.indexOf(userId) > -1 ? '0': '1'
   }
-  const sendRatingData = (experienceId, rating) => {
-    console.log('send rating data', experienceId, rating, userId);
-    if (experienceId && rating && userId) {
-            experienceServices.rateSpecificExperience(experienceId, rating, userId).then((res) => {
+  // const sendRatingData = (experienceId, rating) => {
+  //   console.log('send rating data', experienceId, rating, userId);
+  //   if (experienceId && rating && userId) {
+  //           experienceServices.rateSpecificExperience(experienceId, rating, userId).then((res) => {
                 
-            const { data } = res;
-            const errorStatus = _get(data, 'error.status', true);
-            const payload = _get(data, 'payload', null);
-            if (!errorStatus) {
-                props.setRefreshComponent('refresh')
-            } else {
-                console.log("couldn't go through bookings");
-            }
-            });
-        } else {
-            console.log('user not logged in')
-        //   dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
-        //   history.push('/');
-        }
-  }
+  //           const { data } = res;
+  //           const errorStatus = _get(data, 'error.status', true);
+  //           const payload = _get(data, 'payload', null);
+  //           if (!errorStatus) {
+  //               props.setRefreshComponent('refresh')
+  //           } else {
+  //               console.log("couldn't go through bookings");
+  //           }
+  //           });
+  //       } else {
+  //           console.log('user not logged in')
+  //       //   dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
+  //       //   history.push('/');
+  //       }
+  // }
   useEffect(() => {
     const timeRightNow = new Date().toISOString();
     const itemsNeedUpdatedArray = data.map((item, idx) => {
@@ -473,7 +473,7 @@ function SliderComponent(props) {
                                     md={24}
                                     className='booking-card-footer-rate-col'
                                   >
-                                    {findRating(item) > 0 ?  (<Row>
+                                    {/* {findRating(item) > 0 ?  (<Row>
                                       <p>Thank you for rating this experience!</p>
                                     </Row>):
                                     (
@@ -486,8 +486,10 @@ function SliderComponent(props) {
                                         </Row>
                                       </div>
                                       
-                                    )}
-                                    
+                                    )} */}
+                                    <Row>
+                                      <p>We hope you enjoyed your experience!</p>
+                                    </Row>
                                   </Col>
                                 </Row>
                               )}

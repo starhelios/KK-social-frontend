@@ -44,7 +44,7 @@ function HeaderComponent(props) {
       !hostedMe
       ? "dark"
       : "light";
-
+  //this is to grab user
   useEffect(() => {
     const userId = localStorage.getItem('userId');
 
@@ -69,20 +69,28 @@ function HeaderComponent(props) {
     }
   }, [location]);
 
+  useEffect(() => {
+    if (props.makeUserLogin === true) {
+      setShowSignUpModal(true)
+    }
+
+  }, [props.makeUserLogin])
+
   return (
     <Header className='header-component' style={(location.pathname.includes('experience') ||
       location.pathname.includes('host')) &&
-      !hostedMe ? { background: '#EAEAEA' }: location.pathname.includes('profile') ? {background: "#383838"}: {background: "transparent"}}>
+      !hostedMe ? { background: '#EAEAEA' } : location.pathname.includes('profile') ? { background: "#383838" } : { background: "transparent" }}>
       <Row>
         <AuthComponent
+          makeUserLogin={props.makeUserLogin}
           showSignUpModal={showSignUpModal}
           handleShowSignUpModal={handleShowSignUpModal}
           handleAuthChange={handleAuthChange}
         />
       </Row>
       <Row>
-        <Col md={4} sm={4} xs={4} style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-          <NavLinkWithActivation to='/' style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <Col md={4} sm={4} xs={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <NavLinkWithActivation to='/' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             {/* <img className='logo' src={logo_img} alt='logo' /> */}
             <KloutKastLogo style={logoStyles} />
           </NavLinkWithActivation>
@@ -104,12 +112,12 @@ function HeaderComponent(props) {
                                     </Col> */}
                 </Row>
               ) : (
-                  <Row justify='end' className='signup-link'>
-                    <button style={{cursor: 'pointer' }} onClick={() => handleShowSignUpModal(true)}>
-                      Sign up • Log in
+                <Row justify='end' className='signup-link'>
+                  <button style={{ cursor: 'pointer' }} onClick={() => handleShowSignUpModal(true)}>
+                    Sign up • Log in
                   </button>
-                  </Row>
-                )}
+                </Row>
+              )}
             </Col>
           </Row>
         </Col>

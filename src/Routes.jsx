@@ -17,18 +17,28 @@ import TermsOfService from './pages/TermsOfService/TermsOfService';
 import NoMatch from './pages/404/404';
 import ConfirmedBookings from './pages/ConfirmedBookings/ConfirmedBookings';
 import EditExperience from './pages/ExperiencesHostedByMe/pages/EditExperiences';
+import Footer from './components/Revamp/ParentComponents/Footer/Footer';
+import FAQ from './pages/FAQ/FAQ';
+import CookiePolicy from './pages/CookiePolicy/CookiePolicy';
+import CCPA from './pages/CCPA/CCPA';
+
 
 const { Content } = Layout;
 
 const ROOT = (props) => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [makeUserLogin, setMakeUserLogin] = React.useState(false)
   const handleAuthChange = (value) => {
     setIsAuthenticated(value);
+  };
+  const callback = () => {
+    setMakeUserLogin(true)
   };
   return (
     <React.Fragment>
       <Layout className='layout-wrapper'>
         <Header
+        makeUserLogin={makeUserLogin}
           isAuthenticated={isAuthenticated}
           handleAuthChange={handleAuthChange}
         />
@@ -36,7 +46,8 @@ const ROOT = (props) => {
           <React.Suspense fallback={<LoadingAnimation loading={props.busy} />}>
             <Switch>
               <Route exact path='/'>
-                <Dashboard />
+                <Dashboard callback={callback} />
+                <Footer />
               </Route>
               <Route path='/booking'>
                 <MyBookings />
@@ -50,7 +61,7 @@ const ROOT = (props) => {
               <Route path='/confirmed-bookings'>
                 <ConfirmedBookings />
               </Route>
-              <Route path='/hostdetails/:id'>
+              <Route path='/hostdetails'>
                 <HostDetails />
               </Route>
               <Route path='/hostexperience'>
@@ -62,12 +73,27 @@ const ROOT = (props) => {
               <Route render={(routeParams) =>  <EditExperience {...routeParams} />} path='/edit-experience' />
               <Route path='/privacy-policy'>
                 <PrivacyPolicy />
+                <Footer />
               </Route>
               <Route path='/terms-of-service'>
                 <TermsOfService />
+                <Footer />
               </Route>
               <Route path='/support'>
                 <TermsOfService />
+                <Footer />
+              </Route>
+              <Route path='/faq'>
+                <FAQ />
+                <Footer />
+              </Route>
+              <Route path='/cookie-policy'>
+                <CookiePolicy />
+                <Footer />
+              </Route>
+              <Route path='/ccpa'>
+                <CCPA />
+                <Footer />
               </Route>
               <Route path="*" component={NoMatch} />
 

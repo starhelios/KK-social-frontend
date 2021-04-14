@@ -3,15 +3,23 @@ import React, { useState } from 'react';
 import ImgCrop from 'antd-img-crop';
 import { Row, Col, Typography, Upload, Button, message, Carousel } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import _get from 'lodash/get';
+import { toast } from 'react-toastify';
 
+import { AUTH_SET_USER_INFO } from '../../redux/types/authTypes';
 import profilepicture_default_image from '../../assets/img/Signup/profilepicture_default.png';
-import { storage } from '../../utils/firebase';
+import { experienceServices } from '../../services/experienceService';
+import { authServices } from '../../services/authServices';
+import { getUserInfo } from '../../redux/selectors/authSelector';
 
 function ProfilePicture(props) {
   const dispatch = useDispatch();
   const { handleCurrentAuthPageIndexChange } = props;
   const [urlImage, setUrlImage] = useState('');
+    const [newImage, setNewImage] = useState(false)
+  const [imageUrl, setImageUrl] = useState('');
+    const userInfoSelector = useSelector((state) => getUserInfo(state));
 
   const beforeUpload = (file) => {
     const isImage = file.type.indexOf('image/') === 0;
@@ -28,29 +36,45 @@ function ProfilePicture(props) {
   };
 
   const customUpload = ({ onError, onSuccess, file }) => {
-    const uploadTask = storage.ref(`images/${file.name}`).put(file);
-
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {},
-      (error) => {
-        message.error(`${file.name} file upload failed.`);
-        onError(error);
-      },
-      () => {
-        storage
-          .ref('images')
-          .child(`${file.name}`)
-          .getDownloadURL()
-          .then((url) => {
-            onSuccess(null, url);
-            setUrlImage(url);
-            dispatch({ type: 'SAVE_AVATAR', payload: url });
-            message.success(`${file.name} file uploaded successfully`);
-            handleCurrentAuthPageIndexChange(4);
-          });
-      }
-    );
+    console.log('file...',file)
+    let fileData = new FormData();
+    fileData.append('image', file)
+    experienceServices.uploadPhoto(fileData)
+    .then(async(res) => {
+          const { data } = res;
+          const errorStatus = await _get(data, 'error.status', true);
+          const payload =await  _get(data, 'payload', null);
+        console.log(payload)
+          if (!errorStatus) {
+            setNewImage(true)
+            const param = {
+              avatarUrl: payload.uploadedPhoto
+            }
+            setTimeout(() =>{
+              setImageUrl(payload.uploadedPhoto)
+            },3000
+            )
+            authServices.updateUserInfo(userInfoSelector.randomString, param).then((res) => {
+              const { data } = res;
+              const errorStatus = _get(data, 'error.status', true);
+              const errorMessage = _get(data, 'error.message', '');
+              const payload = _get(data, 'payload', null);
+              console.log(payload)
+              if (!errorStatus) {
+                toast.success('Successfully added profile photo');
+                dispatch({ type: AUTH_SET_USER_INFO, payload });
+                setNewImage(false)
+                handleCurrentAuthPageIndexChange(7);
+              } else {
+                toast.error("Something went wrong saving profile photo");
+              }
+            });
+            onSuccess(null, payload.uploadedPhoto);
+          } else{
+            onError(errorStatus)
+            toast.error("Something went wrong")
+          }
+        });
   };
 
   return (
@@ -70,7 +94,7 @@ function ProfilePicture(props) {
             </Col>
             <Col sm={8} xs={8}>
               <Row justify='end'>
-                <button onClick={() => handleCurrentAuthPageIndexChange(5)}>
+                <button onClick={() => handleCurrentAuthPageIndexChange(7)}>
                   <Typography.Text style={{ color: '#979797' }}>
                     Skip
                   </Typography.Text>
@@ -82,7 +106,7 @@ function ProfilePicture(props) {
             <Col className='content' sm={14} xs={14}>
               <Row justify='center'>
                 <Typography.Text style={{ color: 'white' }}>
-                  Add a profile picture so hosts know who you are.
+                  Add a profile picture so people know who you are.
                 </Typography.Text>
               </Row>
 

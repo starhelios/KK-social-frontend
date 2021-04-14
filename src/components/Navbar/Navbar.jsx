@@ -10,7 +10,7 @@ import _get from 'lodash/get';
 import avatar_img from '../../assets/img/avatar.jpg';
 import { authServices } from '../../services/authServices';
 import { AUTH_SET_AUTHENTICATED } from '../../redux/types/authTypes';
-import { getUserInfo } from '../../redux/selectors/authSelector';
+import { getUserInfo, getAuthenticated } from '../../redux/selectors/authSelector';
 
 const { useBreakpoint } = Grid;
 
@@ -19,6 +19,7 @@ function Navbar(props) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const userInfoSelector = useSelector((state) => getUserInfo(state));
+  const getAuthenticatedUser = useSelector((state) => getAuthenticated(state));
 
   const onLogoutSuccess = (res) => { };
 
@@ -66,20 +67,26 @@ function Navbar(props) {
     }
   }, [userInfoSelector]);
 
+  useEffect(() => {
+    if(!getAuthenticatedUser){
+      signOut();
+    }
+  }, [getAuthenticatedUser])
+
   return (
     <Col md={24} sm={24} xs={24}>
       <Row justify='end' className='loged-in-nav-bar'>
         <Menu mode={'horizontal'}>
           {userInfoSelector && userInfoSelector.isHost && (
                   <Menu.Item key='experience'>
-                    <NavLink exact to={userInfoSelector.zoomAccessToken && userInfoSelector.status === 'active' ? '/hostexperience': '/profile'}>
+                    <NavLink style={{ color: color }} exact to={userInfoSelector.zoomConnected && userInfoSelector.stripeAccountVerified ? '/hostexperience': '/profile'}>
                       Host Experience
                     </NavLink>
                   </Menu.Item>
                 )}
                 {userInfoSelector && !userInfoSelector.isHost && (
                   <Menu.Item key='experience'>
-                    <NavLink exact to='/profile'>
+                    <NavLink exact to='/profile' style={{ color: color }}>
                       Become Host
                     </NavLink>
                   </Menu.Item>

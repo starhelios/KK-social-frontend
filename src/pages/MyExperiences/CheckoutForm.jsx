@@ -53,6 +53,7 @@ const CheckoutForm = (props) => {
     props.setIsSubmitting(true);
 
     const cardElement = elements.getElement(CardNumberElement);
+    console.log(props.modalDataToShow)
 
     const result = await paymentsServices.GenerateIntentForChargeCustomerExperience(
       {

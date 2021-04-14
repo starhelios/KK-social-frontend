@@ -19,13 +19,35 @@ function SignUp(props) {
   const onSubmit = (values) => {
     authServices.register(values).then(
       (res) => {
+        console.log(values)
         const { data } = res;
         const error = _get(data, 'error', {});
 
         if (!error.status) {
           const accessToken = _get(data.payload, 'tokens.access.token', '');
           const refreshToken = _get(data.payload, 'tokens.refresh.token', '');
-          const userInfo = _get(data.payload, 'user', {});
+          const userInfo = _get(data.payload, 'newUser', {});
+          if (accessToken) {
+            localStorage.setItem('access_token', accessToken);
+            dispatch({ type: AUTH_SET_AUTHENTICATED, payload: true });
+          }
+          if (refreshToken) {
+            localStorage.setItem('refresh_token', refreshToken);
+          }
+          if (userInfo) {
+            dispatch({ type: AUTH_SET_USER_INFO, payload: userInfo });
+            localStorage.setItem('user_info', JSON.stringify(userInfo));
+            localStorage.setItem('userId', userInfo.randomString);
+            values = {email: values.email, password: values.password}
+            authServices.login(values).then(
+      (res) => {
+        const { data } = res;
+        const error = _get(data, 'error', {});
+
+        if (!error.status) {
+          const accessToken = _get(data.payload, 'tokens.access.token', '');
+          const refreshToken = _get(data.payload, 'tokens.refresh.token', '');
+          const userInfo = _get(data.payload, 'newUser', {});
 
           if (accessToken) {
             localStorage.setItem('access_token', accessToken);
@@ -38,6 +60,15 @@ function SignUp(props) {
             dispatch({ type: AUTH_SET_USER_INFO, payload: userInfo });
             localStorage.setItem('user_info', JSON.stringify(userInfo));
             localStorage.setItem('userId', userInfo.randomString);
+          }
+        } else {
+          toast.error(error.message);
+        }
+      },
+      (error) => {
+        toast.error('Error!');
+      }
+    );
           }
           handleCurrentAuthPageIndexChange(3);
         } else {

@@ -49,7 +49,7 @@ function HostExperience(props) {
     setUneditableExperiences(unEditableArray)
 
   }, [])
-
+  console.log(editableExperiences)
   return (
     <>
       <Row justify='end' className='host-experience'>

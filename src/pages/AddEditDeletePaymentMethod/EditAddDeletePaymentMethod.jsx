@@ -195,11 +195,11 @@ export default function EditAddDeletePaymentMethod(props) {
                   setFullName(val);
                 }}
               />
-              {showError.fullName && (
-                <div className="errorText">Name can't be empty</div>
-              )}
             </Row>
             <Row className="edit-profile-line" />
+              {showError.fullName && (
+                <div className="errorText">Please put a valid name</div>
+              )}
             <Row>
               <h4>Card Number</h4>
             </Row>
@@ -211,18 +211,21 @@ export default function EditAddDeletePaymentMethod(props) {
                     .replace(/[^\dA-Z]/g, '')
                     .replace(/(.{4})/g, '$1 ')
                     .trim();
+                    if(e.target.value.split(" ").join("").length > 16){
+                      return false
+                    }
                   setCardNumber(val);
                 }}
               />
-              {showError.cardNumber && (
-                <div className="errorText">Invalid Card Number</div>
-              )}
             </Row>
             <Row className="edit-profile-line" />
+              {showError.cardNumber && (
+                <div className="errorText">Please put a valid card no.</div>
+              )}
             <Row>
               <Col sm={12} xs={12}>
                 <Row>
-                  <h4>Expiry Date</h4>
+                  <h4>Expiration Date</h4>
                 </Row>
                 <Row>
                   <Input
@@ -238,11 +241,11 @@ export default function EditAddDeletePaymentMethod(props) {
                       }
                     }}
                   />
-                  {showError.cardExpiry && (
-                    <div className="errorText">Invalid Date. Format MM-YY</div>
-                  )}
                 </Row>
                 <Row className="edit-profile-line" />
+                  {showError.cardExpiry && (
+                    <div className="errorText">Please put a valid date</div>
+                  )}
               </Col>
               <Col sm={1} xs={1}></Col>
               <Col sm={11} xs={11}>
@@ -254,7 +257,7 @@ export default function EditAddDeletePaymentMethod(props) {
                     value={cardCVV}
                     onChange={(e) => {
                       let tempVal = e.target.value;
-                      if (tempVal.length < 7) {
+                      if (tempVal.length < 6) {
                         const val = e.target.value
                           .replace(/[^\dA-Z]/g, '')
                           .trim();
@@ -262,11 +265,11 @@ export default function EditAddDeletePaymentMethod(props) {
                       }
                     }}
                   />
-                  {showError.cardCVV && (
-                    <div className="errorText">CVV can't be empty</div>
-                  )}
                 </Row>
                 <Row className="edit-profile-line" />
+                  {showError.cardCVV && (
+                    <div className="errorText">Please enter a valid CVV</div>
+                  )}
               </Col>
             </Row>
             {props.isEditMode ? (

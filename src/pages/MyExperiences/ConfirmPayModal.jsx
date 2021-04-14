@@ -41,6 +41,7 @@ const ConfirmPayModal = ({
   const submitSavedCard = async() => {
     console.log('running payment')
     setIsSubmitting(true)
+    console.log(modalDataToShow)
     const result = await paymentsServices.GenerateIntentForChargeCustomerExperience(
       {
         experienceID: `${modalDataToShow[`id`]}`,
@@ -84,7 +85,7 @@ const ConfirmPayModal = ({
           // execution. Set up a webhook or plugin to listen for the
           // payment_intent.succeeded event that handles any business critical
           // post-payment actions.
-
+          console.log(modalDataToShow)
           const saveTransaction = await paymentsServices.SaveTransactionInDB({
             client_secret: `${payload.paymentIntent.client_secret}`,
             id: `${payload.paymentIntent.id}`,
@@ -115,7 +116,7 @@ const ConfirmPayModal = ({
   console.log(itemInfo)
 
   useEffect(() => {
-    if (userData && userData.availableMethods.length > 0) {
+    if (userData && userData.availableMethods && userData.availableMethods.length > 0) {
       let elem = userData.availableMethods[0];
       setSelectedCard(
         `${elem.cardBrand.toUpperCase()} ending with ${elem.last4digits}`
@@ -126,7 +127,7 @@ const ConfirmPayModal = ({
   }, [userData]);
 
   useEffect(() => {
-    if (userData && userData.availableMethods.length === 0) {
+    if (userData && userData.availableMethods && userData.availableMethods.length === 0) {
       console.log('is new')
       setIsNewCard('new');
     }
@@ -203,10 +204,10 @@ const ConfirmPayModal = ({
                       value={'saved'}
                       onClick={() => setIsNewCard('saved')}
                       disabled={
-                        !(userData && userData.availableMethods.length > 0)
+                        !(userData && userData.availableMethods && userData.availableMethods.length > 0)
                       }
                     >
-                      {userData && userData.availableMethods.length > 0
+                      {userData && userData.availableMethods && userData.availableMethods.length > 0
                         ? `Saved payment methods`
                         : `No saved payment methods`}
                     </Radio>
@@ -228,7 +229,7 @@ const ConfirmPayModal = ({
                         );
                       }}
                     >
-                      {userData &&
+                      {userData && userData.availableMethods &&
                         userData.availableMethods.length > 0 &&
                         userData.availableMethods.map((elem, index) => {
                           return (
