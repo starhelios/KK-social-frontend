@@ -39,7 +39,9 @@ const DateItem = ({
       console.log(start);
       console.log(end);
       console.log(idx);
-
+      if(!start || !end) {
+        return false;
+      }
       let object = {}
       object.startDayTime = values[idx] + " " + start;
       object.endDayTime = values[idx] + " " + end;
@@ -47,7 +49,7 @@ const DateItem = ({
       newState[idx] = object;
       setDayAvailable(newState);
     }
-    setEdit(!isEdit);
+    return setEdit(!isEdit);
   };
 
   const onChange = (time, timeString) => {

@@ -121,7 +121,7 @@ function SliderConfirmed(props) {
                         }}
                       >
                         {popular_flag < 5 ? (
-                          <Row className='card-wrapper' align='bottom'>
+                          <Row className='card-wrapper' align='bottom' style={{background: 'rgba(0,0,0,0.3)'}}>
                             <Col sm={24} xs={24}>
                               <Row className='booking-card-content'>
                                 <Col>

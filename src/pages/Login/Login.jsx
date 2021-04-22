@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import isEmail from 'validator/lib/isEmail';
 import { Row, Col, Typography, Button, Carousel } from 'antd';
+import {useHistory} from 'react-router-dom'
 import _get from 'lodash/get';
 import { useDispatch } from 'react-redux';
 
@@ -19,6 +20,7 @@ function Login(props) {
   const { handleCurrentAuthPageIndexChange } = props;
   const { register, handleSubmit, errors } = useForm();
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   const onSubmit = (values) => {
     setLoading(true);
@@ -47,6 +49,7 @@ function Login(props) {
             localStorage.setItem('userId', userInfo.randomString);
           }
           handleCurrentAuthPageIndexChange(7);
+          return history.go(0)
         } else {
           toast.error(error.message);
         }

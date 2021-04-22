@@ -4,20 +4,12 @@ import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 
 import "./faq.scss";
+import { Link } from "react-router-dom";
 
 const { Panel } = Collapse;
 
-function callback(key) {
-  console.log(key);
-}
-const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
-
 const CollapseWrapper = styled.div`
-  height: 100vh;
+  min-height: 100vh;
 `;
 export default function FAQ() {
   React.useEffect(() => {
@@ -52,7 +44,6 @@ export default function FAQ() {
           >
             <Collapse
               defaultActiveKey={["1"]}
-              onChange={callback}
               style={{ background: "transparent", border: "none" }}
             >
               <Panel
@@ -80,29 +71,6 @@ export default function FAQ() {
                 </p>
               </Panel>
               <Panel
-                header="Zoom"
-                key="2"
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  fontFamily: "Avenir Next",
-                  fontSize: "18px",
-                  color: "white",
-                }}
-              >
-                <p>Having Zoom issues?</p>
-                <p>
-                  <a
-                    href="https://support.zoom.us/hc/en-us/sections/200258579-Chats"
-                    target="_blank"
-                  >
-                    Click here
-                  </a>{" "}
-                  to speak to a Zoom representative and click the chat icon in
-                  the bottom right-hand corner
-                </p>
-              </Panel>
-              <Panel
                 header="Contact Us"
                 key="3"
                 style={{
@@ -113,6 +81,7 @@ export default function FAQ() {
                   color: "white",
                 }}
               >
+                <p>Contact us on our <Link to="/contact">Contact Page</Link> or use the links below</p>
                 <p>
                   Being we are a new startup company, the best way for us to
                   manage your requests are through email:
@@ -139,7 +108,7 @@ export default function FAQ() {
                 </p>
               </Panel>
               <Panel
-                header="Uninstall Zoom"
+                header="Documentation"
                 key="4"
                 style={{
                   background: "transparent",
@@ -149,20 +118,63 @@ export default function FAQ() {
                   color: "white",
                 }}
               >
-                <p>
-                  <ul>
-                    <li>
-                      Login into your Zoom account and navigate to the Zoom App
-                      Marketplace.
-                    </li>
-                    <li>
-                      Click Manage > Installed Apps or search for the KloutKast
-                      app.
-                    </li>
-                    <li>Click the KK app.</li>
-                    <li>Click Uninstall</li>
-                  </ul>
-                </p>
+                <div>
+                  <>
+                    <p>
+                      <h1>Zoom Installation</h1>
+                      <p>
+                        *Zoom is only required for Hosts to be connected and
+                        create experiences for users*
+                        <ul>
+                          <li>Login/Signup</li>
+                          <li>
+                            Click Become a Host, and fill out required
+                            information then select "Become a Host".
+                          </li>
+                          <li>
+                            Click on Zoom, then click "Connect Your Zoom
+                            Account"
+                          </li>
+                          <li>
+                            You will be redirected to Zoom account where you
+                            will need to Authorize the application in order to
+                            start hosting experiences
+                          </li>
+                        </ul>
+                      </p>
+                    </p>
+                    <p>
+                      <h1>Zoom Uninstallation</h1>
+                      <ul>
+                        <li>
+                          Login into your Zoom account and navigate to the Zoom
+                          App Marketplace.
+                        </li>
+                        <li>
+                          Click Manage > Installed Apps or search for the
+                          KloutKast app.
+                        </li>
+                        <li>Click the KK app.</li>
+                        <li>Click Uninstall</li>
+                      </ul>
+                    </p>
+
+                    <p>
+                      <h1>Zoom Usage</h1>
+                      <p>
+                        Zoom is only to be used to create meetings and join
+                        meetings throughout KloutKast.
+                      </p>
+                      <p>Different use cases for this are..</p>
+                      <ul>
+                        <li>
+                          Creating Experiences: Pre-requisites - Must be a Host
+                        </li>
+                        <li>Joining Experiences: Pre-requisites - None</li>
+                      </ul>
+                    </p>
+                  </>
+                </div>
               </Panel>
             </Collapse>
           </div>

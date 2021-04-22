@@ -1,5 +1,6 @@
 import React from 'react';
 import { Row, Col, Typography, Card, Button, Carousel } from 'antd';
+import {useHistory} from 'react-router-dom'
 import { GoogleLogin } from 'react-google-login';
 import _get from 'lodash/get';
 import { toast } from 'react-toastify';
@@ -15,6 +16,7 @@ import {
 function YourProfile(props) {
   const { handleCurrentAuthPageIndexChange } = props;
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const responseGoogle = async (authResult) => {
     try {
@@ -52,6 +54,8 @@ function YourProfile(props) {
                 localStorage.setItem('setFirstPass', setFirstPass);
               }
               handleCurrentAuthPageIndexChange(7);
+              console.log('google logging in...')
+              return history.go(0)
             } else {
               toast.error(error.message);
             }

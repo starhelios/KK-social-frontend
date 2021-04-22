@@ -1,6 +1,7 @@
 import './ProfilePicture.scss';
 import React, { useState } from 'react';
 import ImgCrop from 'antd-img-crop';
+import {useHistory} from 'react-router-dom'
 import { Row, Col, Typography, Upload, Button, message, Carousel } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +15,7 @@ import { authServices } from '../../services/authServices';
 import { getUserInfo } from '../../redux/selectors/authSelector';
 
 function ProfilePicture(props) {
+  const history = useHistory();
   const dispatch = useDispatch();
   const { handleCurrentAuthPageIndexChange } = props;
   const [urlImage, setUrlImage] = useState('');
@@ -65,6 +67,7 @@ function ProfilePicture(props) {
                 dispatch({ type: AUTH_SET_USER_INFO, payload });
                 setNewImage(false)
                 handleCurrentAuthPageIndexChange(7);
+                return history.go(0)
               } else {
                 toast.error("Something went wrong saving profile photo");
               }
@@ -94,7 +97,7 @@ function ProfilePicture(props) {
             </Col>
             <Col sm={8} xs={8}>
               <Row justify='end'>
-                <button onClick={() => handleCurrentAuthPageIndexChange(7)}>
+                <button onClick={() => {handleCurrentAuthPageIndexChange(7); history.go(0)}}>
                   <Typography.Text style={{ color: '#979797' }}>
                     Skip
                   </Typography.Text>

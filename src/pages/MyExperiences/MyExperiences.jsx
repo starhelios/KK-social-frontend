@@ -42,7 +42,7 @@ const STRIPE_PK_KEY = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = loadStripe(STRIPE_PK_KEY);
 const NavLinkWithActivation = (props) => (
   <NavLink activeStyle={{ color: 'color' }} {...props} />
-  );
+);
 
 const params = {
   slidesPerView: 'auto',
@@ -87,21 +87,21 @@ function MyExperiences(props) {
   // console.log(experienceData)
 
   useEffect(() => {
-    const data  = Object.values(detailData).length;
+    const data = Object.values(detailData).length;
     let ratingsCount = 0;
     let ratingsTotal = 0;
-    if(data){
+    if (data) {
       const promise = new Promise((resolve, reject) => {
 
         detailData.specificExperience.map((item, idx) => {
-          if(item.ratings.length){
-  
+          if (item.ratings.length) {
+
             item.ratings.forEach((element) => {
               ratingsTotal += element.rating;
               return ratingsCount++;
             })
           }
-          if(idx === detailData.specificExperience.length -1) {
+          if (idx === detailData.specificExperience.length - 1) {
             resolve();
           }
         })
@@ -181,7 +181,7 @@ function MyExperiences(props) {
             }
           }
         }
-        if(moment(item.day + " " + item.startTime).format() < moment(new Date()).format()){
+        if (moment(item.day + " " + item.startTime).format() < moment(new Date()).format()) {
           return false
         }
         return (
@@ -208,7 +208,7 @@ function MyExperiences(props) {
                         toast.error('please login to continue');
                         history.push({
                           pathname: '/',
-                          state: {needsToLogin: true}
+                          state: { needsToLogin: true }
                         })
                       }
                     }}
@@ -352,7 +352,7 @@ function MyExperiences(props) {
     }
   };
   const titleCase = (string) => {
-    
+
     return string.replace(/\w\S*/g, function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
@@ -365,7 +365,7 @@ function MyExperiences(props) {
       <Row justify="end" className="myexperience">
         <Elements stripe={stripePromise}>
           <ConfirmPayModal
-          titleCase={titleCase}
+            titleCase={titleCase}
             showConfirmAndPayModal={showConfirmAndPayModal}
             setShowConfirmAndPayModal={setShowConfirmAndPayModal}
             handleConfirmAndPay={handleConfirmAndPay}
@@ -406,8 +406,8 @@ function MyExperiences(props) {
           <Row className="exp-content">
             <Col md={13} sm={13} xs={23} className="exp-content-left">
               <Row className="exp-content-left-item">
-                <h1>{detailData.title ? titleCase(detailData.title): null}</h1>
-                <h3>Location: {detailData.location ? detailData.location: "TBA"}</h3>
+                <h1 style={{ color: "#0A0A0A" }}>{detailData.title ? titleCase(detailData.title) : null}</h1>
+                <h3>Location: {detailData.location ? detailData.location : "TBA"}</h3>
               </Row>
               <Row className="exp-content-left-item-line" />
               <Row className="exp-content-left-item">
@@ -436,7 +436,7 @@ function MyExperiences(props) {
                     </Col>
                     <Col>
                       <h3 style={{ textTransform: 'capitalize' }}>
-                        {detailData.categoryName ? titleCase(detailData.categoryName): null}
+                        {detailData.categoryName ? titleCase(detailData.categoryName) : null}
                       </h3>
                     </Col>
                   </Row>
@@ -454,11 +454,11 @@ function MyExperiences(props) {
                     <h2>Say Hello! to {fullname}</h2>
                   </Row>
                   <Row align="middle" justify="start">
-                    <Col style={{display: 'flex', justify: 'center', alignItems: 'center'}}>
-                        <ReviewIcon />
+                    <Col style={{ display: 'flex', justify: 'center', alignItems: 'center' }}>
+                      <ReviewIcon />
                     </Col>
                     <Col>
-                      <h3>{ratingsCount > 0 && ratingsTotal > 0 ? rating.toFixed(1).toString() + " • ": ""}{ratingsCount.toString()} {ratingsCount > 1 || ratingsCount === 0 ? 'Reviews': "Review"}</h3>
+                      <h3>{ratingsCount > 0 && ratingsTotal > 0 ? rating.toFixed(1).toString() + " • " : ""}{ratingsCount.toString()} {ratingsCount > 1 || ratingsCount === 0 ? 'Reviews' : "Review"}</h3>
                     </Col>
                   </Row>
                   <Row style={{ marginTop: '39px' }}>
@@ -579,10 +579,10 @@ function MyExperiences(props) {
                 <Col sm={24} xs={24}>
                   <Row className="exp-content-right-body-row">
                     <Col sm={24} xs={24}>
-                      <Row className="exp-content-right-body-row-choose">
+                      <Row className="exp-content-right-body-row-choose" >
                         {formattedEventsData.length > 0 && formattedEventsData}
 
-                        <p>
+                        <p style={{ color: "#0A0A0A" }}>
                           {formattedEventsData.length === 0 &&
                             `No events available for selected dates.`}
                         </p>

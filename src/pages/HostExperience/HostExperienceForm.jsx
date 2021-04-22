@@ -68,16 +68,16 @@ const HostExperienceForm = ({ setPrice, days, daysAvailable, setFormErrors }) =>
     //   return;
     // }
 
-    const addMinutes =  function (dt, minutes) {
+    const addMinutes = function (dt, minutes) {
       return new Date(dt.getTime() + minutes * 60000);
     };
     console.log(days);
-console.log(`${days.length} ${daysAvailable.length}`)
-    if(days.length !== daysAvailable.length || !days.length){
-      setFormErrors({availability: 'Please Complete/Save Your Availability'})
+    console.log(`${days.length} ${daysAvailable.length}`)
+    if (days.length !== daysAvailable.length || !days.length) {
+      setFormErrors({ availability: 'Please Complete/Save Your Availability' })
       return false;
     }
-    
+
     let specificExperiences = [];
     daysAvailable.forEach((element) => {
       let start = new Date(moment(element.startDayTime).format());
@@ -89,7 +89,7 @@ console.log(`${days.length} ${daysAvailable.length}`)
         endTime: moment(firstEnd).format('LT')
       }
       specificExperiences.push(startingObject);
-      while (start < end){
+      while (start < end) {
         let newStartDate = addMinutes(start, value.duration)
         let newEndDate = addMinutes(newStartDate, value.duration)
         let object = {
@@ -98,7 +98,7 @@ console.log(`${days.length} ${daysAvailable.length}`)
           endTime: moment(newEndDate).format('LT')
         };
         console.log(newEndDate < end)
-        if(object.startTime !== object.endTime && newEndDate <= end && newStartDate < end){
+        if (object.startTime !== object.endTime && newEndDate <= end && newStartDate < end) {
           specificExperiences.push(object);
         }
         start = addMinutes(start, value.duration);
@@ -160,7 +160,7 @@ console.log(`${days.length} ${daysAvailable.length}`)
                 setSelectedCategory(elem);
               }}
             >
-              <p>{elem.name}</p>
+              <p style={{ color: '#060606' }}>{elem.name}</p>
             </Menu.Item>
           );
         })}
@@ -171,7 +171,7 @@ console.log(`${days.length} ${daysAvailable.length}`)
     <Col md={13} sm={13} xs={23} className="host-experience-content-left">
       <form onSubmit={handleSubmit(onSubmit)}>
         <Row className="host-experience-content-left-item">
-          <h1>Host an Experience</h1>
+          <h1 style={{ color: "#0A0A0A" }}>Host an Experience</h1>
           <h3>Create your experience below.</h3>
         </Row>
         <Row className="host-experience-content-left-item-line" />
@@ -193,7 +193,7 @@ console.log(`${days.length} ${daysAvailable.length}`)
             <Row align="middle" justify="start">
               <Col md={24} sm={24} xs={24}>
                 <Controller
-                  render={(onChange) =><Input placeholder="Enter title" maxLength="40" onChange={(e) => {setTitle(e.target.value); setValue('title', e.target.value, {shouldDirty: true})}} value={title} />}
+                  render={(onChange) => <Input placeholder="Enter title" maxLength="40" onChange={(e) => { setTitle(e.target.value); setValue('title', e.target.value, { shouldDirty: true }) }} value={title} />}
                   name="title"
                   control={control}
                   value={title}
@@ -207,11 +207,11 @@ console.log(`${days.length} ${daysAvailable.length}`)
               </Col>
             </Row>
           </Col>
-        <Row className="host-experience-content-left-item-line" />
-                {errors.title && (
-                  <div className="errorText">{errors.title.message}</div>
-                )}
-        <div style={{textAlign: 'left'}}>Characters Remaining: {40 - title.length}</div>
+          <Row className="host-experience-content-left-item-line" />
+          {errors.title && (
+            <div className="errorText">{errors.title.message}</div>
+          )}
+          <div style={{ textAlign: 'left' }}>Characters Remaining: {40 - title.length}</div>
         </Row>
 
         <Row className="host-experience-content-left-item">
@@ -235,10 +235,10 @@ console.log(`${days.length} ${daysAvailable.length}`)
               </Col>
             </Row>
           </Col>
-        <Row className="host-experience-content-left-item-line" />
-                {errors.description && (
-                  <div className="errorText">{errors.description.message}</div>
-                )}
+          <Row className="host-experience-content-left-item-line" />
+          {errors.description && (
+            <div className="errorText">{errors.description.message}</div>
+          )}
         </Row>
         <Row className="host-experience-content-left-item">
           <Col md={24} sm={24} xs={24}>
@@ -268,10 +268,10 @@ console.log(`${days.length} ${daysAvailable.length}`)
               </Col>
             </Row>
           </Col>
-        <Row className="host-experience-content-left-item-line" />
-                {errors.duration && (
-                  <div className="errorText">{errors.duration.message}</div>
-                )}
+          <Row className="host-experience-content-left-item-line" />
+          {errors.duration && (
+            <div className="errorText">{errors.duration.message}</div>
+          )}
         </Row>
         <Row className="host-experience-content-left-item">
           <Col md={24} sm={24} xs={24}>
@@ -298,15 +298,19 @@ console.log(`${days.length} ${daysAvailable.length}`)
                       value: true,
                       message: 'You must enter price / person',
                     },
+                    min: {
+                      value: 20,
+                      message: "Price / person must be greater than $20"
+                    }
                   }}
                 />
               </Col>
             </Row>
           </Col>
-        <Row className="host-experience-content-left-item-line" />
-                {errors.price && (
-                  <div className="errorText">{errors.price.message}</div>
-                )}
+          <Row className="host-experience-content-left-item-line" />
+          {errors.price && (
+            <div className="errorText">{errors.price.message}</div>
+          )}
         </Row>
         <Row className="host-experience-content-left-item">
           <Col md={24} sm={24} xs={24}>
@@ -314,11 +318,10 @@ console.log(`${days.length} ${daysAvailable.length}`)
               <h5>Category</h5>
             </Row>
             <Row align="middle" justify="start">
-              <Col style={{cursor: 'pointer'}} md={24} sm={24} xs={24}>
+              <Col style={{ cursor: 'pointer' }} md={24} sm={24} xs={24}>
                 <Dropdown overlay={showDropDownMenu} trigger={['click']}>
-                  <p style={{ fontSize: '20px' }}>{`${
-                    selectedCategory ? selectedCategory.name : `Select Category`
-                  }`}</p>
+                  <p style={!selectedCategory ? { fontSize: '20px', color: '#BFBFBF' } : { fontSize: '20px', color: '#060606' }}>{`${selectedCategory ? selectedCategory.name : `Select Category`
+                    }`}</p>
                 </Dropdown>
               </Col>
             </Row>

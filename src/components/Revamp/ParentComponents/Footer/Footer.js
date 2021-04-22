@@ -104,7 +104,7 @@ export default function Footer() {
           <Headers>Help</Headers>
           <InnerLinksWrapper>
             <Links to="/faq">FAQs</Links>
-            <Links to="/faq">Contact Us</Links>
+            <Links to="/contact">Contact Us</Links>
           </InnerLinksWrapper>
         </HelpLinksWrapper>
         <DownloadLinksWrapper>

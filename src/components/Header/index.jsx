@@ -21,7 +21,7 @@ const NavLinkWithActivation = (props) => (
 );
 
 function HeaderComponent(props) {
-  const { location, handleAuthChange } = props;
+  const { location, handleAuthChange, isAuthenticated } = props;
   const dispatch = useDispatch();
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [isHost, setIsHost] = useState(false);
@@ -76,6 +76,7 @@ function HeaderComponent(props) {
 
   }, [props.makeUserLogin])
 
+
   return (
     <Header className='header-component' style={(location.pathname.includes('experience') ||
       location.pathname.includes('host')) &&
@@ -86,6 +87,7 @@ function HeaderComponent(props) {
           showSignUpModal={showSignUpModal}
           handleShowSignUpModal={handleShowSignUpModal}
           handleAuthChange={handleAuthChange}
+          isAuthenticated={isAuthenticated}
         />
       </Row>
       <Row>

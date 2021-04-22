@@ -2,6 +2,7 @@ import './AuthComponent.scss';
 import React, { useEffect } from 'react';
 import { Modal } from 'antd';
 import _get from 'lodash/get';
+import {useHistory} from 'react-router-dom'
 
 import YourProfile from '../../pages/YourProfile/YourProfile';
 import SignUp from '../../pages/SignUp/SignUp';
@@ -13,8 +14,10 @@ import ResetPassword from '../../pages/ResetPassword/ResetPassword';
 import {getQueryParams} from '../../utils/utils'
 
 function AuthComponent(props) {
+  const history = useHistory();
   const { showSignUpModal, handleShowSignUpModal, handleAuthChange } = props;
   const [currentAuthPageIndex, setCurrentAuthPageIndex] = React.useState(1);
+  const [userIsLoggedIn, setUserIsLoggedIn] = React.useState(false)
   const handleCurrentAuthPageIndexChange = (value) => {
     setCurrentAuthPageIndex(value);
   };
@@ -32,6 +35,8 @@ function AuthComponent(props) {
     }
   }, []);
 
+  console.log('authenticated....', userIsLoggedIn)
+
   return (
     <Modal
       className='signup-modal'
@@ -41,6 +46,9 @@ function AuthComponent(props) {
       maskClosable={false}
       onCancel={() => {
         handleShowSignUpModalfunc();
+        if(userIsLoggedIn) {
+          history.go(0)
+        }
       }}
     >
       {currentAuthPageIndex === 1 ? (
@@ -49,10 +57,12 @@ function AuthComponent(props) {
         />
       ) : currentAuthPageIndex === 2 ? (
         <SignUp
+          setUserIsLoggedIn={setUserIsLoggedIn}
           handleCurrentAuthPageIndexChange={handleCurrentAuthPageIndexChange}
         />
       ) : currentAuthPageIndex === 3 ? (
         <ProfilePicture
+          userIsLoggedIn={userIsLoggedIn}
           handleCurrentAuthPageIndexChange={handleCurrentAuthPageIndexChange}
         />
       ) : currentAuthPageIndex === 4 ? (

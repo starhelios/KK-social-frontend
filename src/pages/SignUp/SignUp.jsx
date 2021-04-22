@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import isEmail from 'validator/lib/isEmail';
 import _get from 'lodash/get';
 import { useDispatch } from 'react-redux';
+import {useHistory} from 'react-router-dom'
 
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { authServices } from '../../services/authServices';
@@ -13,8 +14,9 @@ import { AUTH_SET_AUTHENTICATED, AUTH_SET_USER_INFO } from '../../redux/types/au
 
 function SignUp(props) {
   const dispatch = useDispatch();
-  const { handleCurrentAuthPageIndexChange } = props;
+  const { handleCurrentAuthPageIndexChange, setUserIsLoggedIn } = props;
   const { register, handleSubmit, errors } = useForm();
+  const history = useHistory();
 
   const onSubmit = (values) => {
     authServices.register(values).then(
@@ -61,6 +63,7 @@ function SignUp(props) {
             localStorage.setItem('user_info', JSON.stringify(userInfo));
             localStorage.setItem('userId', userInfo.randomString);
           }
+          setUserIsLoggedIn(true)
         } else {
           toast.error(error.message);
         }

@@ -21,6 +21,7 @@ import Footer from './components/Revamp/ParentComponents/Footer/Footer';
 import FAQ from './pages/FAQ/FAQ';
 import CookiePolicy from './pages/CookiePolicy/CookiePolicy';
 import CCPA from './pages/CCPA/CCPA';
+import Contact from './components/Contact/Contact';
 
 
 const { Content } = Layout;
@@ -38,7 +39,7 @@ const ROOT = (props) => {
     <React.Fragment>
       <Layout className='layout-wrapper'>
         <Header
-        makeUserLogin={makeUserLogin}
+          makeUserLogin={makeUserLogin}
           isAuthenticated={isAuthenticated}
           handleAuthChange={handleAuthChange}
         />
@@ -56,7 +57,7 @@ const ROOT = (props) => {
                 <MyExperiences />
               </Route>
               <Route path='/profile'>
-                <Profile />
+                <Profile setMakeUserLogin={setMakeUserLogin} />
               </Route>
               <Route path='/confirmed-bookings'>
                 <ConfirmedBookings />
@@ -81,6 +82,10 @@ const ROOT = (props) => {
               </Route>
               <Route path='/support'>
                 <TermsOfService />
+                <Footer />
+              </Route>
+              <Route path='/contact'>
+                <Contact />
                 <Footer />
               </Route>
               <Route path='/faq'>

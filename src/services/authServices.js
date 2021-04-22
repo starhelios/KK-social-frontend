@@ -12,6 +12,7 @@ export const authServices = {
   changePassword,
   getHosts,
   getHostInfo,
+  sendContactData
 };
 
 function login(data) {
@@ -98,4 +99,10 @@ function getHosts() {
   return requestAPI.get(`/v1/hosts`).then((res) => {
     return res;
   });
+}
+
+function sendContactData(data) {
+  return requestAPI.post(`/v1/auth/contactUs`, data).then((res) => {
+    return res;
+  })
 }

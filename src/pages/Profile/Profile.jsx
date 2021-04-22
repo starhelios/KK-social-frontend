@@ -58,7 +58,6 @@ export const Profile = (props) => {
     dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
     history.push('/');
   };
-
   const showDeleteConfirmation = (id) => {
     const { confirm } = Modal;
     confirm({
@@ -113,12 +112,18 @@ export const Profile = (props) => {
           determineStep(payload.isHost);
         } else {
           dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
-          history.push('/');
+          history.push({
+            pathname: '/',
+            state: { needsToLogin: true }
+          })
         }
       });
     } else {
       dispatch({ type: AUTH_SET_AUTHENTICATED, payload: false });
-      history.push('/');
+      history.push({
+        pathname: '/',
+        state: { needsToLogin: true }
+      })
     }
 
     const objParams = getQueryParams();
